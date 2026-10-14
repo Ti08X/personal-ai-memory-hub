@@ -1,0 +1,9 @@
+{
+ "name":"@zgatri/openclaw-personal-memory-hub",
+ "version":"0.1.0",
+ "type":"module",
+ "files":["index.js","runtime.mjs","core.mjs","openclaw.plugin.json","README.md"],
+ "peerDependencies":{"openclaw":">=2026.10.3"},
+ "openclaw":{"extensions":["./index.js"],"compat":{"pluginApi":">=2026.10.3","minGatewayVersion":"2026.10.3"}},
+ "license":"MIT"
+}

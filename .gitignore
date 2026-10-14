@@ -1,0 +1,17 @@
+node_modules/
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.env
+.env.*
+worker.env
+worker-secrets.json
+credentials*.json
+*.secret.json
+test-results/
+playwright-report/
+__pycache__/
+*.pyc
+context-snapshot/
+work-v2/

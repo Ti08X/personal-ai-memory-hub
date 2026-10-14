@@ -1,0 +1,23 @@
+{
+ "id":"personal-ai-memory-hub",
+ "name":"Personal AI Memory Hub 自动记忆",
+ "version":"0.1.0",
+ "description":"回答前自动读取私人记忆，回答后归档已授权的当前对话；加密待同步、回读校验与版本冲突保护。",
+ "activation":{"onStartup":true},
+ "configSchema":{
+  "type":"object","additionalProperties":false,
+  "properties":{
+   "baseUrl":{"type":"string","default":"https://pw.zgatri.com/v1"},
+   "apiKey":{"type":"string"},
+   "autoRecall":{"type":"boolean","default":true},
+   "autoArchive":{"type":"boolean","default":false},
+   "archiveAuthorized":{"type":"boolean","default":false},
+   "autoSummary":{"type":"boolean","default":false},
+   "summaryAuthorized":{"type":"boolean","default":false},
+   "agentIds":{"type":"array","items":{"type":"string"},"default":["main"]},
+   "privateSessionKeys":{"type":"array","items":{"type":"string"},"default":[]},
+   "sensitivity":{"type":"string","enum":["normal","sensitive","restricted"],"default":"sensitive"}
+  }
+ },
+ "uiHints":{"apiKey":{"label":"Memory Hub API Key","sensitive":true},"baseUrl":{"label":"Memory Hub URL"},"autoRecall":{"label":"自动读取"},"autoArchive":{"label":"自动归档"},"autoSummary":{"label":"自动整理交接概要"}}
+}

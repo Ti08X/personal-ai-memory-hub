@@ -1,0 +1,4 @@
+interface:
+  display_name: "个人 AI 记忆中心"
+  short_description: "跨 AI 查询历史、接手计划，并按授权保存可回溯记忆"
+  default_prompt: "使用 $personal-ai-memory-hub 核验连接并查询我的过往记忆；根据授权保存资料和计划，保留来源与版本。"

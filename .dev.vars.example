@@ -1,0 +1,5 @@
+# Local development placeholders only. Never put real secrets in source control.
+ENCRYPTION_KEY=replace-with-a-random-secret
+RAG_ENABLED=false
+SUMMARY_BASE_URL=
+SUMMARY_MODEL=

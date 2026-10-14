@@ -1,0 +1,206 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtemp,readFile,rm,chmod} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {execFile,spawn} from 'node:child_process';
+import {promisify} from 'node:util';
+import {randomBytes,createHmac} from 'node:crypto';
+import {localTestConfig} from '../scripts/local-test-config.mjs';
+import {Client,StreamableHTTPClientTransport} from '@modelcontextprotocol/client';
+const project=new URL('..',import.meta.url).pathname,wrangler=join(project,'node_modules/wrangler/bin/wrangler.js');
+const run=promisify(execFile);
+function totp(secret,step=Math.floor(Date.now()/30000)){
+ let bits=0,value=0,out=[];
+ for(const c of secret){value=(value<<5)|'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'.indexOf(c);bits+=5;if(bits>=8){out.push((value>>>(bits-8))&255);bits-=8;}}
+ const b=Buffer.alloc(8);b.writeBigUInt64BE(BigInt(step));const m=createHmac('sha1',Buffer.from(out)).update(b).digest(),offset=m[m.length-1]&15;
+ return String((m.readUInt32BE(offset)&0x7fffffff)%1000000).padStart(6,'0');
+}
+test('password change requires current password, fresh 2FA and CSRF, and revokes sessions/challenges', {timeout:120000},async t=>{
+ const dir=await mkdtemp(join(tmpdir(),'pmh-password-test-'));await chmod(dir,0o700);
+ const localConfig=await localTestConfig(dir);
+ const state=join(dir,'state'),base='http://localhost:8792';let server,browser,requestCount=0;
+ const cli=async args=>run(process.execPath,[wrangler,'--config',localConfig,...args],{cwd:project,env:{...process.env,CI:'1'},maxBuffer:2000000});
+ async function request(path,{method='GET',body,cookie,csrf,token,origin=base}={}){
+  const r=await fetch(base+path,{method,headers:{origin,'cf-connecting-ip':'test-'+(++requestCount),...(body?{'content-type':'application/json'}:{}),...(cookie?{cookie}:{}),...(csrf?{'x-csrf-token':csrf}:{}),...(token?{authorization:'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});
+  return {status:r.status,headers:r.headers,data:await r.json()};
+ }
+ const auth=(path,body,options={})=>request('/ui/auth/'+path,{method:'POST',body,...options});
+ const session=r=>({cookie:r.headers.get('set-cookie').split(';')[0],csrf:r.data.csrf});
+ try{
+  await run(process.execPath,[join(project,'scripts/bootstrap.mjs'),dir],{cwd:project});
+  await cli(['d1','migrations','apply','personal-ai-memory-hub','--local','--persist-to',state]);
+  await cli(['d1','execute','personal-ai-memory-hub','--local','--persist-to',state,'--file',join(dir,'bootstrap.sql'),'--yes']);
+  const config=JSON.parse(await readFile(join(dir,'credentials.json'),'utf8'));
+  server=spawn(process.execPath,[wrangler,'--config',localConfig,'dev','--host','localhost','--port','8792','--persist-to',state,'--env-file',join(dir,'worker.env')],{cwd:project,stdio:'ignore',env:{...process.env,CI:'1'}});
+  let ready=false;for(let i=0;i<100;i++){try{if((await fetch(base+'/health')).ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,100));}assert.equal(ready,true);
+  const oldPassword=randomBytes(24).toString('base64url'),newPassword=randomBytes(24).toString('base64url');
+  const started=await auth('setup/start',{username:'password-test',password:oldPassword},{token:config.clients.admin.token});assert.equal(started.status,200);
+  const secret=started.data.secret;
+  const enrollmentStep=Math.floor(Date.now()/30000)-1;
+  const confirmed=await auth('setup/confirm',{code:totp(secret,enrollmentStep)});assert.equal(confirmed.status,200);
+  const first=session(confirmed),recovery=confirmed.data.recovery_codes;
+  const challenge=await auth('login',{username:'password-test',password:oldPassword});assert.equal(challenge.status,200);
+  const secondLogin=await auth('verify',{challenge_id:challenge.data.challenge_id,code:recovery[0]});assert.equal(secondLogin.status,200);const second=session(secondLogin);
+  const pending=await auth('login',{username:'password-test',password:oldPassword});assert.equal(pending.status,200);
+  const account=await request('/ui/auth/account',first);assert.equal(account.status,200);assert.deepEqual(account.data,{username:'password-test',two_factor_enabled:true});
+  const change={current_password:oldPassword,new_password:newPassword,code:totp(secret)};
+  assert.equal((await auth('password',change)).status,401);
+  assert.equal((await auth('password',change,{token:config.clients.codex.token})).status,401);
+  assert.equal((await auth('password',change,{cookie:first.cookie})).status,403);
+  assert.equal((await auth('password',change,{...first,origin:'https://other.invalid'})).status,403);
+  assert.equal((await auth('password',{...change,current_password:'synthetic-wrong-password'},first)).data.error,'current_password_incorrect');
+  assert.equal((await auth('password',{...change,new_password:oldPassword},first)).data.error,'new_password_unchanged');
+  assert.equal((await auth('password',{...change,new_password:'short'},first)).status,400);
+  assert.equal((await auth('password',{...change,code:totp(secret,enrollmentStep)},first)).status,400);
+  assert.equal((await auth('password',{...change,code:recovery[1]},first)).status,400);
+  assert.equal((await request('/ui/session',first)).status,200);
+  const changeCode=totp(secret);
+  const changed=await auth('password',{...change,code:changeCode},first);assert.equal(changed.status,200);assert.equal(changed.data.changed,true);assert.match(changed.headers.get('set-cookie'),/Max-Age=0/);
+  assert.equal((await request('/ui/session',first)).status,401);assert.equal((await request('/ui/session',second)).status,401);
+  assert.equal((await auth('verify',{challenge_id:pending.data.challenge_id,code:totp(secret,Math.floor(Date.now()/30000)+1)})).status,401);
+  assert.equal((await auth('login',{username:'password-test',password:oldPassword})).status,401);
+  const updated=await auth('login',{username:'password-test',password:newPassword});assert.equal(updated.status,200);
+  assert.equal((await auth('verify',{challenge_id:updated.data.challenge_id,code:changeCode})).status,401);
+  const lastAcceptedStep=Math.floor(Date.now()/30000)+1;
+  assert.equal((await auth('verify',{challenge_id:updated.data.challenge_id,code:totp(secret,lastAcceptedStep)})).status,200);
+  // A real UI session, using an unused recovery code, tests the form without
+  // changing any production account or exposing synthetic secrets in output.
+  assert.equal((await request('/v1/profile',{token:config.clients.codex.token})).status,200);
+  if(!process.env.PLAYWRIGHT_MODULE){t.diagnostic('Browser checks require PLAYWRIGHT_MODULE; HTTP security checks passed.');return;}
+  const {chromium}=await import(process.env.PLAYWRIGHT_MODULE);
+  browser=await chromium.launch({headless:true,...(process.env.BROWSER_EXECUTABLE?{executablePath:process.env.BROWSER_EXECUTABLE}:{})});
+  const context=await browser.newContext({permissions:['clipboard-read','clipboard-write']}),page=await context.newPage();const errors=[];page.on('pageerror',()=>errors.push('page_error'));
+  await page.goto(base+'/dashboard#security');await page.locator('#auth-login-form').waitFor({state:'visible'});
+  await page.locator('#auth-username').fill('password-test');await page.locator('#auth-password').fill(newPassword);await page.locator('#auth-login-form button').click();
+  await page.locator('#auth-code-form').waitFor({state:'visible'});await page.locator('#auth-code').fill(recovery[1]);await page.locator('#auth-code-form button').click();
+  await page.locator('#password-change-form').waitFor({state:'visible'});
+  assert.equal(await page.locator('#credential').isVisible(),false);
+  await page.locator('#current-password').fill(newPassword);await page.locator('#new-password').fill('synthetic-new-password');await page.locator('#confirm-password').fill('synthetic-different-password');await page.locator('#password-change-code').fill('000000');
+  let submissions=0;page.on('request',r=>{if(r.url().endsWith('/ui/auth/password'))submissions++;});
+  await page.locator('#password-change-form button').click();await page.locator('#notice').filter({hasText:'两次输入的新密码不一致'}).waitFor();assert.equal(submissions,0);
+  await page.locator('#current-password').fill('synthetic-wrong-password');await page.locator('#confirm-password').fill('synthetic-new-password');await page.locator('#password-change-form button').click();await page.locator('#notice').filter({hasText:'原密码不正确'}).waitFor();
+  assert.equal(await page.locator('#current-password').inputValue(),'');assert.equal(await page.locator('#password-change-code').inputValue(),'');
+  const uiSession=await (await context.request.get(base+'/ui/session')).json();
+  for(const [record_type,source_record_id,title,text] of [['project','browser-project','合成主线项目','测试计划：验证跨平台交接与引用。'],['memory','browser-memory','合成长期记忆','测试偏好：中文说明与来源回溯。']]){
+   const response=await context.request.post(base+'/ui/api/memories',{headers:{origin:base,'x-csrf-token':uiSession.csrf},data:{authorized:true,record_type,source_record_id,title,text,source_platform:'browser-synthetic',source_kind:'test',timestamp:new Date().toISOString(),sensitivity:'normal'}});assert.equal(response.status(),201);
+  }
+  assert.equal((await request('/v1/model-settings',{token:config.clients.codex.token})).status,404);
+  assert.equal((await request('/ui/api/model-settings',{token:config.clients.codex.token})).status,401);
+  const savedSettings=await context.request.post(base+'/ui/api/model-settings',{headers:{origin:base,'x-csrf-token':uiSession.csrf},data:{authorized:true,expected_version:0,base_url:'https://api.example.com/v1',model:'synthetic-model',api_key:'synthetic-web-credential',summary_enabled:false,retrieval_enabled:false}});assert.equal(savedSettings.status(),200);assert.ok(!(await savedSettings.text()).includes('synthetic-web-credential'));
+  const noCsrf=await context.request.post(base+'/ui/api/model-settings',{data:{authorized:true,expected_version:1}});assert.equal(noCsrf.status(),403);
+  await page.locator('[data-view="models"]').click();await page.locator('#content h2').filter({hasText:'模型服务设置'}).waitFor();
+  assert.equal(await page.locator('#content input[type="url"]').inputValue(),'https://api.example.com/v1');assert.equal(await page.locator('#content input[type="password"]').first().inputValue(),'');
+  await page.locator('#content input[type=password]').first().fill('synthetic-model-list-key');
+  await page.route('**/ui/api/model-settings/models',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'model_service_unavailable'})}));
+  await page.locator('#content button').filter({hasText:'拉取模型列表'}).click();
+  await page.locator('#notice.error').waitFor({state:'visible'});
+  assert.equal(await page.locator('#content input[type=password]').first().inputValue(),'synthetic-model-list-key');
+  await page.unroute('**/ui/api/model-settings/models');
+  await page.route('**/ui/api/model-settings/models',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({models:['synthetic-model','another-model']})}));
+  await page.locator('#content button').filter({hasText:'拉取模型列表'}).click();await page.locator('#content select').waitFor({state:'visible'});await page.locator('#content select').selectOption('another-model');
+  assert.equal(await page.locator('#content input').nth(2).inputValue(),'another-model');
+  assert.match(await page.locator('#notice').innerText(),/已获取 2 个模型/);
+  assert.equal(await page.locator('#notice').getAttribute('class'),'');
+  assert.equal(await page.locator('#content input[type=password]').first().inputValue(),'synthetic-model-list-key');
+  await page.unroute('**/ui/api/model-settings/models');
+  if(process.env.V2_MODELS_SCREENSHOT)await page.screenshot({path:process.env.V2_MODELS_SCREENSHOT,fullPage:true});
+  // New V2 panels use the real isolated Worker and synthetic user session.
+  await page.locator('[data-view="automatic"]').click();await page.locator('#content h2').filter({hasText:'自动记忆运行记录'}).waitFor();
+  assert.match(await page.locator('#content').innerText(),/尚未收到自动记忆插件的运行报告/);
+  await page.locator('[data-view="rag"]').click();await page.locator('#content h2').filter({hasText:'语义检索健康状态'}).waitFor();
+  assert.match(await page.locator('#content').innerText(),/等待服务端密钥与向量库配置/);
+  assert.match(await page.locator('#content').innerText(),/BAAI\/bge-reranker-v2-m3/);
+  assert.match(await page.locator('#content').innerText(),/嵌入、查询、重排和概要均无每日次数上限/);
+  assert.doesNotMatch(await page.locator('#content').innerText(),/概要共享|每日应用调用上限/);
+  if(process.env.V2_SCREENSHOT)await page.screenshot({path:process.env.V2_SCREENSHOT,fullPage:true});
+  await page.locator('[data-view="projects"]').click();await page.locator('#page-title').filter({hasText:'主线与计划'}).waitFor();
+  await page.locator('#content button').filter({hasText:'新建项目或计划'}).click();await page.locator('#detail').waitFor({state:'visible'});
+  assert.equal(await page.locator('#detail select').first().locator('option').count(),7);
+  await page.locator('#detail-close').click();
+  await page.locator('[data-view="clients"]').click();await page.locator('#content button').filter({hasText:'新建授权'}).click();
+  assert.match(await page.locator('#detail-body').innerText(),/读取敏感上限/);assert.match(await page.locator('#detail-body').innerText(),/允许集合：聊天档案/);
+  // Real isolated minting: Key copy replaces automatic file download.
+  let downloads=0;page.on('download',()=>downloads++);
+  await page.getByLabel('客户端名称',{exact:true}).fill('OpenClaw 合成测试');
+  await page.getByRole('button',{name:'使用 OpenClaw L3 读写方案',exact:true}).click();
+  assert.equal(await page.locator('#detail input[type=checkbox]:checked').count(),10);
+  await page.getByRole('checkbox',{name:'允许读取 L2 / L3 资料和原始批次',exact:true}).uncheck();
+  await page.getByLabel('读取敏感上限',{exact:true}).selectOption('3');await page.getByLabel('写入敏感上限',{exact:true}).selectOption('3');
+  await page.getByRole('button',{name:'创建 API Key',exact:true}).click();
+  await page.locator('#detail-body .form-error').filter({hasText:'还需勾选'}).waitFor();
+  for(const title of ['保存 / 更新记忆与计划','导入对话','允许读取 L2 / L3 资料和原始批次','允许写入 L2 / L3 资料'])await page.getByRole('checkbox',{name:title,exact:true}).check();
+  await page.getByRole('button',{name:'创建 API Key',exact:true}).click();
+  const keyInput=page.getByLabel('新创建的 API Key',{exact:true});await keyInput.waitFor({state:'visible'});
+  assert.equal(await keyInput.getAttribute('type'),'password');const clientToken=await keyInput.inputValue();assert.match(clientToken,/^pmh_[a-f0-9]{64}$/);assert.equal(downloads,0);
+  await page.getByRole('button',{name:'复制 API Key',exact:true}).click();await page.locator('#notice').filter({hasText:'API Key 已复制'}).waitFor();
+  assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),clientToken);
+  await page.getByRole('button',{name:'复制 OpenClaw 配置',exact:true}).click();await page.locator('#notice').filter({hasText:'OpenClaw 配置已复制'}).waitFor();
+  const copied=JSON.parse(await page.evaluate(()=>navigator.clipboard.readText())).mcp.servers.personal_memory_hub;
+  assert.equal(copied.url,base+'/mcp');assert.equal(copied.transport,'streamable-http');assert.equal(copied.headers.Authorization,'Bearer '+clientToken);assert.equal(copied.auth,undefined);
+  await page.getByRole('button',{name:'复制 Skill 配置',exact:true}).click();await page.locator('#notice').filter({hasText:'Skill 配置已复制'}).waitFor();
+  const skillConfig=JSON.parse(await page.evaluate(()=>navigator.clipboard.readText())).skills.entries['personal-ai-memory-hub'];
+  await page.getByRole('button',{name:'复制自动记忆插件配置',exact:true}).click();await page.locator('#notice').filter({hasText:'自动记忆配置已复制'}).waitFor();
+  const autoConfig=JSON.parse(await page.evaluate(()=>navigator.clipboard.readText())).plugins.entries['personal-ai-memory-hub'];
+  assert.equal(autoConfig.config.apiKey,clientToken);assert.equal(autoConfig.config.baseUrl,base+'/v1');assert.equal(autoConfig.hooks.allowConversationAccess,true);assert.equal(autoConfig.config.archiveAuthorized,true);
+  assert.equal(skillConfig.apiKey,clientToken);assert.equal(skillConfig.env.PMH_BASE_URL,base+'/v1');assert.equal(skillConfig.enabled,true);
+  assert.equal(await page.locator('#detail-body').getByRole('link',{name:'下载个人记忆 Skill',exact:true}).getAttribute('href'),'/personal-ai-memory-hub-skill.zip');
+  assert.equal(await page.locator('#detail-body').getByRole('link',{name:'Skill 安装与连接',exact:true}).getAttribute('href'),'/memory-skill-setup.md');
+  await page.locator('#detail-body').getByRole('button',{name:'复制给 OpenClaw 的说明',exact:true}).click();await page.locator('#notice').filter({hasText:'使用说明已复制'}).waitFor();
+  const instructions=await page.evaluate(()=>navigator.clipboard.readText());assert.ok(instructions.includes('get_handoff'));assert.ok(!instructions.includes(clientToken));
+  assert.equal(await page.evaluate(key=>[...Object.values(localStorage),...Object.values(sessionStorage),document.body.textContent].some(v=>v.includes(key)),clientToken),false);
+  await page.setViewportSize({width:1280,height:900});await page.locator('#detail').evaluate(n=>n.scrollTop=0);
+  if(process.env.OPENCLAW_ACCESS_SCREENSHOT)await page.screenshot({path:process.env.OPENCLAW_ACCESS_SCREENSHOT});
+  await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  assert.equal(await page.locator('#detail').evaluate(n=>n.scrollWidth<=n.clientWidth),true);
+  await page.locator('#detail').evaluate(n=>n.scrollTop=0);
+  if(process.env.OPENCLAW_ACCESS_MOBILE_SCREENSHOT)await page.screenshot({path:process.env.OPENCLAW_ACCESS_MOBILE_SCREENSHOT});
+  await page.locator('#detail-close').click();await page.waitForFunction(()=>document.querySelector('[aria-label="新创建的 API Key"]')===null);
+  const activity={authorized:true,event_id:'c'.repeat(64),timestamp:new Date().toISOString(),plugin_version:'0.1.0',phase:'archive',state:'success',code:'none',session_ref:'d'.repeat(64),counts:{archived:2,verified:2,pending:0}};
+  assert.equal((await request('/v1/integrations/activity',{method:'POST',token:clientToken,body:activity})).status,201);
+  await page.locator('[data-view="automatic"]').click();await page.locator('#content').getByText('已归档 2 · 已校验 2 · 待上传 0',{exact:true}).waitFor();
+  assert.ok(!(await page.locator('#content').innerText()).includes(clientToken));
+  if(process.env.AUTO_MEMORY_MOBILE_SCREENSHOT)await page.screenshot({path:process.env.AUTO_MEMORY_MOBILE_SCREENSHOT,fullPage:true});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  await page.setViewportSize({width:1280,height:900});
+  if(process.env.AUTO_MEMORY_SCREENSHOT)await page.screenshot({path:process.env.AUTO_MEMORY_SCREENSHOT,fullPage:true});
+  assert.equal((await request('/v1/clients',{token:clientToken})).status,403);
+  const savedRestricted=await request('/v1/memories',{method:'POST',token:clientToken,body:{authorized:true,record_type:'memory',source_record_id:'openclaw-restricted-test',source_platform:'openclaw',source_kind:'test',timestamp:new Date().toISOString(),text:'合成高敏感回读验证',sensitivity:'restricted'}});
+  assert.equal(savedRestricted.status,201);const restrictedId=savedRestricted.data.id;
+  const readRestricted=await request('/v1/records/'+restrictedId,{token:clientToken});assert.equal(readRestricted.status,200);assert.equal(readRestricted.data.sensitivity,'restricted');
+  const importBody={authorized:true,source_platform:'openclaw',session_id:'isolated-openclaw-session',completeness:'partial',messages:[{id:'isolated-message-1',role:'user',timestamp:'2026-10-14T12:00:00+08:00',content:'合成聊天上传与去重',sensitivity:'restricted'}]};
+  const imported=await request('/v1/conversations/import',{method:'POST',token:clientToken,body:importBody});assert.equal(imported.status,201);assert.equal(imported.data.conflicts,0);
+  const duplicate=await request('/v1/conversations/import',{method:'POST',token:clientToken,body:importBody});assert.equal(duplicate.status,201);assert.equal(duplicate.data.messages[0].deduplicated,true);
+  const mcpClient=new Client({name:'isolated-openclaw',version:'1'});
+  try{
+   await mcpClient.connect(new StreamableHTTPClientTransport(new URL(base+'/mcp'),{authProvider:{token:async()=>clientToken}}));
+   assert.equal((await mcpClient.listTools()).tools.length,9);
+   assert.ok(!(await mcpClient.callTool({name:'get_handoff',arguments:{}})).isError);
+   const mcpSaved=await mcpClient.callTool({name:'save_memory',arguments:{authorized:true,record_type:'memory',source_record_id:'openclaw-mcp-test',source_platform:'openclaw',source_kind:'test',timestamp:new Date().toISOString(),text:'合成 MCP 直接写入验证',sensitivity:'restricted'}});assert.ok(!mcpSaved.isError);
+   assert.equal((await request('/v1/records/'+mcpSaved.structuredContent.id,{token:clientToken})).status,200);
+  }finally{await mcpClient.close();}
+  const listed=await context.request.get(base+'/ui/api/clients');const issued=(await listed.json()).clients.find(c=>c.name==='OpenClaw 合成测试');assert.ok(issued);assert.ok(!JSON.stringify(issued).includes(clientToken));
+  const renew=await context.request.post(base+'/ui/api/clients/'+issued.id+'/renew',{headers:{origin:base,'x-csrf-token':uiSession.csrf},data:{authorized:true,expires_days:60}});assert.equal(renew.status(),200);
+  const revoke=await context.request.delete(base+'/ui/api/clients/'+issued.id,{headers:{origin:base,'x-csrf-token':uiSession.csrf},data:{authorized:true}});assert.equal(revoke.status(),200);
+  assert.equal((await request('/v1/profile',{token:clientToken})).status,401);
+  await page.setViewportSize({width:1280,height:900});
+  await page.locator('[data-view="overview"]').click();await page.locator('#content h2').filter({hasText:'个人交接概要'}).waitFor();
+  if(process.env.V2_OVERVIEW_SCREENSHOT)await page.screenshot({path:process.env.V2_OVERVIEW_SCREENSHOT,fullPage:true});
+  await page.locator('[data-view="security"]').click();await page.locator('#password-change-form').waitFor({state:'visible'});
+  await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);assert.deepEqual(errors,[]);
+  // Wait for the next window so the UI uses a genuinely unused TOTP.
+  while(Math.floor(Date.now()/30000)+1<=lastAcceptedStep)await new Promise(r=>setTimeout(r,30000-Date.now()%30000+100));
+  await page.locator('#current-password').fill(newPassword);await page.locator('#password-change-code').fill(totp(secret,Math.floor(Date.now()/30000)+1));
+  await page.locator('#new-password').fill('synthetic-new-password');await page.locator('#confirm-password').fill('synthetic-new-password');
+  const response=page.waitForResponse(r=>r.url().endsWith('/ui/auth/password'));
+  await page.locator('#password-change-form button').click();assert.equal((await response).status(),200);
+  await page.locator('#auth-login-form').waitFor({state:'visible'});await page.locator('#login-error').filter({hasText:'密码已修改'}).waitFor();
+  assert.equal((await context.request.get(base+'/ui/session')).status(),401);
+  await page.locator('#auth-username').fill('password-test');await page.locator('#auth-password').fill('synthetic-new-password');await page.locator('#auth-login-form button').click();
+  await page.locator('#auth-code-form').waitFor({state:'visible'});await page.locator('#auth-code').fill(recovery[2]);await page.locator('#auth-code-form button').click();
+  await page.locator('#password-change-form').waitFor({state:'visible'});assert.deepEqual(errors,[]);
+  assert.equal((await request('/v1/profile',{token:config.clients.codex.token})).status,200);
+ }finally{
+  await browser?.close();if(server&&!server.killed){server.kill('SIGTERM');await new Promise(resolve=>{server.once('exit',resolve);setTimeout(resolve,2000);});}await rm(dir,{recursive:true,force:true});
+ }
+});

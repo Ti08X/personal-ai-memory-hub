@@ -1,0 +1,32 @@
+{
+  "name": "personal-ai-memory-hub",
+  "archive": "personal-ai-memory-hub-skill.zip",
+  "sha256": "911945bb967174c4e42aecc534e59e580351892b381859cd349b60dc52eec2f3",
+  "files": [
+    {
+      "path": "personal-ai-memory-hub/SKILL.md",
+      "bytes": 5770,
+      "sha256": "72d9e90d7bded8ea88c520c220631961902f8a5427a05827dc2c117acd71daa3"
+    },
+    {
+      "path": "personal-ai-memory-hub/agents/openai.yaml",
+      "bytes": 300,
+      "sha256": "7862ab365d7e13dbd4f2c9ca5a55e37a9d0d707878534239057cdafd3626ac4d"
+    },
+    {
+      "path": "personal-ai-memory-hub/references/api.md",
+      "bytes": 4098,
+      "sha256": "c663344e1e8ce03b468ea3c18de84fba13ae924651a38804e0f91a99f482f852"
+    },
+    {
+      "path": "personal-ai-memory-hub/references/setup.md",
+      "bytes": 2671,
+      "sha256": "08ece12443e58c2fd2113ba6213e906f30db7e6c0b7afec3e249a735abc47d98"
+    },
+    {
+      "path": "personal-ai-memory-hub/scripts/hub_client.py",
+      "bytes": 15822,
+      "sha256": "e949c086c5d0b817df5e59f9b81011c7e29a3faf50da86a654de702a9297a52c"
+    }
+  ]
+}

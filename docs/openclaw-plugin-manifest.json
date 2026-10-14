@@ -1,0 +1,36 @@
+{
+  "version": "0.1.0",
+  "sha256": "20d23a32534fa432e0f338a7e7d9c5d4ca83bb67eaa95028b3c67cfc8328b1c7",
+  "files": [
+    {
+      "path": "package/package.json",
+      "sha256": "249e93a014cebb28bdd4e0c9b94ff2b2e3fb917dd7602f22ee8e221271cb7ba8",
+      "bytes": 350
+    },
+    {
+      "path": "package/openclaw.plugin.json",
+      "sha256": "2ef4298c7c2c2d93b043910b57d4a20a8cce0db5744faba27821329e4370638f",
+      "bytes": 1247
+    },
+    {
+      "path": "package/index.js",
+      "sha256": "8a4df8b19cc7e8b34fae18ad855f53fbff7948681ce133e9651cf09e10ee5b94",
+      "bytes": 579
+    },
+    {
+      "path": "package/runtime.mjs",
+      "sha256": "779fd058fa805b9b9bce9469d08d7de10358e54f4b9f8faf28498717c510fafa",
+      "bytes": 3479
+    },
+    {
+      "path": "package/core.mjs",
+      "sha256": "6157476377fa71b6eaab0e7618ac2c860510b47302b431a38ddcbffd2728d404",
+      "bytes": 20278
+    },
+    {
+      "path": "package/README.md",
+      "sha256": "b05abe4628e08eb90193443569ae545c3189d9024e6f53ee54956d7a4f065331",
+      "bytes": 6272
+    }
+  ]
+}
