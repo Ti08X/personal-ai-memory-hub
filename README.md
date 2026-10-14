@@ -37,7 +37,7 @@ Read and write ceilings are independent. The API key must also have the needed o
 
 ## OpenClaw
 
-Clone this repository and install the plugin from its local directory:
+The Hook plugin is optional; it adds per-turn context recall and capture. For history backfill plus daily scheduled uploads, follow the [daily sync guide](integrations/openclaw-memory/daily-sync.md); the plugin is not required for that workflow. If you do install the plugin, keep `autoArchive` and `autoSummary` disabled for daily-only archiving. To install the optional plugin:
 
 ```bash
 git clone https://github.com/Ti08X/personal-ai-memory-hub.git
@@ -45,7 +45,7 @@ cd personal-ai-memory-hub
 openclaw plugins install ./integrations/openclaw-memory
 ```
 
-Follow [`integrations/openclaw-memory/README.md`](integrations/openclaw-memory/README.md) to add the client key through OpenClaw’s private configuration. The Skill instructions are in [`integrations/skills/personal-ai-memory-hub/SKILL.md`](integrations/skills/personal-ai-memory-hub/SKILL.md). Give the AI this repository URL as its implementation and usage reference, then enter its own API key in the private connection settings.
+Follow [`integrations/openclaw-memory/README.md`](integrations/openclaw-memory/README.md) to add the client key through OpenClaw’s private configuration. For one-time history backfill followed by daily scheduled chat archiving, see the [OpenClaw daily sync guide](integrations/openclaw-memory/daily-sync.md). The Skill instructions are in [`integrations/skills/personal-ai-memory-hub/SKILL.md`](integrations/skills/personal-ai-memory-hub/SKILL.md). Give the AI this repository URL as its implementation and usage reference, then enter its own API key in the private connection settings.
 
 ## What the service can collect
 

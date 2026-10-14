@@ -1,5 +1,7 @@
 # Personal AI Memory Hub：OpenClaw 接入说明
 
+要先导入当前 OpenClaw 客户端的已有聊天，再每天凌晨同步昨天的聊天，请使用[首次回填与每日同步教程](https://github.com/Ti08X/personal-ai-memory-hub/blob/main/integrations/openclaw-memory/daily-sync.md)。MCP 接通本身不会扫描历史或自动创建定时任务。
+
 本服务存储获授权的记忆与聊天，不生成聊天回答。无需授权文件。所有客户端共用 URL，每个客户端使用独立的 API Key。
 
 建议同时安装 [个人记忆 Skill](memory-skill-setup.md)，提供可加载的操作规则和固定 REST 兼容脚本。Skill 不替代实际连接配置；认证失败不能当作没有记录，问过去经历时不能只读近期概要。原生 MCP 不可用时，Skill 通过已注入 Key 的脚本验证 REST，不能用 *** 或 YOUR_API_KEY 发请求。
