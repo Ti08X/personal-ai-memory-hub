@@ -1,5 +1,5 @@
 import {ApiError, authenticate, authorizeClient, Env, Principal, Vault} from './core';
-const lifetime=1800;
+const lifetime=7*24*60*60;
 const cookieName=(req:Request)=>new URL(req.url).protocol==='https:'?'__Host-pmh_session':'pmh_dev_session';
 export function sessionCookie(req:Request,value:string,maxAge=lifetime){return `${cookieName(req)}=${value}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${new URL(req.url).protocol==='https:'?'; Secure':''}`;}
 export function sameOrigin(req:Request){if(req.headers.get('origin')!==new URL(req.url).origin)throw new ApiError(403,'same_origin_required');}

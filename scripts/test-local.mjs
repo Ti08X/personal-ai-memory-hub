@@ -16,7 +16,7 @@ try{
  server=spawn(process.execPath,[wrangler,'--config',localConfig,'dev','--host','localhost','--port',String(port),'--persist-to',state,'--env-file',join(dir,'worker.env')],{cwd:project,stdio:'ignore'});
  let ready=false;for(let n=0;n<80;n++){try{if((await fetch(base+'/health')).ok){ready=true;break;}}catch{}await new Promise(done=>setTimeout(done,250));}
  if(!ready)throw new Error('isolated Worker did not become ready');
- await run(['--test','--test-concurrency=1',...['client-access','collections','dashboard','import-format','integration','model-transport','openclaw-plugin','plugin-activity','password-change','password-kdf','rag','skill'].map(s=>'tests/'+s+'.test.mjs')],'local suite',true,{...process.env,HUB_URL:base,CREDENTIAL_FILE:file});
+ await run(['--test','--test-concurrency=1',...['auth-bootstrap','client-access','collections','dashboard','dashboard-login-browser','import-format','integration','model-transport','memory-overview','strategy','openclaw-plugin','plugin-activity','password-change','password-kdf','rag','skill'].map(s=>'tests/'+s+'.test.mjs')],'local suite',true,{...process.env,HUB_URL:base,CREDENTIAL_FILE:file});
 }finally{
  if(server){server.kill('SIGTERM');await new Promise(done=>{server.once('exit',done);setTimeout(done,3000);});}
  await rm(dir,{recursive:true,force:true});

@@ -24,6 +24,14 @@ For an MCP client, configure the endpoint and put the key in that client’s pri
 
 Never place a real API key in this repository, a GitHub issue, a public chat, or a screenshot. The repository contains source code and setup instructions only; it does not contain the owner’s conversations, database, or credentials.
 
+## Categorization and overview
+
+The source includes personal/development topic classification, visual coverage and daily intake metrics, and a versioned evidence-based overview of personal context, projects, current progress and next actions. AI clients start with `get_handoff` / `get_overview`, then retrieve detailed sections and original sources. Background organization reuses the configured summary provider and skips unchanged sources. See [the architecture and upgrade guide](docs/memory-overview.md).
+
+## Owner-published strategy
+
+The owner drafts and publishes a hierarchy of overall strategy, stage strategy and monthly goals in the password/2FA dashboard. The published strategy is the highest-priority source for personal goals and task planning. Agents read it first in `get_handoff`, then personal context and observed execution progress. `get_strategy` is read-only; even L3 or administrator Bearer keys cannot edit or publish goals. Drafts remain private. See [strategy, permissions and usage](docs/strategy.md). The hosted instance includes this feature; published goals remain empty until the owner supplies and publishes them.
+
 ## Permission levels
 
 | Level | Data sensitivity | Access includes |
@@ -73,3 +81,5 @@ For deployment, create your own D1 and Vectorize resources, set the database and
 ## Privacy and security
 
 Records are encrypted at rest by the Worker application. API keys are shown once when created and stored as hashes. Use a distinct revocable key for each client. Keep client keys in private configuration and rotate them if exposed. The public repository is a source distribution, not a backup of the owner’s personal data.
+
+Dashboard login requires the account password and a second factor. A successful login keeps the same browser signed in for up to 7 days using a Secure, HttpOnly, same-site cookie; refreshing the page does not end the session. Manual logout, password changes, account revocation, or the 7-day expiry end it sooner. Passwords and authenticator codes are not stored in browser storage.

@@ -106,22 +106,35 @@ test('V2 HTTP endpoints, scoped policies, expiry renewal and honest disabled RAG
  assert.equal((await api('/v1/rag/index',{method:'POST',body:{authorized:true}})).status,503);
  assert.equal((await api('/v1/summaries/generate',{method:'POST',body:{authorized:true,evidence:[{id:project.data.id,version:1}]}})).data.error,'summary_not_configured');
 });
-test('real Streamable HTTP MCP discovers nine tools and invokes the core tools',async()=>{
+test('real Streamable HTTP MCP discovers overview tools and invokes the core tools',async()=>{
  const client=new Client({name:'integration-suite',version:'1'});
  await client.connect(new StreamableHTTPClientTransport(new URL(base+'/mcp'),{authProvider:{token:async()=>config.clients.codex.token}}));
  try {
-  const list=await client.listTools();assert.deepEqual(list.tools.map(t=>t.name).sort(),['get_profile','get_context','search_memory','save_memory','import_conversation','get_handoff','list_social_accounts','save_social_account','generate_summary'].sort());
+  const list=await client.listTools();assert.deepEqual(list.tools.map(t=>t.name).sort(),['get_strategy','get_profile','get_context','search_memory','save_memory','import_conversation','get_handoff','get_overview','classify_memory','list_social_accounts','save_social_account','generate_summary'].sort());
   for(const [name,args] of [['get_profile',{}],['get_context',{session_id:session}],['search_memory',{query:'冲突处理'}],['save_memory',{...memory,source_record_id:'mcp-message',text:'MCP远程写入测试'}],['import_conversation',{authorized:true,source_platform:'integration-test',session_id:session,title:'',completeness:'partial',messages:[{id:'mcp-import',role:'user',timestamp:stamp,content:'远程MCP导入'}]}]]) {
    const result=await client.callTool({name,arguments:args});assert.ok(!result.isError,JSON.stringify(result));
   }
  }finally{await client.close();}
+});
+test('overview and topic classification REST share source version guards, scopes and dashboard counts',async()=>{
+ const source=await api('/v1/memories',{method:'POST',body:{...memory,source_record_id:'categorized-source',text:'合成个人情况与开发进度测试'}});assert.equal(source.status,201);
+ const body={authorized:true,id:source.data.id,version:1,expected_revision:0,categories:['personal','development']};
+ assert.equal((await api('/v1/classifications',{method:'POST',body})).status,200);
+ assert.equal((await api('/v1/classifications',{method:'POST',body})).status,409);
+ const read=await api('/v1/records/'+source.data.id);assert.equal(read.data.version,1);assert.deepEqual(read.data.classification.categories,['personal','development']);
+ assert.ok((await api('/v1/records?category=development')).data.records.some(r=>r.id===source.data.id));
+ assert.ok((await api('/v1/search?query='+encodeURIComponent('开发进度')+'&category=personal')).data.records.some(r=>r.id===source.data.id));
+ const overview=await api('/v1/overview?detail=full&section=projects');assert.equal(overview.status,200);assert.ok(overview.data.counts.classified>=1);assert.ok(overview.data.index.sections.some(s=>s.section==='projects'));
+ assert.ok((await api('/v1/handoff')).data.overview);
+ assert.equal((await api('/v1/classifications',{client:'reader',method:'POST',body:{...body,expected_revision:1}})).status,403);
+ assert.equal((await api('/v1/overview/process',{method:'POST',body:{authorized:true}})).status,403);
 });
 test('standard stdio bridge forwards discovery and tool results to cloud HTTP',async(t)=>{
  // Use the actual private credential endpoint; local run defaults to localhost.
  if(config.endpoint!==base){t.skip('Credential endpoint differs from test target');return;}
  const client=new Client({name:'stdio-integration',version:'1'});
  await client.connect(new StdioClientTransport({command:process.execPath,args:[fileURLToPath(new URL('../scripts/mcp-bridge.mjs',import.meta.url)),'--credential-file',credentialFile,'--client','antigravity'],stderr:'pipe'}));
- try{assert.equal((await client.listTools()).tools.length,9);assert.ok(!(await client.callTool({name:'get_profile',arguments:{}})).isError);}finally{await client.close();}
+ try{assert.equal((await client.listTools()).tools.length,12);assert.ok(!(await client.callTool({name:'get_profile',arguments:{}})).isError);assert.ok(!(await client.callTool({name:'get_overview',arguments:{}})).isError);}finally{await client.close();}
 });
 test('paginated export and destructive cleanup update FTS atomically',async()=>{
  const exported=await api('/v1/export?limit=1');assert.equal(exported.data.records.length,1);assert.ok(exported.data.next_cursor);
@@ -129,4 +142,17 @@ test('paginated export and destructive cleanup update FTS atomically',async()=>{
  assert.equal((await api('/v1/conversations',{method:'DELETE',body:{authorized:true,source_platform:'integration-test',session_id:session}})).status,200);
  const search=await api('/v1/search?query='+encodeURIComponent('云端上下文系统'));assert.ok(!search.data.records.some(r=>r.session_id===session));
  assert.equal((await api('/v1/records/'+recordId)).status,404);
+});
+
+test('strategy API is read-only for Bearer clients including admin and requires owner dashboard identity',async()=>{
+ const read=await api('/v1/strategy');assert.equal(read.status,200);assert.equal(read.data.agent_writable,false);
+ for(const path of ['/v1/strategy','/v1/strategy/draft','/v1/strategy/publish','/v1/strategy/history']){
+  assert.equal((await api(path,{method:'POST',body:{authorized:true}})).status,403);
+  assert.equal((await api(path,{method:'DELETE',body:{authorized:true}})).status,403);
+ }
+ assert.equal((await api('/ui/api/strategy/draft',{method:'POST',body:{authorized:true}})).status,401);
+ assert.equal((await api('/v1/strategy/history')).status,404);
+ assert.equal((await api('/v1/memories',{method:'POST',body:{...memory,logical_key:'strategy.current'}})).status,403);
+ const start=await api('/ui/session',{method:'POST',headers:{origin:base},body:{}});assert.equal(start.status,200);const cookie=start.headers.get('set-cookie').split(';')[0];
+ const blocked=await fetch(base+'/ui/api/strategy',{headers:{cookie}});assert.equal(blocked.status,403);assert.equal((await blocked.json()).error,'strategy_owner_dashboard_only');
 });

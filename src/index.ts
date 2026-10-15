@@ -8,6 +8,8 @@ import {ModelSettings,runtimeModels} from './model-settings';
 import { Store } from './store';
 import {policySchema,collections,policy} from './policy';
 import {evidenceSchema} from './models';
+import {classificationSchema,overviewReadSchema} from './memory-overview';
+import {Strategy,strategyReadSchema} from './strategy';
 import {createSession,readSession,sessionCookie} from './dashboard-auth';
 import {authStatus,setupStart,setupConfirm,passwordLogin,verifyLogin,accountSettings,changePassword} from './dashboard-login';
 
@@ -31,7 +33,10 @@ function mcp(store:Store) {
  add('search_memory','Search authorized memories and conversation messages. mode=keyword/semantic/hybrid; hybrid can rerank. Degraded responses explicitly report keyword fallback.',searchSchema,v=>store.search(v),true);
  add('save_memory','Save only information the user has authorized to store. authorized=true is required. Updates require expected_version; conflicting information is retained for review instead of silently replacing it.',saveSchema,v=>store.save(v),false);
  add('import_conversation','Import user-authorized conversation messages, at most 10 per batch. Explicit source platform/session/message IDs enable incremental deduplication. Mark full/partial/summary accurately; this tool cannot obtain private platform chat history.',importSchema,v=>store.importConversation(v),false);
- add('get_handoff','Read brief authorized summaries, current projects and tasks before searching original evidence.',z.object({}).strict(),()=>store.handoff(),true);
+ add('get_strategy','Read authoritative user-published overall strategy, stage strategy and monthly goals as the highest-priority source for personal planning. Read-only for every agent, including L3. Check publication and current periods; draft and AI suggestions are not approved goals.',strategyReadSchema,v=>store.strategy(v),true);
+ add('get_handoff','Start here before planning or task work: read highest-priority owner-published overall/stage/month goals first, then the bounded personal overview, current project progress, mainline and next actions with coverage, section indexes and versioned evidence. Read detailed sections only when needed.',z.object({}).strict(),()=>store.handoff(),true);
+ add('get_overview','Read owner-published strategy first (agents cannot modify it), then the personal overview brief, project goals/current progress/next steps and mainline tasks. detail=full and section load indexed details with original evidence. Check coverage and stale/restricted status.',overviewReadSchema,v=>store.overview(v),true);
+ add('classify_memory','Classify authorized source topics as personal/development/other without altering raw text. Source version and expected_revision guard changes; topics are not verified facts.',classificationSchema,v=>store.classifyMemory(v),false);
  add('list_social_accounts','Read authorized social account metadata, never login secrets.',z.object({}).strict(),()=>store.listRecords({collection:'accounts'}),true);
  add('save_social_account','Save authorized social account links, purpose and notes. Requires record_type=profile and logical_key beginning accounts.; never store login secrets.',saveSchema,v=>store.saveSocialAccount(v),false);
  add('generate_summary','Use the configured external summary model to organize explicitly selected authorized evidence. Saves provenance and versions; conflicts are retained. Requires authorized=true and read/write permissions.',z.object({authorized:z.literal(true),evidence:z.array(evidenceSchema).min(1).max(30),logical_key:z.string().min(1).max(160).optional(),expected_version:z.number().int().positive().optional()}).strict(),v=>store.generateSummary(v),false);
@@ -41,8 +46,15 @@ async function api(req:Request,env:Env,p:Principal) {
  const u=new URL(req.url),path=u.pathname,store=new Store(env,p);
  if(req.method==='GET'&&path==='/v1/integrations/activity')return json(await listActivity(env,p,Object.fromEntries(u.searchParams)));
  if(req.method==='POST'&&path==='/v1/integrations/activity')return json(await saveActivity(env,p,await body(req)),201);
+ if(path.startsWith('/v1/strategy')){if(req.method!=='GET')throw new ApiError(403,'strategy_owner_dashboard_only');if(path==='/v1/strategy')return json(await store.strategy(Object.fromEntries(u.searchParams)));throw new ApiError(404,'route_not_found');}
  if(req.method==='GET'&&path==='/v1/handoff')return json(await store.handoff());
+ if(req.method==='GET'&&path==='/v1/overview')return json(await store.overview(Object.fromEntries(u.searchParams)));
+ if(req.method==='GET'&&path==='/v1/overview/history')return json(await store.overviewHistory(Object.fromEntries(u.searchParams)));
+ if(req.method==='POST'&&path==='/v1/overview/refresh')return json(await store.refreshOverview(await body(req)));
+ if(req.method==='POST'&&path==='/v1/overview/process'){z.object({authorized:z.literal(true)}).strict().parse(await body(req));return json(await store.processOverview());}
+ if(req.method==='POST'&&path==='/v1/classifications')return json(await store.classifyMemory(await body(req)));
  if(req.method==='GET'&&path==='/v1/rag/status')return json(await store.ragStatus());
+ if(req.method==='POST'&&path==='/v1/rag/retry')return json(await store.retryIndexFailures(await body(req)));
  if(req.method==='POST'&&path==='/v1/rag/index'){const v=z.object({authorized:z.literal(true),limit:z.number().int().min(1).max(5).default(3)}).strict().parse(await body(req));return json(await store.indexPending(v.limit));}
  if(req.method==='POST'&&path==='/v1/summaries/generate')return json(await store.generateSummary(await body(req)),201);
  if(req.method==='GET'&&path==='/v1/social-accounts')return json(await store.listRecords({...Object.fromEntries(u.searchParams),collection:'accounts'}));
@@ -99,8 +111,10 @@ export default {
  async scheduled(_event:ScheduledController,env:Env):Promise<void> {
   if(env.RAG_ENABLED==='true'&&env.VECTOR_INDEX){
    const owners=(await env.DB.prepare('SELECT DISTINCT owner_id FROM rag_jobs WHERE status IN (?,?,?) LIMIT 10').bind('pending','failed','processing').all<{owner_id:string}>()).results;
-   for(const {owner_id} of owners){const config=await runtimeModels(env,owner_id);if(!config.retrievalEnabled||!config.SILICONFLOW_API_KEY)continue;const store=new Store(env,{id:'rag-index-service',owner_id,scopes:['memory:read','sensitive:read','admin'],policy:{read_level:3,write_level:0,collections:[...collections]}});await store.indexPending(2);}
+   for(const {owner_id} of owners){const config=await runtimeModels(env,owner_id);if(!config.retrievalEnabled||!config.SILICONFLOW_API_KEY)continue;const store=new Store(env,{id:'rag-index-service',owner_id,scopes:['memory:read','sensitive:read','admin'],policy:{read_level:3,write_level:0,collections:[...collections]}});await store.indexPending(5);}
   }
+  const organizers=(await env.DB.prepare('SELECT s.owner_id,s.client_id,c.scopes,c.name,c.policy_json FROM memory_overview_state s JOIN clients c ON c.id=s.client_id AND c.owner_id=s.owner_id WHERE s.enabled=1 AND c.revoked_at IS NULL AND c.expires_at>? LIMIT 10').bind(new Date().toISOString()).all<{owner_id:string;client_id:string;scopes:string;name:string;policy_json:string|null}>()).results;
+  for(const c of organizers){const p:Principal={id:c.client_id,owner_id:c.owner_id,scopes:JSON.parse(c.scopes),...(c.policy_json?{policy:JSON.parse(c.policy_json)}:{})};if(c.name==='dashboard-login-service')p.policy={read_level:3,write_level:3,collections:[...collections]};try{await new Store(env,p).processOverview();}catch{/* Fixed error code is already stored by the pipeline. Never log model input or vendor responses. */}}
  await env.DB.batch([env.DB.prepare("DELETE FROM rate_limits WHERE bucket<?").bind(Math.floor(Date.now()/60000)-1440),env.DB.prepare('DELETE FROM dashboard_sessions WHERE expires_at<=?').bind(new Date().toISOString()),env.DB.prepare('DELETE FROM dashboard_auth_challenges WHERE expires_at<=?').bind(new Date().toISOString()),env.DB.prepare('DELETE FROM dashboard_auth_pending WHERE expires_at<=?').bind(new Date().toISOString()),env.DB.prepare('DELETE FROM dashboard_auth_attempts WHERE bucket<?').bind(Math.floor(Date.now()/60000)-1440)]); },
  async fetch(req:Request,env:Env):Promise<Response> {
   const url=new URL(req.url),origin=req.headers.get('origin');let response:Response;
@@ -109,7 +123,7 @@ export default {
   try {
    if(origin&&!allowed.includes(origin))throw new ApiError(403,'origin_not_allowed');
    if(req.method==='OPTIONS')response=new Response(null,{status:204,headers:{'access-control-allow-methods':'GET,POST,DELETE,OPTIONS','access-control-allow-headers':'authorization,content-type,mcp-protocol-version,mcp-session-id'}});
-   else if(req.method==='GET'&&['/','/dashboard','/dashboard/','/app.js','/style.css','/import-format.js','/collections.js','/client-access.js','/openclaw-quickstart.md','/memory-hub-client.py','/memory-skill-setup.md','/openclaw-memory-setup.md','/openclaw-personal-memory-hub.tgz','/openclaw-personal-memory-hub.sha256','/personal-ai-memory-hub-skill.zip','/personal-ai-memory-hub-skill.sha256','/launch.js','/dashboard/launch.js'].includes(url.pathname)){
+   else if(req.method==='GET'&&['/','/dashboard','/dashboard/','/app.js','/style.css','/import-format.js','/collections.js','/client-access.js','/auth-bootstrap.js','/overview-ui.js','/strategy-ui.js','/openclaw-quickstart.md','/memory-hub-client.py','/memory-skill-setup.md','/openclaw-memory-setup.md','/openclaw-personal-memory-hub.tgz','/openclaw-personal-memory-hub.sha256','/personal-ai-memory-hub-skill.zip','/personal-ai-memory-hub-skill.sha256','/launch.js','/dashboard/launch.js'].includes(url.pathname)){
     const asset=new URL(req.url);if(['/','/dashboard','/dashboard/'].includes(url.pathname))asset.pathname='/index.html';if(url.pathname==='/dashboard/launch.js')asset.pathname='/launch.js';
     response=await env.ASSETS.fetch(new Request(asset,req));
    }
@@ -136,6 +150,16 @@ export default {
     if(url.pathname.endsWith('/models')&&req.method==='POST')response=json(await settings.list(await body(req)));
     else if(req.method==='GET'&&url.pathname==='/ui/api/model-settings')response=json(await settings.metadata());
     else if(req.method==='POST'&&url.pathname==='/ui/api/model-settings')response=json(await settings.save(await body(req)));
+    else throw new ApiError(405,'method_not_allowed');
+   }
+   else if(['/ui/api/strategy','/ui/api/strategy/draft','/ui/api/strategy/publish','/ui/api/strategy/history'].includes(url.pathname)){
+    const s=await readSession(req,env,req.method!=='GET');
+    const owner=await env.DB.prepare('SELECT client_id FROM dashboard_auth WHERE owner_id=? AND client_id=?').bind(s.principal.owner_id,s.principal.id).first();if(!owner)throw new ApiError(403,'strategy_owner_dashboard_only');
+    const strategy=new Strategy(new Store(env,s.principal));
+    if(req.method==='GET'&&url.pathname==='/ui/api/strategy')response=json(await strategy.editor());
+    else if(req.method==='GET'&&url.pathname==='/ui/api/strategy/history')response=json(await strategy.history(Object.fromEntries(url.searchParams)));
+    else if(req.method==='POST'&&url.pathname==='/ui/api/strategy/draft')response=json(await strategy.saveDraft(await body(req)));
+    else if(req.method==='POST'&&url.pathname==='/ui/api/strategy/publish')response=json(await strategy.publish(await body(req)));
     else throw new ApiError(405,'method_not_allowed');
    }
    else if(url.pathname.startsWith('/ui/api/')){

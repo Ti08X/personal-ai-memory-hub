@@ -62,7 +62,7 @@ def scrub(value, key):
 def brief(record):
     if not isinstance(record, dict) or not isinstance(record.get("id"), str):
         raise HubError("invalid_response")
-    result = {k: record[k] for k in ("id", "version", "record_type", "source_platform", "source_kind", "source_timestamp", "session_id", "logical_key", "sensitivity", "citation") if k in record}
+    result = {k: record[k] for k in ("id", "version", "record_type", "source_platform", "source_kind", "source_timestamp", "session_id", "logical_key", "sensitivity", "citation", "classification") if k in record}
     payload = record.get("payload", {})
     if not isinstance(payload, dict) or not isinstance(payload.get("text", ""), str):
         raise HubError("invalid_response")
@@ -134,6 +134,8 @@ class HubClient:
         complete, actual = False, mode
         while pages < args.max_pages:
             query = {"query": args.query, "mode": mode, "rerank": str(args.rerank and mode != "keyword").lower(), "limit": args.limit, "cursor": cursor}
+            if getattr(args, "category", None):
+                query["category"] = args.category
             if args.collection:
                 query["collection"] = args.collection
             if args.record_type:
@@ -180,7 +182,7 @@ class HubClient:
     def write(self, operation, payload):
         if not isinstance(payload, dict) or payload.get("authorized") is not True:
             raise HubError("authorization_required")
-        paths = {"save": "/memories", "import": "/conversations/import", "save-account": "/social-accounts", "summary": "/summaries/generate"}
+        paths = {"save": "/memories", "import": "/conversations/import", "save-account": "/social-accounts", "summary": "/summaries/generate", "classify": "/classifications"}
         if operation == "import":
             messages = payload.get("messages")
             if not isinstance(messages, list) or not 1 <= len(messages) <= 10:
@@ -230,7 +232,7 @@ class JsonParser(argparse.ArgumentParser):
 
 def parser():
     p = JsonParser(description=__doc__)
-    p.add_argument("command", choices=["check", "handoff", "profile", "context", "search", "get", "accounts", "save", "import", "save-account", "summary"])
+    p.add_argument("command", choices=["check", "handoff", "profile", "context", "search", "get", "accounts", "save", "import", "save-account", "summary", "overview", "classify", "strategy"])
     p.add_argument("--query")
     p.add_argument("--record-id")
     p.add_argument("--mode", choices=["keyword", "semantic", "hybrid"], default="hybrid")
@@ -239,6 +241,9 @@ def parser():
     p.add_argument("--max-pages", type=int, choices=range(1, 21), default=3)
     p.add_argument("--collection", choices=["chats", "memories", "projects", "accounts", "knowledge"])
     p.add_argument("--record-type", choices=["memory", "profile", "event", "context", "summary", "message", "project", "task"])
+    p.add_argument("--category", choices=["personal", "development", "other", "unclassified"])
+    p.add_argument("--detail", choices=["brief", "full"], default="brief")
+    p.add_argument("--section", choices=["all", "personal", "projects", "mainline", "next_actions"], default="all")
     p.add_argument("--since")
     p.add_argument("--session-id")
     p.add_argument("--include-conversation", action="store_true")
@@ -264,7 +269,7 @@ def main(argv=None, transport=http_transport, stdin=None, stdout=None):
             data = client.search(args)
         elif operation == "get":
             data = client.get(args.record_id)
-        elif operation in ("save", "import", "save-account", "summary"):
+        elif operation in ("save", "import", "save-account", "summary", "classify"):
             raw = (stdin or sys.stdin.buffer).read(MAX_INPUT + 1)
             if len(raw) > MAX_INPUT:
                 raise HubError("payload_too_large")
@@ -272,9 +277,21 @@ def main(argv=None, transport=http_transport, stdin=None, stdout=None):
                 payload = json.loads(raw)
             except (ValueError, UnicodeError):
                 raise HubError("invalid_input_json") from None
-            data = client.write(operation, payload)
+            if operation == "classify":
+                receipt = client.request("/classifications", payload)
+                record = client.get(receipt.get("id"))
+                current = record.get("classification", {})
+                if current.get("revision") != receipt.get("revision") or current.get("categories") != receipt.get("categories"):
+                    raise HubError("write_verification_failed", persisted=True, receipt=receipt)
+                data = {"receipt": receipt, "verified": True}
+            else:
+                data = client.write(operation, payload)
         else:
-            path = {"handoff": "/handoff", "profile": "/profile", "context": "/context", "accounts": "/social-accounts"}[operation]
+            path = {"handoff": "/handoff", "profile": "/profile", "context": "/context", "accounts": "/social-accounts", "overview": "/overview", "strategy": "/strategy"}[operation]
+            if operation == "strategy":
+                path += "?" + urllib.parse.urlencode({"detail": args.detail})
+            if operation == "overview":
+                path += "?" + urllib.parse.urlencode({"detail": args.detail, "section": args.section})
             if operation == "context":
                 query = {"limit": args.limit, "include_conversation": str(args.include_conversation).lower()}
                 if args.since:

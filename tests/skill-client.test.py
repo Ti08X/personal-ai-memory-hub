@@ -20,7 +20,7 @@ SPEC.loader.exec_module(HUB)
 KEY = "pmh_" + "a" * 64  # Synthetic fixture only.
 
 
-def record(n=1, text="合成项目规划资料", version=1):
+def record(n=1, text="合成高中资料", version=1):
     return {"id": "rec_test" + str(n), "version": version, "record_type": "message", "source_platform": "synthetic", "sensitivity": "sensitive", "payload": {"title": "", "text": text}, "citation": {"record_id": "rec_test" + str(n), "version": version}}
 
 
@@ -35,6 +35,33 @@ class QueueTransport:
 
 
 class SkillClientTests(unittest.TestCase):
+    def test_read_only_published_strategy_command(self):
+        q = QueueTransport([(200, {"status": "published", "version": 1, "agent_writable": False, "document": {"goals": []}})])
+        code, result, _ = self.invoke(["strategy", "--detail", "full"], q)
+        self.assertEqual(code, 0)
+        self.assertFalse(result["data"]["agent_writable"])
+        self.assertTrue(q.requests[0].full_url.endswith("/strategy?detail=full"))
+        self.assertEqual(q.requests[0].method, "GET")
+
+    def test_overview_section_and_category_search_use_standard_rest(self):
+        q = QueueTransport([(200, {"status": "ready", "overview": {"section": "projects", "items": []}})])
+        code, result, _ = self.invoke(["overview", "--detail", "full", "--section", "projects"], q)
+        self.assertEqual(code, 0)
+        self.assertEqual(result["data"]["status"], "ready")
+        self.assertIn("section=projects", q.requests[0].full_url)
+        q = QueueTransport([(200, {"records": [], "next_cursor": None, "search_mode": "keyword"})])
+        code, _, _ = self.invoke(["search", "--query", "项目", "--mode", "keyword", "--category", "development"], q)
+        self.assertEqual(code, 0)
+        self.assertIn("category=development", q.requests[0].full_url)
+
+    def test_topic_writes_are_read_back_without_rewriting_original_text(self):
+        source = record()
+        source["classification"] = {"revision": 1, "categories": ["personal"]}
+        q = QueueTransport([(200, {"id": source["id"], "revision": 1, "categories": ["personal"]}), (200, source)])
+        code, result, _ = self.invoke(["classify"], q, {"authorized": True, "id": source["id"], "version": 1, "expected_revision": 0, "categories": ["personal"]})
+        self.assertEqual(code, 0)
+        self.assertTrue(result["data"]["verified"])
+
     def test_archive_contains_exact_current_skill_files_and_no_private_sources(self):
         names = ["SKILL.md", "agents/openai.yaml", "references/api.md", "references/setup.md", "scripts/hub_client.py"]
         source = ROOT / "integrations/skills/personal-ai-memory-hub"
@@ -64,7 +91,7 @@ class SkillClientTests(unittest.TestCase):
 
     def test_authentication_error_is_failure_not_empty_search(self):
         q = QueueTransport([(401, {"error": "authentication_required", "details": {"leak": KEY}})])
-        code, result, text = self.invoke(["search", "--query", "项目规划"], q)
+        code, result, text = self.invoke(["search", "--query", "高中"], q)
         self.assertNotEqual(code, 0)
         self.assertEqual(result["error"]["code"], "authentication_required")
         self.assertNotIn("data", result)
@@ -72,7 +99,7 @@ class SkillClientTests(unittest.TestCase):
 
     def test_empty_candidate_page_is_followed_until_next_cursor_ends(self):
         q = QueueTransport([(200, {"records": [], "next_cursor": 100, "search_mode": "Exact substring index"}), (200, {"records": [record()], "next_cursor": None, "search_mode": "Exact substring index"})])
-        code, result, _ = self.invoke(["search", "--query", "项目规划", "--mode", "keyword"], q)
+        code, result, _ = self.invoke(["search", "--query", "高中", "--mode", "keyword"], q)
         self.assertEqual(code, 0)
         self.assertEqual(result["data"]["count"], 1)
         self.assertTrue(result["data"]["complete"])
@@ -80,13 +107,13 @@ class SkillClientTests(unittest.TestCase):
 
     def test_page_cap_reports_incomplete_not_absence(self):
         q = QueueTransport([(200, {"records": [], "next_cursor": 100, "search_mode": "Exact substring index"})])
-        _, result, _ = self.invoke(["search", "--query", "项目规划", "--mode", "keyword", "--max-pages", "1"], q)
+        _, result, _ = self.invoke(["search", "--query", "高中", "--mode", "keyword", "--max-pages", "1"], q)
         self.assertFalse(result["data"]["complete"])
         self.assertEqual(result["data"]["next_cursor"], 100)
 
     def test_hybrid_degradation_restarts_explicit_keyword_pagination(self):
         q = QueueTransport([(200, {"records": [record()], "next_cursor": None, "search_mode": "keyword", "degraded": True, "reason": "model_daily_limit"}), (200, {"records": [record()], "next_cursor": 10, "search_mode": "Exact substring index"}), (200, {"records": [record(2)], "next_cursor": None, "search_mode": "Exact substring index"})])
-        code, value, _ = self.invoke(["search", "--query", "项目规划"], q)
+        code, value, _ = self.invoke(["search", "--query", "高中"], q)
         self.assertEqual(code, 0)
         self.assertEqual(value["data"]["count"], 2)
         self.assertEqual(value["data"]["reasons"], ["model_daily_limit"])
@@ -95,13 +122,13 @@ class SkillClientTests(unittest.TestCase):
 
     def test_semantic_candidates_do_not_claim_full_history(self):
         q = QueueTransport([(200, {"records": [record()], "next_cursor": None, "search_mode": "semantic"})])
-        _, value, _ = self.invoke(["search", "--query", "项目规划", "--mode", "semantic"], q)
+        _, value, _ = self.invoke(["search", "--query", "高中", "--mode", "semantic"], q)
         self.assertFalse(value["data"]["complete"])
         self.assertEqual(value["data"]["scope"], "ranked_candidates")
 
     def test_failure_after_a_page_is_explicitly_partial(self):
         q = QueueTransport([(200, {"records": [record()], "next_cursor": 20, "search_mode": "Exact substring index"}), (403, {"error": "record_policy_denied"})])
-        code, value, _ = self.invoke(["search", "--query", "项目规划", "--mode", "keyword"], q)
+        code, value, _ = self.invoke(["search", "--query", "高中", "--mode", "keyword"], q)
         self.assertNotEqual(code, 0)
         self.assertEqual(value["error"]["details"]["pages_completed"], 1)
         self.assertFalse(value["error"]["details"]["complete"])
@@ -144,7 +171,7 @@ class SkillClientTests(unittest.TestCase):
     def test_redirect_bad_json_and_cursor_loop_are_failures(self):
         for response in [(302, {"error": "redirected"}), (200, b"not json"), (200, {"records": [], "next_cursor": 0, "search_mode": "Exact substring index"})]:
             q = QueueTransport([response])
-            code, value, _ = self.invoke(["search", "--query", "项目规划", "--mode", "keyword"], q)
+            code, value, _ = self.invoke(["search", "--query", "高中", "--mode", "keyword"], q)
             self.assertNotEqual(code, 0)
             self.assertFalse(value["ok"])
             self.assertEqual(len(q.requests), 1)
@@ -165,7 +192,7 @@ class SkillClientTests(unittest.TestCase):
 
     def test_search_excerpts_preserve_provenance_and_signal_truncation(self):
         q = QueueTransport([(200, {"records": [record(text="长" * 1000)], "next_cursor": None, "search_mode": "Exact substring index"})])
-        _, value, _ = self.invoke(["search", "--query", "项目规划", "--mode", "keyword"], q)
+        _, value, _ = self.invoke(["search", "--query", "高中", "--mode", "keyword"], q)
         item = value["data"]["records"][0]
         self.assertTrue(item["truncated"])
         self.assertEqual(item["citation"]["record_id"], item["id"])
@@ -189,7 +216,7 @@ class IsolatedWorkerTests(unittest.TestCase):
         client = HUB.HubClient("https://isolated.example/v1", token, transport)
         self.assertTrue(client.check()["authenticated"])
         marker = "skill-test-" + uuid.uuid4().hex
-        memory = {"authorized": True, "record_type": "memory", "source_record_id": marker, "source_platform": "skill-synthetic", "source_kind": "test", "timestamp": "2026-10-14T12:00:00+08:00", "text": marker + " 合成项目规划讨论", "sensitivity": "sensitive"}
+        memory = {"authorized": True, "record_type": "memory", "source_record_id": marker, "source_platform": "skill-synthetic", "source_kind": "test", "timestamp": "2026-10-14T12:00:00+08:00", "text": marker + " 合成高中讨论", "sensitivity": "sensitive"}
         saved = client.write("save", memory)
         self.assertEqual(saved["verified_count"], 1)
         self.assertTrue(client.write("save", memory)["verified"][0]["deduplicated"])

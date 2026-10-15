@@ -1,12 +1,12 @@
 {
   "name": "personal-ai-memory-hub",
   "archive": "personal-ai-memory-hub-skill.zip",
-  "sha256": "911945bb967174c4e42aecc534e59e580351892b381859cd349b60dc52eec2f3",
+  "sha256": "923cd1e8eff8f91e8779b63db9f1efe3ae8ffe4dbd3b067412efd10ee050045d",
   "files": [
     {
       "path": "personal-ai-memory-hub/SKILL.md",
-      "bytes": 5770,
-      "sha256": "72d9e90d7bded8ea88c520c220631961902f8a5427a05827dc2c117acd71daa3"
+      "bytes": 8585,
+      "sha256": "e97af41042b5e0d4c01a2fae1e3d9dea73cebd927e23fd72df35656b06f51139"
     },
     {
       "path": "personal-ai-memory-hub/agents/openai.yaml",
@@ -15,8 +15,8 @@
     },
     {
       "path": "personal-ai-memory-hub/references/api.md",
-      "bytes": 4098,
-      "sha256": "c663344e1e8ce03b468ea3c18de84fba13ae924651a38804e0f91a99f482f852"
+      "bytes": 5792,
+      "sha256": "8da4e2e5e09cd49b74c91ad67956c40300c81bc1e9ac5ddff39ffc955baf372d"
     },
     {
       "path": "personal-ai-memory-hub/references/setup.md",
@@ -25,8 +25,8 @@
     },
     {
       "path": "personal-ai-memory-hub/scripts/hub_client.py",
-      "bytes": 15822,
-      "sha256": "e949c086c5d0b817df5e59f9b81011c7e29a3faf50da86a654de702a9297a52c"
+      "bytes": 17149,
+      "sha256": "832824c4d5bcb99c986ead7e026296447a8ed6daecbfe1c65f0e79b1e463964a"
     }
   ]
 }

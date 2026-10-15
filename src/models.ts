@@ -19,13 +19,13 @@ export type Evidence = {id:string;version:number;timestamp:string;text:string;so
 const vectorSchema=z.array(z.number().finite()).length(DIMENSIONS).refine(v=>v.some(n=>n!==0));
 
 // Never surface a vendor body: it may echo private input or credentials.
-async function post(url:string,key:string,payload:unknown,transport:typeof fetch):Promise<unknown> {
+export async function post(url:string,key:string,payload:unknown,transport:typeof fetch,timeoutMs=30000):Promise<unknown> {
  const u=new URL(url);
  if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash||!u.hostname.includes('.')||u.hostname.endsWith('.local')||u.hostname.endsWith('.localhost')||/^\d+\.\d+\.\d+\.\d+$/.test(u.hostname)||u.hostname.includes(':'))throw new ApiError(503,'invalid_model_endpoint');
  let response:Response;
- try {response=await transport(url,{method:'POST',redirect:'manual',signal:AbortSignal.timeout(30000),headers:{authorization:'Bearer '+key,'content-type':'application/json'},body:JSON.stringify(payload)});}
- catch {throw new ApiError(503,'model_service_unavailable');}
- if(!response.ok){await response.body?.cancel();throw new ApiError(response.status===429?429:503,response.status===429?'model_provider_rate_limit':'model_service_unavailable');}
+ try {response=await transport(url,{method:'POST',redirect:'manual',signal:AbortSignal.timeout(timeoutMs),headers:{authorization:'Bearer '+key,'content-type':'application/json'},body:JSON.stringify(payload)});}
+ catch(e) {throw new ApiError(503,e instanceof Error&&['AbortError','TimeoutError'].includes(e.name)?'model_request_timeout':'model_service_unavailable');}
+ if(!response.ok){await response.body?.cancel();throw new ApiError(response.status===429?429:503,response.status===429?'model_provider_rate_limit':'model_service_unavailable',{upstream_status:response.status});}
  const reader=response.body?.getReader();if(!reader)throw new ApiError(503,'invalid_model_response');
  const parts:Uint8Array[]=[];let length=0;
  try{while(true){const item=await reader.read();if(item.done)break;length+=item.value.length;if(length>2*1024*1024){await reader.cancel();throw new ApiError(503,'model_response_too_large');}parts.push(item.value);}}catch(e){if(e instanceof ApiError)throw e;throw new ApiError(503,'model_service_unavailable');}

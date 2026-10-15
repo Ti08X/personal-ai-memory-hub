@@ -35,5 +35,10 @@
     "RAG_ENABLED": "false",
     "SUMMARY_BASE_URL": "",
     "SUMMARY_MODEL": ""
+  },
+  "triggers": {
+    "crons": [
+      "* * * * *"
+    ]
   }
 }

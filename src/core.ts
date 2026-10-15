@@ -30,7 +30,7 @@ export const importSchema = z.object({
  raw_metadata:z.record(z.string(),z.unknown()).optional()
 }).strict();
 export const contextSchema = z.object({since:date.optional(),limit:z.number().int().min(1).max(50).default(20),session_id:str(160).optional(),source_platform:str(64).optional(),include_conversation:z.boolean().default(false)}).strict();
-export const searchSchema = z.object({query:z.string().min(2).max(120),limit:z.number().int().min(1).max(50).default(20),record_type:z.enum(['memory','profile','event','context','summary','message','project','task']).optional(),collection:z.enum(['accounts','knowledge','memories','chats','projects']).optional(),cursor:z.number().int().min(0).default(0),mode:z.enum(['keyword','semantic','hybrid']).default('keyword'),rerank:z.boolean().default(true)}).strict();
+export const searchSchema = z.object({query:z.string().min(2).max(120),limit:z.number().int().min(1).max(50).default(20),record_type:z.enum(['memory','profile','event','context','summary','message','project','task']).optional(),collection:z.enum(['accounts','knowledge','memories','chats','projects']).optional(),category:z.enum(['personal','development','other','unclassified']).optional(),cursor:z.number().int().min(0).default(0),mode:z.enum(['keyword','semantic','hybrid']).default('keyword'),rerank:z.boolean().default(true)}).strict();
 export const scopes = ['memory:read','memory:write','conversation:import','sensitive:read','sensitive:write','admin'] as const;
 export function need(p:Principal,scope:string) { if(!p.scopes.includes(scope)) throw new ApiError(403,'insufficient_scope',{required:scope}); }
 export const canonical = (v:unknown):string => {

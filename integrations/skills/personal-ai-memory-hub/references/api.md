@@ -46,3 +46,16 @@ summary 对应 generate_summary：authorized=true、evidence:[{id,version}]，�
 | write_verification_failed | 已提交但没完成回读，可能已保存，核查收据 |
 | invalid_response / network_error / response_too_large | 无可用成功结果，不推断不存在资料 |
 | ok=true、records=[]、complete=true | 当前权限内这组关键词未命中，不等于全账号无记录 |
+# 分类与总概览
+
+`GET /v1/overview` 默认精简交接；`?detail=full&section=projects` 读取项目目标、状态、当前进度和下一步。section 可为 all/personal/projects/mainline/next_actions。状态和覆盖范围是实际已整理的资料，不代表官方账号全部历史；stale_or_scope_restricted 不返回正文。所有项带 evidence_ids，原文用 records/{id}。MCP 对应 get_overview。
+
+`GET /v1/records?category=personal` 与 search_memory 的 category 参数可按 personal/development/other/unclassified 筛选，受相同权限限制。未分类内容仍需按需检索。
+
+`POST /v1/classifications` / MCP classify_memory：`{authorized:true,id,version,expected_revision,categories:["personal","development"]}`；other 不和其他分类共用。先读取 classification.revision，未分类为0。409 不盲目覆盖；更改的是主题元数据，原文版本不变。脚本 classify 从标准输入接收同一对象并回读校验。
+
+总概览的后台启用/暂停/分批处理为网页管理员功能，不给普通 AI Key 管理权限。AI 按授权写入原始事实/项目/计划，后台使用配置好的外部模型更新概要。
+
+## 本人发布的云端战略（Agent 只读）
+
+先读 get_handoff.strategy，再读 overview。get_strategy / GET /v1/strategy?detail=brief|full 返回本人已发布版本、当前周期目标、层级和达成标准。草稿、历史以及所有发布/写入接口不向 Agent 开放，L3 不改变这个限制。strategy.* 逻辑键保留，不能通过普通记忆写入冒充正式目标。新目标必须由本人在密码和 2FA 登录的网页确认发布；建议和观察留在普通记录。
