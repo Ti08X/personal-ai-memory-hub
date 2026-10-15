@@ -12,7 +12,10 @@
     "check": "tsc --noEmit",
     "test": "node --test --test-concurrency=1 tests/*.test.mjs",
     "predeploy": "node scripts/build-ui.mjs",
-    "deploy": "wrangler deploy",
+    "deploy": "node scripts/deploy-server.mjs",
+    "build:server": "node scripts/build-server.mjs",
+    "test:server": "node scripts/test-server.mjs",
+    "deploy:cloudflare:legacy": "wrangler deploy --config wrangler.legacy.jsonc --keep-vars",
     "migrate": "wrangler d1 migrations apply personal-ai-memory-hub --local",
     "test:local": "node scripts/test-local.mjs",
     "test:rag": "node --test tests/rag.test.mjs"

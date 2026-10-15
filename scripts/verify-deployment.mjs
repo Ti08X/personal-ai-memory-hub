@@ -19,7 +19,7 @@ try{
  assert.equal((await fetcher(base+'/ui/api/model-settings')).status,401);
  checks.unauthenticated_access_denied=true;
  checks.assets=[];
- for(const file of ['index.html','app.js','style.css','launch.js','collections.js','import-format.js','client-access.js','auth-bootstrap.js','overview-ui.js','strategy-ui.js','openclaw-quickstart.md','memory-hub-client.py','memory-skill-setup.md','personal-ai-memory-hub-skill.zip','personal-ai-memory-hub-skill.sha256','openclaw-memory-setup.md','openclaw-personal-memory-hub.tgz','openclaw-personal-memory-hub.sha256']){
+ for(const file of ['index.html','app.js','style.css','launch.js','collections.js','import-format.js','client-access.js','auth-bootstrap.js','overview-ui.js','strategy-ui.js','library-ui.js','archive-ui.js','openclaw-quickstart.md','memory-hub-client.py','memory-skill-setup.md','personal-ai-memory-hub-skill.zip','personal-ai-memory-hub-skill.sha256','openclaw-memory-setup.md','openclaw-personal-memory-hub.tgz','openclaw-personal-memory-hub.sha256']){
   stage='asset:'+file;
   const path=file==='index.html'?'/dashboard':'/'+file;
   const remote=await fetcher(base+path);assert.equal(remote.status,200);
@@ -36,16 +36,17 @@ try{
   assert.equal(Object.keys(handoff)[0],'strategy');assert.equal(handoff.strategy.agent_writable,false);
   assert.equal(rag.application_model_limit,false);assert.equal(rag.calls_per_day,null);
   assert.match(activity.owner_ref,/^[a-f0-9]{64}$/);assert.equal(activity.scope,'this_client');assert.ok(Array.isArray(activity.events));
+  const library=await api('/v1/library/status');assert.equal(library.application_model_limit,false);assert.ok(Array.isArray((await api('/v1/library/summaries?kind=month&limit=1')).summaries));
   const search=await api('/v1/search?query='+encodeURIComponent('记忆')+'&mode=keyword&rerank=false');
   assert.ok(Array.isArray(search.records));assert.match(search.search_mode,/Exact substring/);
   assert.equal((await fetcher(base+'/ui/api/model-settings',{headers:{authorization:'Bearer '+credentials.token}})).status,401);
   stage='mcp:'+clientName;const client=new Client({name:'deployment-read-only-check',version:'1'});
   await client.connect(new StreamableHTTPClientTransport(new URL(base+'/mcp'),{fetch:fetcher,authProvider:{token:async()=>credentials.token},requestInit:{redirect:'error'}}));
   let names;try{
-   names=(await client.listTools()).tools.map(t=>t.name).sort();assert.equal(names.length,12);assert.ok(names.includes('get_strategy'));assert.ok(names.includes('get_overview'));
+   names=(await client.listTools()).tools.map(t=>t.name).sort();assert.equal(names.length,16);assert.ok(names.includes('get_strategy'));assert.ok(names.includes('get_overview'));for(const name of ['list_memory_summaries','get_memory_summary','find_memory_by_label','set_memory_labels'])assert.ok(names.includes(name));
    const result=await client.callTool({name:'get_handoff',arguments:{}});assert.ok(!result.isError);
   }finally{await client.close();}
-  checks.clients.push({client:clientName,rest_reads:'passed',mcp_handoff:'passed',strategy:{status:strategy.status,agent_write_denied:true,priority:strategy.priority},mcp_tools:names,visible_records:dashboard.totals.records,handoff_counts:{summaries:handoff.summaries.length,projects:handoff.projects.length,tasks:handoff.tasks.length},retrieval:{enabled:rag.enabled,configured:rag.configured,summary_configured:rag.summary_configured,application_model_limit:rag.application_model_limit,calls_per_day:rag.calls_per_day},automatic_memory_status:{accessible:true,scope:activity.scope,reported_events:activity.events.length},keyword_search:'passed',model_settings_bearer_denied:true});
+  checks.clients.push({client:clientName,rest_reads:'passed',mcp_handoff:'passed',strategy:{status:strategy.status,agent_write_denied:true,priority:strategy.priority},mcp_tools:names,visible_records:dashboard.totals.records,handoff_counts:{summaries:handoff.summaries?.length??0,projects:handoff.projects?.length??0,tasks:handoff.tasks?.length??0,library_summaries:handoff.library?.summaries?.length??0},retrieval:{enabled:rag.enabled,configured:rag.configured,summary_configured:rag.summary_configured,application_model_limit:rag.application_model_limit,calls_per_day:rag.calls_per_day},automatic_memory_status:{accessible:true,scope:activity.scope,reported_events:activity.events.length},keyword_search:'passed',model_settings_bearer_denied:true});
  }
  checks.actual_model_calls='not_requested_read_only_verification';
  await writeFile(args.output??'docs/v2-live-verification.json',JSON.stringify(checks,null,2)+'\n');

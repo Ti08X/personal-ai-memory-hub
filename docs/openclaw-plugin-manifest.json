@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "sha256": "20d23a32534fa432e0f338a7e7d9c5d4ca83bb67eaa95028b3c67cfc8328b1c7",
+  "sha256": "aabe0660fc4c080c78822f190358981c7e08c2036a682c7bf8491eb08cf7ab69",
   "files": [
     {
       "path": "package/package.json",
@@ -29,8 +29,8 @@
     },
     {
       "path": "package/README.md",
-      "sha256": "b05abe4628e08eb90193443569ae545c3189d9024e6f53ee54956d7a4f065331",
-      "bytes": 6272
+      "sha256": "c9a532b6726e59818b1db571fdd43236ee2b4dc89c7c5805555d485da9e83fed",
+      "bytes": 6699
     }
   ]
 }

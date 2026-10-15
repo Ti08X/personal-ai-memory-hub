@@ -15,3 +15,7 @@ __pycache__/
 *.pyc
 context-snapshot/
 work-v2/
+
+server/*.bundle.mjs
+docs/*tests.tap
+docs/*regressions.tap

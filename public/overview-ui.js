@@ -1,4 +1,4 @@
-export const categoryLabels={personal:'个人信息',development:'开发项目',other:'其他讨论',unclassified:'未分类'};
+export const categoryLabels={personal:'个人信息',development:'开发项目',work:'工作事业',health:'生活健康',learning:'学习研究',other:'其他讨论',unclassified:'未分类'};
 export const stateLabels={confirmed:'有明确陈述',discussed:'讨论过',planned:'计划中',in_progress:'进行中',completed:'已完成',blocked:'有阻塞',unknown:'待确认'};
 const paths={records:['M5 4h14v16H5z','M8 8h8M8 12h8M8 16h5'],plus:['M12 5v14M5 12h14'],personal:['M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0','M4 21v-2a8 8 0 0 1 16 0v2'],development:['m8 6-6 6 6 6','m16 6 6 6-6 6','m14 3-4 18'],classified:['m4 12 5 5L20 5'],pending:['M12 3a9 9 0 1 0 9 9','M12 7v6l4 2']};
 export function metric(label,value,foot,name,h){
@@ -10,7 +10,7 @@ export function categoryChart(counts,h){
  const panel=h.card('记忆分类','按当前权限统计原始资料；个人与开发主题可重叠'),layout=h.el('div','classification-chart');
  const total=counts.total_sources||0,done=counts.classified||0,ring=h.el('div','classification-ring');ring.style.setProperty('--classified-percent',String(total?Math.round(done/total*100):0)+'%');
  ring.append(h.el('strong','',String(done)),h.el('span','','已分类 / '+total));layout.append(ring);
- const bars=h.el('div','category-bars');for(const [key,value] of [['personal',counts.personal],['development',counts.development],['other',counts.other],['unclassified',counts.unclassified]]){
+ const bars=h.el('div','category-bars');for(const [key,value] of [['personal',counts.personal],['development',counts.development],...['work','health','learning'].filter(key=>counts[key]).map(key=>[key,counts[key]]),['other',counts.other],['unclassified',counts.unclassified]]){
   const row=h.el('div','category-bar'),label=h.button(categoryLabels[key],()=>h.openCategory(key),'quiet'),bar=h.el('progress');bar.max=Math.max(1,total);bar.value=value||0;row.append(label,h.el('strong','',String(value||0)),bar);bars.append(row);
  }
  layout.append(bars);panel.append(layout,h.el('p','muted','分类表示资料涉及的主题；个人事实和项目完成状态需要原文证据。未整理的内容会明确保留为未分类。'));return panel;
@@ -24,7 +24,7 @@ export function projectTable(projects,h){
 }
 export function summaryPanel(data,h,detailed=false){
  h={...h,evidenceIndex:data.evidence_index};
- const panel=h.card(detailed?'个人总概览 · 详细版':'个人与执行现状总概览',data.updated_at?'版本 '+data.version+' · '+h.date(data.updated_at):'尚未生成'),summary=data.overview;
+ const panel=h.card(data.summary_title??(detailed?'个人总概览 · 详细版':'个人与执行现状总概览'),data.updated_at?'版本 '+data.version+' · '+h.date(data.updated_at):'尚未生成'),summary=data.overview;
  const coverage=data.coverage;panel.append(h.el('p','muted',coverage?'已纳入 '+coverage.included_sources+' / '+coverage.available_sources+' 条已提交资料。'+(data.status==='updating'?'尚有资料等待增量整理。':''):'已分类 '+data.counts.classified+' / '+data.counts.total_sources+' 条已提交资料。'));if(data.historical)panel.append(h.el('p','error','这是旧版概要，仅供回溯。引用绑定当时的原文版本，不能直接当成当前事实。'));
  if(!summary){panel.append(h.el('p','overview-empty',data.status==='stale_or_scope_restricted'?'来源已更新或当前权限不能读取完整概要；旧内容暂停展示。':'开始整理后，这里会出现个人情况、开发项目、主线进度和下一步。'));}
  else{

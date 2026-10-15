@@ -1,0 +1,32 @@
+{
+  "name": "personal-ai-memory-hub",
+  "main": "src/legacy-proxy.ts",
+  "compatibility_date": "2026-10-10",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [],
+  "triggers": {
+    "crons": []
+  },
+  "observability": {
+    "enabled": false
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "personal-ai-memory-hub",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "workflows": [
+    {
+      "name": "personal-memory-library",
+      "binding": "LIBRARY_WORKFLOW",
+      "class_name": "MemoryLibraryWorkflow"
+    }
+  ]
+}

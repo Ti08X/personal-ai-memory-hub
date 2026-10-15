@@ -232,7 +232,10 @@ class JsonParser(argparse.ArgumentParser):
 
 def parser():
     p = JsonParser(description=__doc__)
-    p.add_argument("command", choices=["check", "handoff", "profile", "context", "search", "get", "accounts", "save", "import", "save-account", "summary", "overview", "classify", "strategy"])
+    p.add_argument("command", choices=["check", "handoff", "profile", "context", "search", "get", "accounts", "save", "import", "save-account", "summary", "overview", "classify", "strategy", "summaries", "scope", "find-label", "labels"])
+    p.add_argument("--kind", choices=["conversation", "category", "project", "day", "week", "month", "tag"])
+    p.add_argument("--name")
+    p.add_argument("--scope-id")
     p.add_argument("--query")
     p.add_argument("--record-id")
     p.add_argument("--mode", choices=["keyword", "semantic", "hybrid"], default="hybrid")
@@ -241,7 +244,7 @@ def parser():
     p.add_argument("--max-pages", type=int, choices=range(1, 21), default=3)
     p.add_argument("--collection", choices=["chats", "memories", "projects", "accounts", "knowledge"])
     p.add_argument("--record-type", choices=["memory", "profile", "event", "context", "summary", "message", "project", "task"])
-    p.add_argument("--category", choices=["personal", "development", "other", "unclassified"])
+    p.add_argument("--category", choices=["personal", "development", "work", "health", "learning", "other", "unclassified"])
     p.add_argument("--detail", choices=["brief", "full"], default="brief")
     p.add_argument("--section", choices=["all", "personal", "projects", "mainline", "next_actions"], default="all")
     p.add_argument("--since")
@@ -267,6 +270,26 @@ def main(argv=None, transport=http_transport, stdin=None, stdout=None):
             data = client.check()
         elif operation == "search":
             data = client.search(args)
+        elif operation == "summaries":
+            if args.kind == "tag":
+                raise HubError("invalid_arguments")
+            query = {"cursor": args.cursor, "limit": min(args.limit, 30)}
+            if args.kind:
+                query["kind"] = args.kind
+            data = client.request("/library/summaries?" + urllib.parse.urlencode(query))
+        elif operation == "scope":
+            if not args.scope_id or not re.fullmatch(r"scope_[a-f0-9]{40}", args.scope_id):
+                raise HubError("invalid_arguments")
+            data = client.request("/library/summaries/" + args.scope_id)
+        elif operation == "find-label":
+            if args.kind not in ("tag", "project") or not args.name:
+                raise HubError("invalid_arguments")
+            data = client.request("/library/records?" + urllib.parse.urlencode({"kind": args.kind, "name": args.name, "cursor": args.cursor, "limit": args.limit}))
+            data["records"] = [brief(r) for r in data.get("records", [])]
+        elif operation == "labels":
+            if not args.record_id or not re.fullmatch(r"rec_[a-zA-Z0-9_-]+", args.record_id):
+                raise HubError("invalid_arguments")
+            data = client.request("/library/labels/" + args.record_id)
         elif operation == "get":
             data = client.get(args.record_id)
         elif operation in ("save", "import", "save-account", "summary", "classify"):

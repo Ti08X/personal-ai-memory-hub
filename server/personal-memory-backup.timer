@@ -1,0 +1,10 @@
+[Unit]
+Description=Twice daily Personal Memory Hub backups
+
+[Timer]
+OnCalendar=*-*-* 00,12:30:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

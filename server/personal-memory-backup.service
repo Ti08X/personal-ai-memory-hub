@@ -1,0 +1,9 @@
+[Unit]
+Description=Verified encrypted Personal Memory Hub SQLite backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+UMask=0077
+ExecStart=/usr/bin/docker run --rm --network none --read-only --user 1000:1000 -e DATABASE_PATH=/data/memory.sqlite -v /var/lib/personal-memory-hub/data:/data:ro -v /var/lib/personal-memory-hub/backups:/backups personal-memory-hub:server-v1 node server/backup.mjs

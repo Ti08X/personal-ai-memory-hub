@@ -1,5 +1,7 @@
 # Personal AI Memory Hub
 
+Production now runs on the owner's Singapore server using Node.js 24, SQLite WAL/FTS5 and Qdrant. The hosted URL and existing MCP/REST API keys remain compatible. Cloudflare is the free DNS/HTTPS proxy; the old database is frozen. See [server deployment and operations](docs/server-deployment.md). The Cloudflare configuration below is legacy/local-test reference, not the current production deployment target.
+
 A self-hostable personal context and long-term memory service. It provides a private dashboard, REST API, remote MCP endpoint, searchable conversation archive, structured memories, social-account notes, knowledge documents, and an optional OpenClaw integration. The service stores and retrieves information; it does not generate chat answers.
 
 ## Connect an AI to the hosted Hub
@@ -59,7 +61,11 @@ Follow [`integrations/openclaw-memory/README.md`](integrations/openclaw-memory/R
 
 An AI client can submit the visible conversation messages it is authorized to access, and a user can import exported files through the dashboard or API. Connecting MCP does not grant access to private chat histories held by other AI platforms. Those histories require a supported client submission or a user-provided export. The dashboard shows source and provenance so imported content can be traced.
 
-## Self-host on Cloudflare
+## Self-host on a server
+
+Use [the server deployment guide](docs/server-deployment.md) for the current Node.js/SQLite/Qdrant runtime, migration checks, private configuration, backups and updates.
+
+## Legacy Cloudflare / local development
 
 Requirements: Node.js 22.18 or later, a Cloudflare account, a D1 database, and (if semantic search is enabled) a Vectorize index. Replace the D1 placeholder and Vectorize index name in `wrangler.jsonc` with resources in your own account, and configure secrets through Wrangler or Cloudflare settings. Never commit `.dev.vars` or real secrets.
 
@@ -80,6 +86,6 @@ For deployment, create your own D1 and Vectorize resources, set the database and
 
 ## Privacy and security
 
-Records are encrypted at rest by the Worker application. API keys are shown once when created and stored as hashes. Use a distinct revocable key for each client. Keep client keys in private configuration and rotate them if exposed. The public repository is a source distribution, not a backup of the owner’s personal data.
+Records are encrypted at rest by the application. API keys are shown once when created and stored as hashes. Use a distinct revocable key for each client. Keep client keys in private configuration and rotate them if exposed. The public repository is a source distribution, not a backup of the owner’s personal data.
 
 Dashboard login requires the account password and a second factor. A successful login keeps the same browser signed in for up to 7 days using a Secure, HttpOnly, same-site cookie; refreshing the page does not end the session. Manual logout, password changes, account revocation, or the 7-day expiry end it sooner. Passwords and authenticator codes are not stored in browser storage.

@@ -59,3 +59,18 @@ summary 对应 generate_summary：authorized=true、evidence:[{id,version}]，�
 ## 本人发布的云端战略（Agent 只读）
 
 先读 get_handoff.strategy，再读 overview。get_strategy / GET /v1/strategy?detail=brief|full 返回本人已发布版本、当前周期目标、层级和达成标准。草稿、历史以及所有发布/写入接口不向 Agent 开放，L3 不改变这个限制。strategy.* 逻辑键保留，不能通过普通记忆写入冒充正式目标。新目标必须由本人在密码和 2FA 登录的网页确认发布；建议和观察留在普通记录。
+
+## 增量记忆库（需服务器部署 0008 与新版 Worker）
+
+| MCP | REST | 脚本 |
+| --- | --- | --- |
+| list_memory_summaries | GET /v1/library/summaries?kind=month&cursor=0&limit=20 | summaries --kind month |
+| get_memory_summary | GET /v1/library/summaries/scope_… | scope --scope-id scope_… |
+| find_memory_by_label | GET /v1/library/records?kind=tag&name=… | find-label --kind tag --name "标签" |
+| set_memory_labels | POST /v1/library/labels | 仅 REST/MCP 写；先用 labels --record-id rec_… 读取两个 revision |
+
+标签写入参数 authorized=true、id、version、expected_revision、expected_classification_revision、categories、tags、projects。这是索引修订，不编辑原文；manual 修订不会被下一次模型提取自动覆盖。
+
+kind=conversation/category/project/day/week/month。周按上海时间周一开始。读取的 status 不是 ready 时 overview=null，不回退展示旧概要。get_handoff.library 只给有界索引，next_project_cursor 与 /library/summaries 是补读入口；部分分类无权限时不会披露标题或概要。
+
+示例：先 summaries --kind project，再 scope --scope-id 响应中的ID；具体历史问题再 search --query "关键经历"。相同输入不要重复生成摘要。

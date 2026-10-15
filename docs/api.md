@@ -1,5 +1,7 @@
 # REST / MCP 使用协议
 
+> 2026-10-15 已发布增量版以 [library-v3.md](library-v3.md) 为准：纯 Cloudflare，新增八类工作台与六种概要，保留现有认证、权限和战略只读边界。下方保留早期设计/历史记录。
+
 ## 自动记忆运行报告（2026-10-14 已发布）
 
 `GET /v1/integrations/activity?limit=50`：需要 memory:read。AI Key 只查看本客户端事件；网页管理员可以查看同 owner 各客户端。返回 events、scope、coverage 与不含原始 owner ID 的 owner_ref，插件用于将离线队列绑定同一账户。limit 为 1–100；本接口是近期运行记录，不是聊天档案全量导出。

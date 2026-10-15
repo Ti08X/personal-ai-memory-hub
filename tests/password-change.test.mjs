@@ -87,10 +87,10 @@ test('password change requires current password, fresh 2FA and CSRF, and revokes
   }
   assert.equal((await request('/v1/model-settings',{token:config.clients.codex.token})).status,404);
   assert.equal((await request('/ui/api/model-settings',{token:config.clients.codex.token})).status,401);
-  const savedSettings=await context.request.post(base+'/ui/api/model-settings',{headers:{origin:base,'x-csrf-token':uiSession.csrf},data:{authorized:true,expected_version:0,base_url:'https://api.example.com/v1',model:'synthetic-model',api_key:'synthetic-web-credential',summary_enabled:false,retrieval_enabled:false}});assert.equal(savedSettings.status(),200);assert.ok(!(await savedSettings.text()).includes('synthetic-web-credential'));
+  const savedSettings=await context.request.post(base+'/ui/api/model-settings',{headers:{origin:base,'x-csrf-token':uiSession.csrf},data:{authorized:true,expected_version:0,base_url:'https://api.zgatri.com/v1',model:'synthetic-model',api_key:'synthetic-web-credential',summary_enabled:false,retrieval_enabled:false}});assert.equal(savedSettings.status(),200);assert.ok(!(await savedSettings.text()).includes('synthetic-web-credential'));
   const noCsrf=await context.request.post(base+'/ui/api/model-settings',{data:{authorized:true,expected_version:1}});assert.equal(noCsrf.status(),403);
   await page.locator('[data-view="models"]').click();await page.locator('#content h2').filter({hasText:'模型服务设置'}).waitFor();
-  assert.equal(await page.locator('#content input[type="url"]').inputValue(),'https://api.example.com/v1');assert.equal(await page.locator('#content input[type="password"]').first().inputValue(),'');
+  assert.equal(await page.locator('#content input[type="url"]').inputValue(),'https://api.zgatri.com/v1');assert.equal(await page.locator('#content input[type="password"]').first().inputValue(),'');
   await page.locator('#content input[type=password]').first().fill('synthetic-model-list-key');
   await page.route('**/ui/api/model-settings/models',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'model_service_unavailable'})}));
   await page.locator('#content button').filter({hasText:'拉取模型列表'}).click();

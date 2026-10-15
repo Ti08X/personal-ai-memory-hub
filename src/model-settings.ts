@@ -14,7 +14,7 @@ export async function runtimeModels(env:Env,owner:string):Promise<ModelConfig&{r
 }
 export class ModelSettings {
  constructor(private env:Env,private principal:Principal){need(principal,'admin');}
- async metadata(){const saved=await readSettings(this.env,this.principal.owner_id),s=saved?.settings;return {version:saved?.version??0,updated_at:saved?.updated_at??null,base_url:s?.base_url??this.env.SUMMARY_BASE_URL??'https://api.example.com/v1',model:s?.model??this.env.SUMMARY_MODEL??'',api_key_configured:!!(s?.api_key??((!s||s.base_url===this.env.SUMMARY_BASE_URL)?this.env.SUMMARY_API_KEY:undefined)),siliconflow_key_configured:!!(s?.siliconflow_api_key??this.env.SILICONFLOW_API_KEY),summary_enabled:s?.summary_enabled??true,retrieval_enabled:s?.retrieval_enabled??true};}
+ async metadata(){const saved=await readSettings(this.env,this.principal.owner_id),s=saved?.settings;return {version:saved?.version??0,updated_at:saved?.updated_at??null,base_url:s?.base_url??this.env.SUMMARY_BASE_URL??'https://api.zgatri.com/v1',model:s?.model??this.env.SUMMARY_MODEL??'',api_key_configured:!!(s?.api_key??((!s||s.base_url===this.env.SUMMARY_BASE_URL)?this.env.SUMMARY_API_KEY:undefined)),siliconflow_key_configured:!!(s?.siliconflow_api_key??this.env.SILICONFLOW_API_KEY),summary_enabled:s?.summary_enabled??true,retrieval_enabled:s?.retrieval_enabled??true};}
  async save(input:unknown){
   const v=schema.parse(input),old=await readSettings(this.env,this.principal.owner_id);
   if(v.expected_version!==(old?.version??0))throw new ApiError(409,'model_settings_conflict');

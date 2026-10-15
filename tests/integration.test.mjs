@@ -110,7 +110,7 @@ test('real Streamable HTTP MCP discovers overview tools and invokes the core too
  const client=new Client({name:'integration-suite',version:'1'});
  await client.connect(new StreamableHTTPClientTransport(new URL(base+'/mcp'),{authProvider:{token:async()=>config.clients.codex.token}}));
  try {
-  const list=await client.listTools();assert.deepEqual(list.tools.map(t=>t.name).sort(),['get_strategy','get_profile','get_context','search_memory','save_memory','import_conversation','get_handoff','get_overview','classify_memory','list_social_accounts','save_social_account','generate_summary'].sort());
+  const list=await client.listTools();assert.deepEqual(list.tools.map(t=>t.name).sort(),['get_strategy','get_profile','get_context','search_memory','save_memory','import_conversation','get_handoff','get_overview','classify_memory','list_memory_summaries','get_memory_summary','find_memory_by_label','set_memory_labels','list_social_accounts','save_social_account','generate_summary'].sort());
   for(const [name,args] of [['get_profile',{}],['get_context',{session_id:session}],['search_memory',{query:'冲突处理'}],['save_memory',{...memory,source_record_id:'mcp-message',text:'MCP远程写入测试'}],['import_conversation',{authorized:true,source_platform:'integration-test',session_id:session,title:'',completeness:'partial',messages:[{id:'mcp-import',role:'user',timestamp:stamp,content:'远程MCP导入'}]}]]) {
    const result=await client.callTool({name,arguments:args});assert.ok(!result.isError,JSON.stringify(result));
   }
@@ -134,7 +134,7 @@ test('standard stdio bridge forwards discovery and tool results to cloud HTTP',a
  if(config.endpoint!==base){t.skip('Credential endpoint differs from test target');return;}
  const client=new Client({name:'stdio-integration',version:'1'});
  await client.connect(new StdioClientTransport({command:process.execPath,args:[fileURLToPath(new URL('../scripts/mcp-bridge.mjs',import.meta.url)),'--credential-file',credentialFile,'--client','antigravity'],stderr:'pipe'}));
- try{assert.equal((await client.listTools()).tools.length,12);assert.ok(!(await client.callTool({name:'get_profile',arguments:{}})).isError);assert.ok(!(await client.callTool({name:'get_overview',arguments:{}})).isError);}finally{await client.close();}
+ try{assert.equal((await client.listTools()).tools.length,16);assert.ok(!(await client.callTool({name:'get_profile',arguments:{}})).isError);assert.ok(!(await client.callTool({name:'get_overview',arguments:{}})).isError);}finally{await client.close();}
 });
 test('paginated export and destructive cleanup update FTS atomically',async()=>{
  const exported=await api('/v1/export?limit=1');assert.equal(exported.data.records.length,1);assert.ok(exported.data.next_cursor);
@@ -155,4 +155,15 @@ test('strategy API is read-only for Bearer clients including admin and requires 
  assert.equal((await api('/v1/memories',{method:'POST',body:{...memory,logical_key:'strategy.current'}})).status,403);
  const start=await api('/ui/session',{method:'POST',headers:{origin:base},body:{}});assert.equal(start.status,200);const cookie=start.headers.get('set-cookie').split(';')[0];
  const blocked=await fetch(base+'/ui/api/strategy',{headers:{cookie}});assert.equal(blocked.status,403);assert.equal((await blocked.json()).error,'strategy_owner_dashboard_only');
+});
+
+test('library REST routes expose shared taxonomy, exact label lookup, pagination and source revision conflicts',async()=>{
+ const saved=await api('/v1/memories',{method:'POST',body:{...memory,source_record_id:'library-labeled',text:'合成项目归属与多标签接口验证。'}});assert.equal(saved.status,201);const id=saved.data.id;
+ const labels=await api('/v1/library/labels/'+id);assert.equal(labels.status,200);assert.equal(labels.data.revision,0);
+ const body={authorized:true,id,version:1,expected_revision:0,expected_classification_revision:0,categories:['development','learning'],tags:['集成测试'],projects:['合成项目']};
+ const changed=await api('/v1/library/labels',{method:'POST',body});assert.equal(changed.status,200);assert.deepEqual(changed.data.labels.tags,['集成测试']);assert.equal((await api('/v1/library/labels',{method:'POST',body})).status,409);
+ const found=await api('/v1/library/records?kind=tag&name='+encodeURIComponent('集成测试'));assert.equal(found.data.records[0].id,id);assert.equal((await api('/v1/records/'+id)).data.version,1);
+ const status=await api('/v1/library/status');assert.equal(status.data.application_model_limit,false);
+ assert.equal((await api('/v1/library/control',{method:'POST',client:'codex',body:{authorized:true,enabled:false,expected_revision:0}})).status,403);
+ assert.equal((await api('/v1/library/summaries?kind=week&limit=1')).status,200);
 });

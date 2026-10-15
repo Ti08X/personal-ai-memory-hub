@@ -1,9 +1,10 @@
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync,readdirSync} from 'node:fs';
 import {build} from 'esbuild';
-const bundled=await build({entryPoints:['src/store.ts','src/models.ts','src/model-settings.ts'],bundle:true,write:false,outdir:'/unused',format:'esm',platform:'node',target:'node22',absWorkingDir:new URL('../..',import.meta.url).pathname});
+const bundled=await build({entryPoints:['src/store.ts','src/models.ts','src/model-settings.ts','src/memory-library.ts'],bundle:true,write:false,outdir:'/unused',format:'esm',platform:'node',target:'node22',absWorkingDir:new URL('../..',import.meta.url).pathname});
 const modules={};for(const f of bundled.outputFiles)modules[f.path.split('/').pop()]=await import('data:text/javascript;base64,'+Buffer.from(f.text).toString('base64'));
 export const {ModelSettings,runtimeModels}=modules['model-settings.js'];
+export const {MemoryLibrary,calendarKeys,libraryPrincipal}=modules['memory-library.js'];
 export const Store=modules['store.js'].Store;
 export const {Models,chunks}=modules['models.js'];
 export function database(){

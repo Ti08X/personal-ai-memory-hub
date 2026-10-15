@@ -1,0 +1,10 @@
+*
+!package.json
+!package-lock.json
+!server/
+!server/*.mjs
+!server/Dockerfile
+!public/
+!public/**
+!migrations/
+!migrations/*.sql

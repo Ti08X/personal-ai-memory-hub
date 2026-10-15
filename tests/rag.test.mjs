@@ -77,13 +77,13 @@ test('foreign-owner vector hits never reach the caller or reranker',()=>withRig(
 
 test('web model settings encrypt keys, require CAS, discover IDs, and never reuse keys on another endpoint',()=>withRig(async r=>{
  const settings=new ModelSettings(r.env,r.full),metadata=await settings.metadata();assert.equal(metadata.version,0);
- const body={authorized:true,expected_version:0,base_url:'https://api.example.com/v1',model:'synthetic-model',api_key:'synthetic-summary-credential',siliconflow_api_key:'synthetic-retrieval-credential',summary_enabled:true,retrieval_enabled:true};
+ const body={authorized:true,expected_version:0,base_url:'https://api.zgatri.com/v1',model:'synthetic-model',api_key:'synthetic-summary-credential',siliconflow_api_key:'synthetic-retrieval-credential',summary_enabled:true,retrieval_enabled:true};
  const saved=await settings.save(body);assert.equal(saved.version,1);assert.equal(saved.api_key_configured,true);assert.ok(!JSON.stringify(saved).includes(body.api_key));
  const ciphertext=r.env.DB.sqlite.prepare('SELECT payload_cipher FROM model_settings').get().payload_cipher;assert.ok(!ciphertext.includes(body.api_key));assert.equal((await r.store.listRecords({})).records.length,0);
  assert.equal((await runtimeModels(r.env,r.full.owner_id)).SUMMARY_API_KEY,body.api_key);
  await assert.rejects(()=>settings.save(body),e=>e.code==='model_settings_conflict');
  let sent;globalThis.fetch=async(url,options)=>{sent={url,key:options.headers.authorization};return Response.json({data:[{id:'synthetic-model'},{id:'another-model'},{id:'synthetic-model'}]});};
- assert.deepEqual((await settings.list({base_url:body.base_url})).models,['another-model','synthetic-model']);assert.equal(sent.url,'https://api.example.com/v1/models');
+ assert.deepEqual((await settings.list({base_url:body.base_url})).models,['another-model','synthetic-model']);assert.equal(sent.url,'https://api.zgatri.com/v1/models');
  await assert.rejects(()=>settings.list({base_url:'https://different.example.com/v1'}),e=>e.code==='model_key_required');
  await assert.rejects(()=>settings.save({...body,api_key:undefined,expected_version:1,base_url:'https://different.example.com/v1'}),e=>e.code==='summary_settings_incomplete');
  await assert.rejects(()=>settings.list({base_url:'https://127.0.0.1/v1',api_key:body.api_key}),e=>e.code==='invalid_model_endpoint');

@@ -40,7 +40,7 @@ manifest = json.loads((directory/'manifest.json').read_text())
 database = sqlite3.connect(':memory:')
 database.executescript((directory/'schema.sql').read_text())
 for table in manifest['tables']:
-    if table not in ['clients', 'records', 'record_versions', 'conflicts', 'conversations', 'import_batches', 'audit_log', 'record_evidence', 'dashboard_auth', 'dashboard_recovery_codes', 'model_usage', 'model_settings', 'memory_classifications', 'memory_overview_state', 'memory_overview_versions','strategy_state','strategy_versions']:
+    if table not in ['clients', 'records', 'record_versions', 'conflicts', 'conversations', 'import_batches', 'audit_log', 'record_evidence', 'dashboard_auth', 'dashboard_recovery_codes', 'model_usage', 'model_settings', 'memory_classifications', 'memory_overview_state', 'memory_overview_versions','strategy_state','strategy_versions','library_settings','library_labels','library_scopes','library_members','library_summary_versions','library_source_errors','library_import_receipts','library_label_keys']:
         raise ValueError('Unexpected table')
     for statement in statements((directory/(table+'.sql')).read_text()):
         # Structure is from our migration; copy only data from Wrangler table exports.

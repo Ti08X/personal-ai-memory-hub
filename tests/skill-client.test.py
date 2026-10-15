@@ -198,6 +198,20 @@ class SkillClientTests(unittest.TestCase):
         self.assertEqual(item["citation"]["record_id"], item["id"])
         self.assertEqual(len(item["payload"]["text"]), 800)
 
+    def test_library_read_commands_route_and_preserve_cursors(self):
+        q = QueueTransport([(200, {"summaries": [], "next_cursor": 10})])
+        code, value, _ = self.invoke(["summaries", "--kind", "month"], q)
+        self.assertEqual(code, 0)
+        self.assertEqual(value["data"]["next_cursor"], 10)
+        q = QueueTransport([(200, {"id": "scope_" + "a" * 40, "status": "pending", "overview": None})])
+        code, value, _ = self.invoke(["scope", "--scope-id", "scope_" + "a" * 40], q)
+        self.assertEqual(code, 0)
+        self.assertIsNone(value["data"]["overview"])
+        q = QueueTransport([(200, {"records": [record()], "next_cursor": None})])
+        code, value, _ = self.invoke(["find-label", "--kind", "tag", "--name", "合成标签"], q)
+        self.assertEqual(code, 0)
+        self.assertEqual(value["data"]["records"][0]["id"], "rec_test1")
+
 
 class IsolatedWorkerTests(unittest.TestCase):
     def test_real_worker_save_read_dedup_import_and_conflict(self):

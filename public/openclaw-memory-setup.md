@@ -1,8 +1,8 @@
 # OpenClaw 自动记忆插件 0.1.0
 
-如需首次回填当前客户端全部可读取的聊天、再每天定时归档昨天记录，请先看[OpenClaw 每日同步教程](https://github.com/Ti08X/personal-ai-memory-hub/blob/main/integrations/openclaw-memory/daily-sync.md)。本插件本身采用逐轮 Hook，不负责历史扫描或日程调度；每日同步时请关闭 `autoArchive` 与 `autoSummary`。
-
 接入自己的 Personal AI Memory Hub，让支持这些 hook 的 OpenClaw Gateway 在回答前读交接概要并检索当前问题，在回答后归档已授权的当前用户消息与最终可见回答，逐条回读，随后根据证据更新交接概要。模型调用与数据库仍在现有 Hub；本插件不本地运行嵌入模型，不迁移服务器。
+
+本插件的自动归档是**逐轮 Hook**，不扫描安装前的历史，也不是每日批量同步。如果你要“首次全量回填、以后每天定时上传昨天记录”，请使用[每日同步教程](daily-sync.md)，并将下面配置中的 `autoArchive`、`autoSummary` 保持为 `false`。`autoRecall` 只控制回答前读取，可独立选择。
 
 ## 安装
 
@@ -32,7 +32,7 @@ openclaw plugins list
 }
 ```
 
-网站提供“复制自动记忆插件配置”。自动归档/概要默认不启用；只有在你明确选择逐轮归档或自动概要时，才启用对应功能并设置匹配的 `Authorized` 字段。每日批量归档请按每日同步教程另行配置。配置后使用当前版本支持的插件重载方式：
+网站提供“复制自动记忆插件配置”。自动归档/概要默认不启用；只有在你明确选择逐轮归档或自动概要时，才启用对应功能并设置匹配的 `Authorized` 字段。每日批量归档请按[教程](daily-sync.md)另行配置。配置后使用当前版本支持的插件重载方式：
 
 ```sh
 openclaw plugins reload personal-ai-memory-hub
