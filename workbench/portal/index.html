@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workspace — 个人工作台</title>
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/workbench.css?v=7">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">Z</div>
+      <div class="brand-text">
+        <strong>Workspace</strong>
+        <span>zgatri</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-group">
+        <div class="nav-label">核心</div>
+        <button class="nav-item is-active" data-view="overview">
+          <svg class="ico"><use href="#i-grid"/></svg><span>总览</span>
+        </button>
+        <button class="nav-item" data-view="memory">
+          <svg class="ico"><use href="#i-brain"/></svg><span>记忆系统</span>
+          <em class="nav-tag" id="navMemCount">—</em>
+        </button>
+        <button class="nav-item" data-view="intel">
+          <svg class="ico"><use href="#i-radar"/></svg><span>信息采集</span>
+          <em class="nav-tag nav-tag-plan">规划</em>
+        </button>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">凭据</div>
+        <button class="nav-item" data-view="creds">
+          <svg class="ico"><use href="#i-key"/></svg><span>链接凭据</span>
+          <em class="nav-tag" id="navCredCount">—</em>
+        </button>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">资产</div>
+        <button class="nav-item" data-view="projects">
+          <svg class="ico"><use href="#i-rocket"/></svg><span>我的项目</span>
+        </button>
+        <button class="nav-item" data-view="infra">
+          <svg class="ico"><use href="#i-server"/></svg><span>基础设施</span>
+        </button>
+        <button class="nav-item" data-view="tools">
+          <svg class="ico"><use href="#i-wrench"/></svg><span>效率工具</span>
+        </button>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label">外部</div>
+        <a class="nav-item" href="/console" target="_blank" rel="noopener">
+          <svg class="ico"><use href="#i-terminal"/></svg><span>Hindsight 控制台</span>
+          <svg class="ico ico-out"><use href="#i-external"/></svg>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="host-card">
+        <div class="host-row"><span class="dot dot-live"></span><span>sg-node</span></div>
+        <div class="host-meta">47.131.84.26 · 2c4g</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="crumb">
+        <span id="crumbRoot">Workspace</span>
+        <svg class="ico crumb-sep"><use href="#i-chevron"/></svg>
+        <strong id="crumbNow">总览</strong>
+      </div>
+
+      <button class="cmdk" id="cmdkBtn">
+        <svg class="ico"><use href="#i-search"/></svg>
+        <span>搜索记忆、跳转页面…</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      <div class="topbar-right">
+        <div class="stat-chip">
+          <span class="dot dot-live" id="liveDot"></span>
+          <span id="liveLabel">在线</span>
+        </div>
+        <div class="stat-chip mono" id="latencyChip">— ms</div>
+        <button class="theme-btn" id="themeBtn" title="切换主题"></button>
+      </div>
+    </header>
+
+    <div class="scroll">
+
+      <!-- ================= OVERVIEW ================= -->
+      <section class="view is-active" id="view-overview">
+
+        <div class="page-head">
+          <div>
+            <h1>总览</h1>
+            <p>你的数字记忆正在运行。这里是全部资产的一个入口。</p>
+          </div>
+          <div class="page-head-actions">
+            <button class="btn btn-ghost" onclick="document.getElementById('cmdkBtn').click()">
+              <svg class="ico"><use href="#i-search"/></svg>快速检索
+            </button>
+            <a class="btn btn-accent" href="/console" target="_blank" rel="noopener">
+              <svg class="ico"><use href="#i-arrow-up-right"/></svg>打开控制台
+            </a>
+          </div>
+        </div>
+
+        <!-- KPI strip -->
+        <div class="kpi-strip">
+          <div class="kpi">
+            <div class="kpi-head"><svg class="ico"><use href="#i-brain"/></svg>认知节点</div>
+            <div class="kpi-num mono" data-kpi="nodes">—</div>
+            <div class="kpi-sub" data-kpi="nodes-sub">—</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-head"><svg class="ico"><use href="#i-fork"/></svg>关联链接</div>
+            <div class="kpi-num mono" data-kpi="links">—</div>
+            <div class="kpi-sub">语义 / 时序 / 因果</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-head"><svg class="ico"><use href="#i-files"/></svg>归档文档</div>
+            <div class="kpi-num mono" data-kpi="docs">—</div>
+            <div class="kpi-sub" data-kpi="docs-sub">—</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-head"><svg class="ico"><use href="#i-sparkle"/></svg>深度观察</div>
+            <div class="kpi-num mono" data-kpi="obs">—</div>
+            <div class="kpi-sub">consolidation 提炼</div>
+          </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>记忆增长</h3>
+                <span>近 7 天写入的事实分布</span>
+              </div>
+              <div class="legend">
+                <span><i class="sw sw-world"></i>事实</span>
+                <span><i class="sw sw-exp"></i>经历</span>
+                <span><i class="sw sw-obs"></i>观察</span>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3>事实构成</h3>
+                <span>认知结构的比例</span>
+              </div>
+            </div>
+            <div class="donut-wrap">
+              <canvas id="donutChart"></canvas>
+              <div class="donut-center">
+                <strong class="mono" data-kpi="nodes2">—</strong>
+                <span>总计</span>
+              </div>
+            </div>
+            <div class="donut-legend" id="donutLegend"></div>
+          </div>
+        </div>
+
+        <!-- 全资产快照 -->
+        <div class="card card-flush" style="margin-bottom:14px">
+          <div class="card-head card-head-pad">
+            <div>
+              <h3>全部资产</h3>
+              <span>项目 · 运维 · 采集，一处总览</span>
+            </div>
+          </div>
+          <div class="snap-list" id="overviewAssets"></div>
+        </div>
+
+        <!-- Live feed -->
+        <div class="card card-flush">
+          <div class="card-head card-head-pad">
+            <div>
+              <h3>最近记忆</h3>
+              <span>Hindsight 中最新沉淀的认知条目</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="refreshFeed">
+              <svg class="ico"><use href="#i-refresh"/></svg>刷新
+            </button>
+          </div>
+          <div class="feed" id="feed">
+            <div class="feed-empty">加载中…</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= MEMORY ================= -->
+      <section class="view" id="view-memory">
+
+        <div class="page-head">
+          <div>
+            <h1>记忆系统</h1>
+            <p>把 Hindsight 挂载到你的 AI 客户端，让它自动读写长期记忆。</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div><h3>选择客户端</h3><span>复制配置 → 粘贴 → 重启</span></div></div>
+          <div class="client-grid" id="clientGrid"></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head card-head-pad">
+              <div>
+                <h3 id="cfgName">—</h3>
+                <span class="mono" id="cfgFile">—</span>
+              </div>
+              <button class="btn btn-accent btn-sm" id="copyCfg">
+                <svg class="ico"><use href="#i-copy"/></svg>复制
+              </button>
+            </div>
+            <pre class="code"><code id="cfgCode"></code></pre>
+            <ol class="steps" id="cfgSteps"></ol>
+          </div>
+
+          <div class="card">
+            <div class="card-head card-head-pad">
+              <div>
+                <h3>自动读写协议</h3>
+                <span>追加到 System Prompt</span>
+              </div>
+              <button class="btn btn-ghost btn-sm" id="copyPrompt">
+                <svg class="ico"><use href="#i-copy"/></svg>复制
+              </button>
+            </div>
+            <pre class="code code-prompt" id="promptText"></pre>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= INTEL ================= -->
+      <section class="view" id="view-intel">
+        <div class="page-head">
+          <div>
+            <h1>信息采集</h1>
+            <p>以 aihot 为底座的热点情报中枢。</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="roadmap">
+            <div class="rm done">
+              <div class="rm-dot"></div>
+              <div class="rm-body"><strong>底座选型</strong><span>aihot · 卡兹克开源</span></div>
+            </div>
+            <div class="rm">
+              <div class="rm-dot"></div>
+              <div class="rm-body"><strong>容器部署</strong><span>采集源与调度配置</span></div>
+            </div>
+            <div class="rm">
+              <div class="rm-dot"></div>
+              <div class="rm-body"><strong>路由挂载</strong><span>/intel 反代入口</span></div>
+            </div>
+            <div class="rm">
+              <div class="rm-dot"></div>
+              <div class="rm-body"><strong>情报入库</strong><span>一键沉淀进记忆库</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="empty-note">
+          <svg class="ico"><use href="#i-radar"/></svg>
+          <p>采集系统尚未部署。等你准备好，我们从 aihot 的采集源配置开始。</p>
+        </div>
+      </section>
+
+      <!-- ================= PROJECTS ================= -->
+      <section class="view" id="view-projects">
+        <div class="page-head">
+          <div><h1>我的项目</h1><p>已部署的对外业务与服务。可自行新增、编辑、删除。</p></div>
+          <div class="page-head-actions">
+            <button class="btn btn-accent" data-new-item>
+              <svg class="ico"><use href="#i-plus"/></svg>新增项目
+            </button>
+          </div>
+        </div>
+        <div class="tile-grid" id="projectGrid"></div>
+      </section>
+
+      <!-- ================= INFRA ================= -->
+      <section class="view" id="view-infra">
+        <div class="page-head">
+          <div><h1>基础设施</h1><p>新加坡节点 · 容器、代理与安全状态。</p></div>
+          <div class="page-head-actions">
+            <button class="btn btn-ghost" data-new-item>
+              <svg class="ico"><use href="#i-plus"/></svg>新增条目
+            </button>
+          </div>
+        </div>
+
+        <div class="alert">
+          <svg class="ico"><use href="#i-shield"/></svg>
+          <div>
+            <strong>4 个端口对公网开放</strong>
+            <p>13654（1Panel）、2096 / 16934（X-UI）、5201（iperf3）当前监听 0.0.0.0，建议在安全组收敛为固定 IP 白名单。</p>
+          </div>
+        </div>
+
+        <div class="tile-grid" id="infraGrid"></div>
+      </section>
+
+      <!-- ================= TOOLS ================= -->
+      <section class="view" id="view-tools">
+        <div class="page-head">
+          <div><h1>效率工具</h1><p>常用外部服务与内部工具。</p></div>
+          <div class="page-head-actions">
+            <button class="btn btn-ghost" data-new-item>
+              <svg class="ico"><use href="#i-plus"/></svg>新增工具
+            </button>
+          </div>
+        </div>
+        <div class="tile-grid" id="toolGrid"></div>
+      </section>
+
+      <!-- ================= CREDENTIALS ================= -->
+      <section class="view" id="view-creds">
+        <div class="page-head">
+          <div><h1>链接凭据</h1><p>Cloudflare / GitHub / SSH 等访问信息。项目上下文会按关联自动带出。</p></div>
+          <div class="page-head-actions">
+            <button class="btn btn-accent" data-new-cred>
+              <svg class="ico"><use href="#i-plus"/></svg>新增凭据
+            </button>
+          </div>
+        </div>
+        <div class="cred-list" id="credList"></div>
+      </section>
+
+    </div>
+
+    <footer class="statusbar">
+      <span class="mono">pw.zgatri.com</span>
+      <span class="sb-sep"></span>
+      <span>Hindsight 0.10.3</span>
+      <span class="sb-sep"></span>
+      <span id="sbContainers">7 容器运行</span>
+      <span class="sb-right mono" id="sbClock">--:--:--</span>
+    </footer>
+
+  </div>
+</div>
+
+<!-- ===== Command Palette ===== -->
+<div class="palette" id="palette">
+  <div class="palette-box">
+    <div class="palette-input">
+      <svg class="ico"><use href="#i-search"/></svg>
+      <input id="paletteInput" placeholder="搜索记忆，或输入页面名称…" autocomplete="off">
+      <kbd>ESC</kbd>
+    </div>
+    <div class="palette-list" id="paletteList"></div>
+  </div>
+</div>
+
+<!-- ===== Icon sprite ===== -->
+<svg style="display:none">
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 5a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8V16a3 3 0 0 0 4 2.8"/><path d="M12 5a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8V16a3 3 0 0 1-4 2.8"/><path d="M12 5v14"/></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12 19 7"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M5 14c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M14.5 4.5c3-3 6.5-3 6.5-3s0 3.5-3 6.5L11 15l-3-3z"/><circle cx="15.5" cy="7.5" r="1.4"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.5 6.5a4 4 0 1 0 5 5L21 10l-4-4z"/><path d="m13.5 7.5-9 9a2 2 0 1 0 3 3l9-9"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M18 14v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-fork" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2.5"/><circle cx="18" cy="5" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M6 7.5v3a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-3"/><path d="M12 13.5v3"/></symbol>
+  <symbol id="i-files" viewBox="0 0 24 24"><path d="M8 3h6l4 4v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v4h4"/><path d="M18 17v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.5 6.5l2.5 2.5M15 15l2.5 2.5M17.5 6.5 15 9M9 15l-2.5 2.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 4 3h9A1.5 1.5 0 0 1 14.5 4.5V5"/></symbol>
+  <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="M12 9v4M12 16h.01"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></symbol>
+  <symbol id="i-id" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2"/><path d="M6 16c1-1.8 4.5-1.8 5.5 0"/><path d="M15 10h3M15 13h3"/></symbol>
+  <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M9 9v11"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="m8.2 10.8 7.6-3.6M8.2 13.2l7.6 3.6"/></symbol>
+  <symbol id="i-waypoints" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 6v5m0 0-5 6m5-6 5 6"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 16h15a3 3 0 1 1-3 3"/><path d="M3 12h8"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4.5V8"/><circle cx="9" cy="13.5" r="1.2"/><circle cx="15" cy="13.5" r="1.2"/><path d="M2.5 12v3M21.5 12v3"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.2 5.6L20 11l-5.8 2.4L12 19l-2.2-5.6L4 11l5.8-2.4z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20h4l10-10a2.8 2.8 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15.5 12v2"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 17.2 9.5 3.75 3.75 0 0 1 17 18z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 20v-3.5c0-.8.3-1.4.8-1.8-2.6-.3-3.8-1.6-3.8-4 0-.9.3-1.7.8-2.3-.2-.7-.1-1.5.1-2.2 0 0 .8-.2 2.4 1a8 8 0 0 1 3.4 0c1.6-1.2 2.4-1 2.4-1 .2.7.3 1.5.1 2.2.5.6.8 1.4.8 2.3 0 2.4-1.2 3.7-3.8 4 .5.4.8 1.1.8 1.9V20"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 10h6M9 14h4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/><path d="M10 11v5M14 11v5"/></symbol>
+</svg>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="/assets/workbench.js?v=7"></script>
+<script src="/assets/creds.js?v=7"></script>
+<script src="/assets/items.js?v=7"></script>
+</body>
+</html>
