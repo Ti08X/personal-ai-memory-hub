@@ -108,7 +108,7 @@
         <div class="dialog-body">
           <label class="field"><span>名称 *</span><input id="c_name" maxlength="80" placeholder="例如 Cloudflare 主账号"></label>
           <label class="field"><span>类型 *</span><select id="c_kind">${kindOpts}</select></label>
-          <label class="field"><span>适用范围</span><input id="c_scope" maxlength="200" placeholder="例如 voidsignal.top / zgatri.com 全部域名"></label>
+          <label class="field"><span>适用范围</span><input id="c_scope" maxlength="200" placeholder="例如 files.example.com / example.com 全部域名"></label>
           <div class="field-row">
             <label class="field"><span>账号 / 用户名</span><input id="c_username" maxlength="200" autocomplete="off" placeholder="邮箱或用户名"></label>
             <label class="field"><span>密码</span><input id="c_password" type="text" maxlength="400" autocomplete="new-password" placeholder="留空则不修改"></label>
@@ -119,7 +119,7 @@
           </label>
           <label class="field">
             <span>备注 / 其他信息</span>
-            <textarea id="c_note" rows="3" maxlength="2000" placeholder="例如：SSH 使用 ~/.ssh/lightsail_singapore.pem&#10;服务器 47.131.84.26 用户 ubuntu"></textarea>
+            <textarea id="c_note" rows="3" maxlength="2000" placeholder="例如：SSH 使用 ~/.ssh/lightsail_singapore.pem&#10;服务器 192.0.2.10 用户 ubuntu"></textarea>
           </label>
           <p class="dialog-err" id="credErr"></p>
         </div>

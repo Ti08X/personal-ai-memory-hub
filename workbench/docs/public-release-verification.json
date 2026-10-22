@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-23",
+  "scope": "Sanitized public source and regenerated synthetic screenshots; no production deployment",
+  "screenshots": {
+    "count": 16,
+    "desktop": 8,
+    "mobile": 8,
+    "sha256": {
+      "workbench/docs/screenshots/ideas-desktop.png": "bb9dac56bea826ae89f2f5ad2f9877cf69916c75e380a2923519a356db5b35a1",
+      "workbench/docs/screenshots/ideas-mobile.png": "534bcccd359c0bbda7a90a4daa3aa123c8816e8773ab31a0331496d85879baae",
+      "workbench/docs/screenshots/infra-desktop.png": "a839a39a02e8b7b5b3ad710cc7ea0ebf3c934ed6502695f94f00fd8719dc427e",
+      "workbench/docs/screenshots/infra-mobile.png": "7e0a75b8232286866e997d6e19134378f76c69ac61a41be31275ea6391169c9c",
+      "workbench/docs/screenshots/intel-desktop.png": "0da9e0e3a88ea4f6f6aab6df620a223b9a6783ca20d53332044871b1790102dd",
+      "workbench/docs/screenshots/intel-mobile.png": "6ca46b66d55f406eedd499908664eef628a20c78ad0171bd5ecb71757d1b02ef",
+      "workbench/docs/screenshots/memory-desktop.png": "e02d0d88c76fc20207b5095f4aff63b12c7c6f7a273b54a69e084b265d98823b",
+      "workbench/docs/screenshots/memory-mobile.png": "4ce820878b6d7d6d981516ac24df1b42cdccafb0665d228fdad4ef7b1608bfb9",
+      "workbench/docs/screenshots/overview-desktop.png": "f56855f091ca57bfbcab3156af7d54b1f32fba5425e54943e63d4f56cb63ca9a",
+      "workbench/docs/screenshots/overview-mobile.png": "b57931e899fe6846cf990da874c6942fbe90b59b557b95b62e8c642520940fc2",
+      "workbench/docs/screenshots/projects-desktop.png": "152afec6e241bd4956f9e3cb04928d30da0fcfbff61957b3a1d2baa84483d2fe",
+      "workbench/docs/screenshots/projects-mobile.png": "3e50984cd8a613f82ba25e1ac0128bbb8143ff9da36ba8245b0ee1c483e8ba67",
+      "workbench/docs/screenshots/settings-desktop.png": "e8516d4a9a864273806d4e89480a970b8fdd09efaa17801e0a94f9689249532d",
+      "workbench/docs/screenshots/settings-mobile.png": "a3e4929bee129ce9b1e9d3a219f0a0f3c1c0526d4a907a80dbb117b49c58b3cb",
+      "workbench/docs/screenshots/tools-desktop.png": "74dbca73c2e45dddbc139bafed0e0de405e457d5a47f0c07c2436d1b5212310e",
+      "workbench/docs/screenshots/tools-mobile.png": "fa55d7456be99ede4859861de410234479c7bf68e812136af86ab47f9bcc624d"
+    }
+  },
+  "privacy": {
+    "source_scan_findings": [],
+    "changed_text_files_scanned": 33,
+    "image_ocr": {
+      "findings": [],
+      "images_checked": 48
+    },
+    "original_reference_archive_included": false,
+    "production_captures_or_backups_included": false
+  },
+  "validation": {
+    "typescript": "passed",
+    "workbench_api_tests": {
+      "pass": 5,
+      "fail": 0
+    },
+    "workbench_ui": {
+      "viewport_checks": 16,
+      "interaction_checks": 12,
+      "script_errors": 0,
+      "horizontal_overflow": false
+    },
+    "legacy_server_regression": {
+      "tests": 99,
+      "pass": 97,
+      "fail": 0,
+      "skip": 2,
+      "skip_reasons": [
+        "Dedicated legacy login browser environment not configured",
+        "Optional official OpenClaw SDK reference unavailable"
+      ]
+    },
+    "legacy_regression_execution": "Isolated ASCII-path copy to avoid pre-existing URL pathname decoding issue in runner"
+  },
+  "portal_sha256": {
+    "workbench/portal/assets/creds.js": "8d658b51ba980bd3984b28f241c342f54d5158862bb440fa17157fc64148300b",
+    "workbench/portal/assets/items.js": "a64aebd95a98c6256528b39964aaf66dac18e1952ed2b0db98413070d76757f2",
+    "workbench/portal/assets/reference/1panel.png": "742955931f43197326702c550de3fda55f0fe4bd931d4f2f027d19335189ef1c",
+    "workbench/portal/assets/reference/aihot.svg": "5b421f44f3a7e2f7caca0016178152965ea3a36378a0ae2f782d31e4bb979742",
+    "workbench/portal/assets/reference/avatar.svg": "49e0d3cc041f5bedf28953c7b77f980679ea819c1abbde27c116daef43637283",
+    "workbench/portal/assets/reference/blog.png": "5483e3519760aaa00384ede717c1c7cd5c1fbd801755e23ab417456775d146a3",
+    "workbench/portal/assets/reference/brain.png": "46b5188fdd10021eb3456646c22b56f4c85960d439467e948bf0805063100098",
+    "workbench/portal/assets/reference/cart.png": "c5de906f738eb31a6cbae99bda5eaec95399b39f57e664102333dfb0a43e4cdb",
+    "workbench/portal/assets/reference/claude.png": "2bfce1b70461fa97699592848e750cc91997d15e5d4d1213e6c07f269bd843b0",
+    "workbench/portal/assets/reference/codex.png": "5ed8291841ed61942f686a88cd2f2ebaccd12f181aab9d0a9da2325b751fb9ed",
+    "workbench/portal/assets/reference/deepseek.png": "9b96dcd6fa813cedb2037fc5b3f6416764e0e37f77dc1e694b82c7ca3b8a50d2",
+    "workbench/portal/assets/reference/hindsight.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea0.png": "3fea1108b8a010e83c56431e129421c0f0e0ab002c497b0b2d95edebc50500c5",
+    "workbench/portal/assets/reference/idea1.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea10.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea11.png": "00278cf1dfdd766b0a592e682b09c093cb7e7f64209ff0b6439fa6606378acbf",
+    "workbench/portal/assets/reference/idea2.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea3.png": "de75d991050912a8fcdbebcdb5e06f5d095dd8f9eba9b72e93e5bc1b4d3450e8",
+    "workbench/portal/assets/reference/idea4.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea5.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea6.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea7.png": "f7aff5db336f41d5b062dfcad11deee0d236a9a968ea09f41538bee517b82fb1",
+    "workbench/portal/assets/reference/idea8.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/idea9.png": "a5021809de821734c05504da08238151800148dab9346dc2891153bfc69b373a",
+    "workbench/portal/assets/reference/magpie.png": "c41b3f4bd903b1363f4da1db7edce626ab3cfd11055dd9ae6e64dde9038ab230",
+    "workbench/portal/assets/reference/main.png": "960c426c32e5306db3d97d887d725425eb1e1b52152b442382c3b4af8c51e02b",
+    "workbench/portal/assets/reference/memory-cover.png": "b0f0f57aee994b77bca8e1a23bb6592db2e413ff2473b31d376ea1839c4cbb8e",
+    "workbench/portal/assets/reference/picon0.png": "7030102e653d2ae116f12b7895d0e9ddf18940c2fa84394f71dd7b31343b3a1b",
+    "workbench/portal/assets/reference/picon1.png": "0348c6c1cbdfe3f9056a5a71117f9f936572356dccbfe7f42ce917ccaa19699a",
+    "workbench/portal/assets/reference/picon2.png": "ac80077b340bac836da81cbcb4135c564eb91d4ef0c27abc40eafc54df46a2cc",
+    "workbench/portal/assets/reference/picon3.png": "7d53dafc19e4cea0c2f13189a880cbb827625e7f58e2579dc0357cd5be71589f",
+    "workbench/portal/assets/reference/picon4.png": "d2e3fc7e754d2d71c47caf2ad041805a1c3b4bcc96b59f0ea69ba0bc60ff3fc8",
+    "workbench/portal/assets/reference/picon5.png": "ef3b39909cc3b4c4aad6bc0aac7654aca1f6485107a4b7f919de4942e62d9edb",
+    "workbench/portal/assets/reference/picon6.png": "e5bce9e8c82079d7a5a80ca3ebc432a80d1510078152dc0236fb89d0b5516bc0",
+    "workbench/portal/assets/reference/picon7.png": "d7c3550bc8a7fb14b3da359decca5de39eb021ba73b33729ae35a7b28c1c9db0",
+    "workbench/portal/assets/reference/picon8.png": "399da9d4a724fcd05c6c37bac3f2fd2d39a9afd109384dfd759a13510ccda0b0",
+    "workbench/portal/assets/reference/shop.png": "678fbde88d70d12a522e1e1feb6c482c7294dbddb6e3df86d01ff79a8228dc11",
+    "workbench/portal/assets/reference/source-reddit.png": "151b5f5c28a743f42b474b5f06968f55c25c1079027604c12c1af1dda572c3bb",
+    "workbench/portal/assets/reference/source-rss.png": "7607aef7291749f161f71c38593a9498ff1fa02735b816f8df7045fa10c3df04",
+    "workbench/portal/assets/reference/source-wechat.png": "05deaa63525e34014bbe27ef4b3633a675f13f3d3d6e689c8ed97fe87e0bc8f0",
+    "workbench/portal/assets/reference/source-x.png": "f9f5d8a013ee33d334883b3505db0e86e40b557fc8a5aa091786e2953ebd19b1",
+    "workbench/portal/assets/reference/source-youtube.png": "ec59ff2fd7130b10a023cc7f839e0741e6e4d35db6b3ddb3a247909106ba659a",
+    "workbench/portal/assets/reference/source-zhihu.png": "5ac7ac680b40c8b3507ba1eb0d5d0af326d26c43d71cfc0c671104c7fe7f8c6c",
+    "workbench/portal/assets/reference/sunlife.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference/upload.svg": "5b421f44f3a7e2f7caca0016178152965ea3a36378a0ae2f782d31e4bb979742",
+    "workbench/portal/assets/reference/workspace.svg": "5b421f44f3a7e2f7caca0016178152965ea3a36378a0ae2f782d31e4bb979742",
+    "workbench/portal/assets/reference/xui-logo.png": "975ecc60fec98c131d8f147b0afcc6153983032b86c535dbdeb24ff33f2b4a69",
+    "workbench/portal/assets/reference/xui.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
+    "workbench/portal/assets/reference-base.css": "7f6ff868ede91fd582e946b120b9a31d277da0232692e9e05b7e7c8f4610782c",
+    "workbench/portal/assets/reference-ui.css": "ef1da18f099ed87f5a342f60fb7a0a773e97eb8f5ddc1d36cadbc359c6b0f937",
+    "workbench/portal/assets/reference-ui.js": "708c95530cdafca98ac0fc260a3b254f40259583451f6824724f2d6960fde165",
+    "workbench/portal/assets/workbench.css": "b39664f7a7fff2686bc92bf7033ae3f71e622dc9c70f82926747778564fac06a",
+    "workbench/portal/assets/workbench.js": "8ee7816d1287e20f843fe08fd288502a3f249ed1517b6e464a045f5059438917",
+    "workbench/portal/index.html": "40d8cde330b45112835ec62f329f9fa6fa8c6c7b09dbbf01f0a6edf6bc6cd0d9"
+  }
+}

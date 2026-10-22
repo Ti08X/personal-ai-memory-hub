@@ -270,7 +270,7 @@
           <button class="dialog-x" id="dlgClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
         </div>
         <div class="dialog-body">
-          <label class="field"><span>名称 *</span><input id="f_name" maxlength="80" placeholder="例如 work-zgatri"></label>
+          <label class="field"><span>名称 *</span><input id="f_name" maxlength="80" placeholder="例如 work-demo"></label>
           <label class="field"><span>分类 *</span>
             <select id="f_category">
               <option value="site">项目</option>

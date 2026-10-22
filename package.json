@@ -18,7 +18,10 @@
     "deploy:cloudflare:legacy": "wrangler deploy --config wrangler.legacy.jsonc --keep-vars",
     "migrate": "wrangler d1 migrations apply personal-ai-memory-hub --local",
     "test:local": "node scripts/test-local.mjs",
-    "test:rag": "node --test tests/rag.test.mjs"
+    "test:rag": "node --test tests/rag.test.mjs",
+    "preview:workbench": "node workbench/scripts/preview.mjs",
+    "test:workbench:ui": "node workbench/scripts/verify-ui.cjs",
+    "test:workbench:api": "node --test workbench/scripts/api.test.mjs"
   },
   "keywords": [],
   "author": "",

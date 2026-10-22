@@ -217,3 +217,11 @@ sudo journalctl -u pw-workbench -n 50 --no-pager
 6. 浏览器强刷验证
 
 数据库表结构变更是自动的：`server.mjs` 启动时会执行 `CREATE TABLE IF NOT EXISTS` 与 `ALTER TABLE ADD COLUMN`（先查 `PRAGMA table_info` 再决定是否添加），不需要手工迁移。
+
+## 2026-10 新版前端补充
+
+新版入口是 `portal/index.html`，加载 `reference-base.css`、`reference-ui.css` 与 `reference-ui.js`。完整预览及接口边界见 [README](README.md)。旧 CSS/JS 留在目录中作历史材料，不被新版页面加载。
+
+仅同步 UI 时，先备份原静态目录，上传 assets 后原子替换 index 即可；不要为前端更新替换数据库、密钥、访问认证或重启无关服务。
+
+新版 API 可通过 `WB_DB_PATH`、`WB_KEY_PATH`、`PORT`、`PUBLIC_ORIGIN` 配置运行环境。正式环境设置自己的 `PUBLIC_ORIGIN`；Hindsight bank 在前端的 `window.WORKSPACE_CONFIG.memoryBank` 配置。示例域名、IP、账号与图像均为脱敏演示，不能直接当作服务器配置。

@@ -3,11 +3,11 @@
    主题：亮色默认 / 01:00–07:00 自动暗色 / 手动切换
    ============================================================ */
 
-const BANK = 'personal-owner';
+const BANK = 'demo-bank';
 const ORIGIN = window.location.origin;
 const PROTO = new URL(ORIGIN).protocol;
 const HOST = new URL(ORIGIN).host;
-const AUTH_URL = `${PROTO}//zgatri:753951qweASD@${HOST}`;
+const AUTH_URL = `${PROTO}//demo:753951qweASD@${HOST}`;
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -294,7 +294,7 @@ const CLIENTS = [
     steps:['Windsurf 中进入 <code>Settings → Cascade → MCP Servers</code>','编辑 <code>mcp_config.json</code> 写入上方 JSON 并保存','重启 Cascade 面板即可调用']},
   { id:'http', name:'HTTP', tag:'Script', icon:'i-code',
     file:'cURL / Python / Node.js',
-    body:()=>`curl -X POST "${ORIGIN}/v1/default/banks/${BANK}/memories/recall" \\\n  -u 'zgatri:753951qweASD@' -H "Content-Type: application/json" \\\n  -d '{"query":"我的最新规划","budget":"mid"}'`,
+    body:()=>`curl -X POST "${ORIGIN}/v1/default/banks/${BANK}/memories/recall" \\\n  -u 'demo:753951qweASD@' -H "Content-Type: application/json" \\\n  -d '{"query":"我的最新规划","budget":"mid"}'`,
     steps:['适配自动化脚本、自定义微服务或任何语言的 HTTP 客户端','所有接口走 HTTP Basic Auth，凭据同工作台登录账号']},
 ];
 
@@ -303,7 +303,7 @@ const PROMPT_TEXT = `# 个人云端记忆挂载协议
 你已接入用户的个人长期记忆库（Hindsight）。遵循以下准则：
 
 1. 【对话前自动召回】
-   涉及过往经历、业务定位（惠州制造 / AI-GEO）、历史项目（work-zgatri 等）、
+   涉及过往经历、业务定位（惠州制造 / AI-GEO）、历史项目（work-demo 等）、
    证件流程、个人偏好、服务器配置时，回答前必须调用 recall 工具，
    结合 world 客观事实与 observation 核心认知作答，禁止凭空猜测。
 
@@ -360,16 +360,16 @@ $('#copyPrompt').addEventListener('click', e => copyBtn(e.currentTarget, PROMPT_
 
 /* ================= 资产 ================= */
 const PROJECTS = [
-  { icon:'i-globe', name:'work-zgatri', desc:'业务工作台 · SKU / 订单 / 利润', url:'https://voidsignal.top', pill:'运行中', cls:'' },
-  { icon:'i-id', name:'me 名片', desc:'个人名片与兴趣页，多端自适应', url:'https://me.voidsignal.top', pill:'运行中', cls:'' },
+  { icon:'i-globe', name:'work-demo', desc:'业务工作台 · SKU / 订单 / 利润', url:'https://files.example.com', pill:'运行中', cls:'' },
+  { icon:'i-id', name:'me 名片', desc:'个人名片与兴趣页，多端自适应', url:'https://me.files.example.com', pill:'运行中', cls:'' },
   { icon:'i-brain', name:'Hindsight 记忆中枢', desc:'长期记忆库与认知图谱', url:'/console', pill:'运行中', cls:'' },
   { icon:'i-radar', name:'aihot 信息采集', desc:'全网 AI 热点情报聚合', url:'#', pill:'规划中', cls:'plan' },
 ];
 
 const INFRA = [
-  { icon:'i-layout', name:'1Panel 面板', desc:'容器、站点、证书与备份管理', url:'http://47.131.84.26:13654', pill:'公网', cls:'warn' },
-  { icon:'i-share', name:'X-UI 节点管理', desc:'代理节点与订阅面板', url:'http://47.131.84.26:2096', pill:'公网', cls:'warn' },
-  { icon:'i-waypoints', name:'magpie 模型网关', desc:'group/never-stuck 模型路由池', url:'https://api.zgatri.trade', pill:'运行中', cls:'' },
+  { icon:'i-layout', name:'1Panel 面板', desc:'容器、站点、证书与备份管理', url:'http://192.0.2.10:13654', pill:'公网', cls:'warn' },
+  { icon:'i-share', name:'X-UI 节点管理', desc:'代理节点与订阅面板', url:'http://192.0.2.10:2096', pill:'公网', cls:'warn' },
+  { icon:'i-waypoints', name:'magpie 模型网关', desc:'group/never-stuck 模型路由池', url:'https://api.demo.trade', pill:'运行中', cls:'' },
   { icon:'i-database', name:'Hindsight DB', desc:'pgvector · 127.0.0.1:5433', url:'#', pill:'内网', cls:'mute' },
   { icon:'i-server', name:'OpenResty 反代', desc:'pw / api / 3xui 站点入口', url:'#', pill:'运行中', cls:'' },
   { icon:'i-shield', name:'Fail2Ban', desc:'SSH 暴力破解防护', url:'#', pill:'启用', cls:'' },

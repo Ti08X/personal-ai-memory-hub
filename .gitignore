@@ -19,3 +19,13 @@ work-v2/
 server/*.bundle.mjs
 docs/*tests.tap
 docs/*regressions.tap
+
+# Workbench runtime and private artifacts
+workbench/data/
+workbench/.private/
+*.pem
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+.credkey
+portal-before.tar.gz

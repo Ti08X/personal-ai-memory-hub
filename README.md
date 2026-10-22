@@ -1,3 +1,5 @@
+> **2026-10 工作台 UI 已更新**：新版入口在 [`workbench/portal/`](workbench/portal/)，包含七类参考页面和总览。查看 [工作台使用说明](workbench/README.md)、[16 张脱敏界面图](workbench/docs/ui-redesign-2026-10.md)。运行 `npm run preview:workbench` 即可静态预览。下方保留早期 Memory Hub 文档，具体部署与功能边界以对应模块说明为准。
+
 # Personal AI Memory Hub
 
 Production now runs on the owner's Singapore server using Node.js 24, SQLite WAL/FTS5 and Qdrant. The hosted URL and existing MCP/REST API keys remain compatible. Cloudflare is the free DNS/HTTPS proxy; the old database is frozen. See [server deployment and operations](docs/server-deployment.md). The Cloudflare configuration below is legacy/local-test reference, not the current production deployment target.

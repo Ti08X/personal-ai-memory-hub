@@ -1,0 +1,94 @@
+[
+  {
+    "page": "projects",
+    "viewport": "desktop",
+    "title": "Workspace — 我的项目",
+    "overflow": false
+  },
+  {
+    "page": "memory",
+    "viewport": "desktop",
+    "title": "Workspace — 记忆系统",
+    "overflow": false
+  },
+  {
+    "page": "ideas",
+    "viewport": "desktop",
+    "title": "Workspace — 灵感",
+    "overflow": false
+  },
+  {
+    "page": "intel",
+    "viewport": "desktop",
+    "title": "Workspace — 信息采集",
+    "overflow": false
+  },
+  {
+    "page": "infra",
+    "viewport": "desktop",
+    "title": "Workspace — 基础设施",
+    "overflow": false
+  },
+  {
+    "page": "tools",
+    "viewport": "desktop",
+    "title": "Workspace — 效率工具",
+    "overflow": false
+  },
+  {
+    "page": "settings",
+    "viewport": "desktop",
+    "title": "Workspace — 安全与设置",
+    "overflow": false
+  },
+  {
+    "page": "overview",
+    "viewport": "desktop",
+    "title": "Workspace — 总览",
+    "overflow": false
+  },
+  {
+    "page": "projects",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "page": "memory",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "page": "ideas",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "page": "intel",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "page": "infra",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "page": "tools",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "page": "settings",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "page": "overview",
+    "viewport": "mobile",
+    "overflow": false
+  },
+  {
+    "interactionChecks": 12,
+    "errors": []
+  }
+]

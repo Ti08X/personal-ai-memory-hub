@@ -6,10 +6,10 @@ import { DatabaseSync } from 'node:sqlite';
 import crypto from 'node:crypto';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 
-const PORT = 8890;
-const DB_PATH = '/opt/pw-workbench/data/workbench.sqlite';
-const KEY_PATH = '/opt/pw-workbench/data/.credkey';
-const ALLOWED_ORIGIN = 'https://pw.zgatri.com';
+const PORT = Number(process.env.PORT || 8890);
+const DB_PATH = process.env.WB_DB_PATH || '/opt/pw-workbench/data/workbench.sqlite';
+const KEY_PATH = process.env.WB_KEY_PATH || '/opt/pw-workbench/data/.credkey';
+const ALLOWED_ORIGIN = process.env.PUBLIC_ORIGIN || 'http://localhost:8898';
 
 /* ---------- 加密 ---------- */
 function loadKey() {
@@ -79,9 +79,12 @@ function addCol(table, col, def) {
 addCol('items', 'repo_url', "TEXT NOT NULL DEFAULT ''");
 addCol('items', 'deploy_path', "TEXT NOT NULL DEFAULT ''");
 addCol('items', 'stack', "TEXT NOT NULL DEFAULT ''");
+addCol('items', 'mechanism', "TEXT NOT NULL DEFAULT ''");
+addCol('items', 'potential', "TEXT NOT NULL DEFAULT ''");
+addCol('items', 'thumb', "TEXT NOT NULL DEFAULT ''");
 
 const str = (v, max = 500) => String(v ?? '').trim().slice(0, max);
-const CATS = new Set(['site', 'infra', 'tool']);
+const CATS = new Set(['site', 'infra', 'tool', 'idea']);
 const STATUSES = new Set(['active', 'planned', 'internal', 'offline']);
 const KINDS = new Set(['cloudflare', 'github', 'ssh', 'api', 'db', 'other']);
 
@@ -114,7 +117,7 @@ function readBody(req, limit = 128 * 1024) {
 }
 
 /* ---------- items ---------- */
-const ITEM_COLS = 'id,name,category,url,admin_url,username,password_enc,note,status,sort_order,repo_url,deploy_path,stack,created_at,updated_at';
+const ITEM_COLS = 'id,name,category,url,admin_url,username,password_enc,note,status,sort_order,repo_url,deploy_path,stack,mechanism,potential,thumb,created_at,updated_at';
 
 function itemOut(r, withSecret = false) {
   const creds = db.prepare(`SELECT c.id, c.name, c.kind FROM item_creds ic
@@ -127,6 +130,7 @@ function itemOut(r, withSecret = false) {
     hasPassword: !!r.password_enc,
     note: r.note, status: r.status, sortOrder: r.sort_order,
     repoUrl: r.repo_url, deployPath: r.deploy_path, stack: r.stack,
+    mechanism: r.mechanism, potential: r.potential, thumb: r.thumb || '',
     credIds: creds.map(c => c.id),
     credRefs: creds,
     createdAt: r.created_at, updatedAt: r.updated_at,
@@ -154,6 +158,8 @@ function validateItem(b, forUpdate = false) {
   if (b.repoUrl !== undefined) out.repoUrl = str(b.repoUrl, 500);
   if (b.deployPath !== undefined) out.deployPath = str(b.deployPath, 300);
   if (b.stack !== undefined) out.stack = str(b.stack, 200);
+  if (b.mechanism !== undefined) out.mechanism = String(b.mechanism ?? '').slice(0, 2000);
+  if (b.potential !== undefined) out.potential = String(b.potential ?? '').slice(0, 1000);
   if (b.username !== undefined) out.username = str(b.username, 120);
   if (b.note !== undefined) out.note = String(b.note ?? '').slice(0, 3000);
   if (b.status !== undefined) {
@@ -324,6 +330,29 @@ const server = createServer(async (req, res) => {
     }
 
     /* ===== items ===== */
+    /* ===== 容器状态（只读，来自 docker ps）===== */
+    if (req.method === 'GET' && path === '/api/containers') {
+      try {
+        const { execFileSync } = await import('node:child_process');
+        const raw = execFileSync('docker', [
+          'ps', '-a', '--format',
+          '{{.Names}}|{{.State}}|{{.Image}}|{{.Status}}'
+        ], { timeout: 8000, encoding: 'utf8' });
+        const containers = raw.trim().split('\n').filter(Boolean).map(line => {
+          const [name, state, image, status] = line.split('|');
+          return { name, status: state, image, uptime: status };
+        });
+        return json(res, 200, {
+          ok: true,
+          total: containers.length,
+          running: containers.filter(c => c.status === 'running').length,
+          containers,
+        });
+      } catch (e) {
+        return json(res, 200, { ok: false, total: 0, running: 0, containers: [], error: 'docker unavailable' });
+      }
+    }
+
     if (req.method === 'GET' && path === '/api/items') {
       const rows = db.prepare(`SELECT ${ITEM_COLS} FROM items ORDER BY category, sort_order, created_at`).all();
       return json(res, 200, { items: rows.map(r => itemOut(r, false)) });
@@ -348,11 +377,12 @@ const server = createServer(async (req, res) => {
       const v = validateItem(b);
       const now = new Date().toISOString();
       const id = 'itm_' + crypto.randomBytes(8).toString('hex');
-      db.prepare(`INSERT INTO items (id,name,category,url,admin_url,username,password_enc,note,status,sort_order,repo_url,deploy_path,stack,created_at,updated_at)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).run(
+      db.prepare(`INSERT INTO items (id,name,category,url,admin_url,username,password_enc,note,status,sort_order,repo_url,deploy_path,stack,mechanism,potential,created_at,updated_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).run(
         id, v.name, v.category, v.url ?? '', v.adminUrl ?? '', v.username ?? '',
         v.passwordEnc ?? null, v.note ?? '', v.status ?? 'active', v.sortOrder ?? 100,
-        v.repoUrl ?? '', v.deployPath ?? '', v.stack ?? '', now, now
+        v.repoUrl ?? '', v.deployPath ?? '', v.stack ?? '',
+        v.mechanism ?? '', v.potential ?? '', now, now
       );
       if (v.credIds) setItemCreds(id, v.credIds);
       const r = db.prepare(`SELECT ${ITEM_COLS} FROM items WHERE id = ?`).get(id);
@@ -370,6 +400,7 @@ const server = createServer(async (req, res) => {
         username: 'username', passwordEnc: 'password_enc', note: 'note',
         status: 'status', sortOrder: 'sort_order',
         repoUrl: 'repo_url', deployPath: 'deploy_path', stack: 'stack',
+        mechanism: 'mechanism', potential: 'potential',
       };
       const sets = [], vals = [];
       for (const [k, col] of Object.entries(map)) {
