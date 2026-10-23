@@ -1,82 +1,128 @@
-# Personal Workspace · 个人工作台
+# Personal Workspace
 
-自托管、单用户工作台：聚合记忆、灵感、项目、工具与基础设施。前端为原生 HTML/CSS/JavaScript，无构建步骤；工作台 API 使用 Node.js 内置 SQLite。记忆接口可接入独立的 Hindsight 服务。
+**English** | [简体中文](README.zh-CN.md)
 
-## 2026-10 UI 改版
+A self-hosted, single-user workspace for memory, ideas, projects, tools and infrastructure. The frontend uses vanilla HTML/CSS/JavaScript without a build step; the API uses Node.js built-in SQLite. Memory can be provided by an independent Hindsight service.
 
-按八张参考图实现七种页面（项目图重复一张），并提供同风格总览。参考布局包括项目卡片、记忆时间线与详情、灵感卡片、采集任务与流水线、基础设施、工具分类和安全设置。
+## Redesigned UI
 
-![项目页（脱敏演示）](docs/screenshots/projects-desktop.png)
+Seven reference page types plus a matching overview: project cards, a memory timeline and detail panel, idea cards, collection tasks and pipeline, infrastructure, tools, and security settings.
 
-[全部页面截图与改版说明](docs/ui-redesign-2026-10.md) · [手机界面](docs/screenshots/projects-mobile.png) · [部署说明](DEPLOY.md)
+[All desktop/mobile screenshots](docs/ui-redesign-2026-10.md) · [Deployment guide](DEPLOY.md)
 
-截图由本目录代码使用合成数据重新渲染；公开代码中的地址、邮箱、设备和记录均为示例。演示状态、计数、日志、成员与设备不代表已接入真实服务。未接入功能会明确提示待确认，不执行容器重启、真实部署、邀请或权限变更。
+### Projects
 
-## 本地预览
+![Projects — sanitized demo](docs/screenshots/projects-desktop.png)
 
-在仓库根目录运行：
+[Mobile preview](docs/screenshots/projects-mobile.png)
+
+### Memory
+
+![Memory — sanitized demo](docs/screenshots/memory-desktop.png)
+
+[Mobile preview](docs/screenshots/memory-mobile.png)
+
+### Ideas
+
+![Ideas — sanitized demo](docs/screenshots/ideas-desktop.png)
+
+[Mobile preview](docs/screenshots/ideas-mobile.png)
+
+### Information collection
+
+![Information collection — sanitized demo](docs/screenshots/intel-desktop.png)
+
+[Mobile preview](docs/screenshots/intel-mobile.png)
+
+### Infrastructure
+
+![Infrastructure — sanitized demo](docs/screenshots/infra-desktop.png)
+
+[Mobile preview](docs/screenshots/infra-mobile.png)
+
+### Tools
+
+![Tools — sanitized demo](docs/screenshots/tools-desktop.png)
+
+[Mobile preview](docs/screenshots/tools-mobile.png)
+
+### Security and settings
+
+![Security and settings — sanitized demo](docs/screenshots/settings-desktop.png)
+
+[Mobile preview](docs/screenshots/settings-mobile.png)
+
+### Overview
+
+![Overview — sanitized demo](docs/screenshots/overview-desktop.png)
+
+[Mobile preview](docs/screenshots/overview-mobile.png)
+
+## Local preview
+
+Run from the repository root:
 
 ```sh
 npm run preview:workbench
 # http://127.0.0.1:8898/#projects
 ```
 
-预览服务器只提供静态文件，不启动 API，不代理任何线上数据库或记忆服务。
+This server provides static files only. It neither starts an API nor proxies a production database or memory service.
 
-默认 **UI 演示** 展示参考布局；顶部可切换 **实际数据**，通过同源 `/api/wb` 与 `/v1` 读取现有接口。实际模式中未接入的统计不使用演示值填充。
+The default **UI demo** uses synthetic content. **Actual data** uses same-origin `/api/wb` and `/v1` endpoints. Unconnected statistics are not replaced with demo values in actual mode.
 
-- 导航、⌘K / Ctrl+K 搜索、项目筛选与视图切换、灵感搜索和详情可操作。
-- 演示项目/灵感编辑只修改当前页面内存，刷新消失；演示凭据不会持久保存密钥。
-- 实际模式的项目、灵感和凭据表单使用原工作台 CRUD；主动保存才会写入 API。
-- 凭据列表只读取元数据，不为展示获取明文密钥。密码/Token 输入框保持遮罩。
-- 记忆页的编辑/新增/删除暂为待接入交互；参考图不意味着这些接口已实现。
+- Navigation, command search, project filtering, view switching, idea search and details work locally.
+- Demo project/idea edits live in page memory and disappear on refresh; demo credentials are not persisted.
+- Actual project, idea and credential forms use existing CRUD endpoints and write only after an explicit save.
+- Credential lists read metadata, not plaintext keys. Password and token inputs remain masked.
+- Memory editing, creation and deletion remain pending integrations, as do some monitoring, permission and collection controls.
 
-## 配置与部署
+## Configuration and deployment
 
-API 只监听 `127.0.0.1`，由现有 Nginx/HTTPS 认证反向代理。不要直接公开端口。
+The API listens only on `127.0.0.1`; place it behind an authenticated HTTPS reverse proxy.
 
 ```sh
-# 先创建受限数据目录；这些文件不得提交 Git。
+# Create a private data directory first; never commit its contents.
 export WB_DB_PATH=/private/workspace/workbench.sqlite
 export WB_KEY_PATH=/private/workspace/.credkey
 export PUBLIC_ORIGIN=https://workspace.example.com
 node workbench/server.mjs
 ```
 
-`PORT` 默认为 8890；数据库与密钥默认目录为 `/opt/pw-workbench/data`。`PUBLIC_ORIGIN` 默认 `http://localhost:8898`，正式部署必须设置为自己的 HTTPS 域名。API 保留 AES-256-GCM 凭据加密和独立密钥文件。
+`PORT` defaults to 8890. The default data/key directory is `/opt/pw-workbench/data`. `PUBLIC_ORIGIN` defaults to `http://localhost:8898`; set your own HTTPS origin for deployment. Credentials retain AES-256-GCM encryption with a separate key file.
 
-Hindsight bank 默认是虚构的 `demo-bank`。在加载 `reference-ui.js` 前设置：
+The default Hindsight bank is the synthetic `demo-bank`. Set this before loading `reference-ui.js`:
 
 ```html
 <script>window.WORKSPACE_CONFIG = { memoryBank: 'YOUR_BANK_ID' };</script>
 ```
 
-此配置只放非敏感标识，不放 API Key、Cookie 或密码。
+Only place non-secret identifiers here, never keys, cookies or passwords.
 
-前端单独发布只需复制 `workbench/portal/index.html` 与 `workbench/portal/assets/`。先备份旧静态目录，上传资源后原子替换 index；无需更改数据库、访问认证或重启 API。仓库其余目录保留较早的 Memory Hub 实现，不是新版工作台前端的入口。
+For UI-only releases, back up the existing static directory, upload `portal/assets/`, then atomically replace `portal/index.html`. No database, authentication or API restart is needed. The repository's other implementation directories retain the earlier Memory Hub, not the current workspace UI.
 
-## 验证
+## Checks
 
 ```sh
 npm run check
 npm run test:server
 npm run test:workbench:api
-# 可选：安装 Playwright 后生成脱敏截图并检查交互。
+# Optional browser tooling for screenshot generation and interaction checks:
 npm install --no-save --package-lock=false playwright
 npx playwright install chromium
 npm run test:workbench:ui
 ```
 
-也可用环境变量 `PLAYWRIGHT_MODULE` 指定已安装模块，`CHROME_PATH` 指定本机 Chrome。截图输出至 `workbench/docs/screenshots/`。UI 测试在独立本地静态服务运行，实际数据模式使用合成响应，不访问生产账号。
+Alternatively set `PLAYWRIGHT_MODULE` to an installed module and `CHROME_PATH` to a local Chrome executable. Screenshots are written to `workbench/docs/screenshots/`. Tests use an isolated local preview and synthetic API responses, not production accounts.
 
-## 代码目录
+## Source map
 
-- `portal/index.html`：导航、图标与页面外壳。
-- `portal/assets/reference-ui.js`：页面、数据切换与交互。
-- `portal/assets/reference-ui.css`：新版布局、主题与移动适配。
-- `portal/assets/reference-base.css`：基础样式；旧模块保留供回退参考，不被新版加载。
-- `portal/assets/reference/`：公开安全的装饰素材和合成 SVG 缩略图。
-- `server.mjs`：工作台清单/凭据/API；新增字段声明兼容全新 SQLite 安装。
-- `scripts/preview.mjs`、`scripts/verify-ui.cjs`、`scripts/api.test.mjs`：本地预览和隔离检查。
+- `portal/index.html`: navigation, icon symbols and shell.
+- `portal/assets/reference-ui.js`: pages, data modes and interactions.
+- `portal/assets/reference-ui.css`: redesigned layouts, themes and mobile styles.
+- `portal/assets/reference-base.css`: base styles. Older modules remain for historical reference and are not loaded by the new page.
+- `portal/assets/reference/`: public-safe decorative assets and synthetic SVG thumbnails.
+- `server.mjs`: workspace API with additive schema declarations for fresh SQLite installs.
+- `scripts/preview.mjs`, `scripts/verify-ui.cjs`, `scripts/api.test.mjs`: preview and isolated checks.
 
-公开仓库不包含私有归档、原始设计压缩包、生产截图、数据库、备份、SSH 私钥或访问凭据。公开版只对演示内容和素材、环境配置入口做了去标识化，不将其反向部署到已有实例覆盖私人配置。
+The public version replaces owner identities, addresses, private records and text-bearing thumbnails with samples. Screenshots are UI demonstrations, not proof of deployed services. Private archives, design ZIPs, production screenshots, databases, backups, SSH keys and credentials are excluded. Publishing this version does not replace an existing instance's private configuration.

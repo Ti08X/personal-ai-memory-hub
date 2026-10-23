@@ -1,93 +1,112 @@
-> **2026-10 工作台 UI 已更新**：新版入口在 [`workbench/portal/`](workbench/portal/)，包含七类参考页面和总览。查看 [工作台使用说明](workbench/README.md)、[16 张脱敏界面图](workbench/docs/ui-redesign-2026-10.md)。运行 `npm run preview:workbench` 即可静态预览。下方保留早期 Memory Hub 文档，具体部署与功能边界以对应模块说明为准。
+# ZGATRI Workspace
 
-# Personal AI Memory Hub
+**English** | [简体中文](README.zh-CN.md)
 
-Production now runs on the owner's Singapore server using Node.js 24, SQLite WAL/FTS5 and Qdrant. The hosted URL and existing MCP/REST API keys remain compatible. Cloudflare is the free DNS/HTTPS proxy; the old database is frozen. See [server deployment and operations](docs/server-deployment.md). The Cloudflare configuration below is legacy/local-test reference, not the current production deployment target.
+A self-hosted personal workspace for memory, ideas, projects, tools, and infrastructure. Built with vanilla HTML, CSS, JavaScript, and a Node.js/SQLite API, with an optional Hindsight memory backend.
 
-A self-hostable personal context and long-term memory service. It provides a private dashboard, REST API, remote MCP endpoint, searchable conversation archive, structured memories, social-account notes, knowledge documents, and an optional OpenClaw integration. The service stores and retrieves information; it does not generate chat answers.
+[Quick start](#quick-start) · [Screenshots](#screenshots) · [Workbench guide](workbench/README.md) · [Deployment](workbench/DEPLOY.md)
 
-## Connect an AI to the hosted Hub
+## Features
 
-The project owner’s hosted instance is available at:
+| Area | What the UI includes |
+| --- | --- |
+| Projects | Cards, list view, status filters, project details and editing |
+| Memory | Categories, tags, timeline, related content and a detail panel |
+| Ideas | Card/list/board layouts, search, tags and quick capture |
+| Information collection | Sources, tasks, processing pipeline and logs |
+| Infrastructure | Servers, containers, domains, monitoring and security panels |
+| Tools | Shortcuts, categories, recent activity and script entries |
+| Security and settings | Credential metadata, members, devices, preferences and notifications |
+| Overview | A shared entry point for memory metrics and project cards |
 
-- Dashboard: <https://pw.zgatri.com/dashboard>
-- MCP (Streamable HTTP): <https://pw.zgatri.com/mcp>
-- REST API: <https://pw.zgatri.com/v1>
+The default **UI demo** presents the reference layout using synthetic content. Switch to **actual data** to use configured, same-origin APIs. Some collection, monitoring, permissions and memory-editing controls are UI placeholders; they do not execute production operations. Demo counters are illustrative, not live service or security metrics.
 
-Create a separate client API key in the dashboard for each AI. Set its read and write levels, allowed collections, and operations to match that client’s job. L3 can read or write records at every sensitivity level, including restricted records; it does not grant administrator access. Use L3 only for a client you fully trust.
+## Quick start
 
-For an MCP client, configure the endpoint and put the key in that client’s private secret or connection settings:
+Requires Node.js 22.18 or later. From the repository root:
 
-```json
-{
-  "url": "https://pw.zgatri.com/mcp",
-  "transport": "streamable-http",
-  "headers": {"Authorization": "Bearer YOUR_API_KEY"}
-}
+```sh
+git clone https://github.com/Ti08X/zgatri-workspace.git
+cd zgatri-workspace
+npm run preview:workbench
 ```
 
-Never place a real API key in this repository, a GitHub issue, a public chat, or a screenshot. The repository contains source code and setup instructions only; it does not contain the owner’s conversations, database, or credentials.
+Open [http://127.0.0.1:8898/#projects](http://127.0.0.1:8898/#projects). The preview serves static files only and does not connect to a production database. See the [workbench guide](workbench/README.md) for API setup, configuration and checks.
 
-## Categorization and overview
+## Screenshots
 
-The source includes personal/development topic classification, visual coverage and daily intake metrics, and a versioned evidence-based overview of personal context, projects, current progress and next actions. AI clients start with `get_handoff` / `get_overview`, then retrieve detailed sections and original sources. Background organization reuses the configured summary provider and skips unchanged sources. See [the architecture and upgrade guide](docs/memory-overview.md).
+All images below are regenerated from the public code with sanitized, synthetic data. Addresses, accounts, device details and memory entries are examples. Text-bearing private thumbnails are replaced with synthetic artwork. [Browse all 16 desktop/mobile images](workbench/docs/ui-redesign-2026-10.md).
 
-## Owner-published strategy
+### Projects
 
-The owner drafts and publishes a hierarchy of overall strategy, stage strategy and monthly goals in the password/2FA dashboard. The published strategy is the highest-priority source for personal goals and task planning. Agents read it first in `get_handoff`, then personal context and observed execution progress. `get_strategy` is read-only; even L3 or administrator Bearer keys cannot edit or publish goals. Drafts remain private. See [strategy, permissions and usage](docs/strategy.md). The hosted instance includes this feature; published goals remain empty until the owner supplies and publishes them.
+![Projects — sanitized demo](workbench/docs/screenshots/projects-desktop.png)
 
-## Permission levels
+[Mobile preview](workbench/docs/screenshots/projects-mobile.png)
 
-| Level | Data sensitivity | Access includes |
-| --- | --- | --- |
-| L0 | Public | L0 records |
-| L1 | Normal | L0–L1 records |
-| L2 | Sensitive | L0–L2 records, with the matching sensitive permission |
-| L3 | Restricted | L0–L3 records, with the matching sensitive permission |
+### Memory
 
-Read and write ceilings are independent. The API key must also have the needed operation scope and collection access. None of the levels grants admin access or makes it appropriate to store passwords, cookies, 2FA codes, or other credentials as memories.
+![Memory — sanitized demo](workbench/docs/screenshots/memory-desktop.png)
 
-## OpenClaw
+[Mobile preview](workbench/docs/screenshots/memory-mobile.png)
 
-The Hook plugin is optional; it adds per-turn context recall and capture. For history backfill plus daily scheduled uploads, follow the [daily sync guide](integrations/openclaw-memory/daily-sync.md); the plugin is not required for that workflow. If you do install the plugin, keep `autoArchive` and `autoSummary` disabled for daily-only archiving. To install the optional plugin:
+### Ideas
 
-```bash
-git clone https://github.com/Ti08X/personal-ai-memory-hub.git
-cd personal-ai-memory-hub
-openclaw plugins install ./integrations/openclaw-memory
+![Ideas — sanitized demo](workbench/docs/screenshots/ideas-desktop.png)
+
+[Mobile preview](workbench/docs/screenshots/ideas-mobile.png)
+
+### Information collection
+
+![Information collection — sanitized demo](workbench/docs/screenshots/intel-desktop.png)
+
+[Mobile preview](workbench/docs/screenshots/intel-mobile.png)
+
+### Infrastructure
+
+![Infrastructure — sanitized demo](workbench/docs/screenshots/infra-desktop.png)
+
+[Mobile preview](workbench/docs/screenshots/infra-mobile.png)
+
+### Tools
+
+![Tools — sanitized demo](workbench/docs/screenshots/tools-desktop.png)
+
+[Mobile preview](workbench/docs/screenshots/tools-mobile.png)
+
+### Security and settings
+
+![Security and settings — sanitized demo](workbench/docs/screenshots/settings-desktop.png)
+
+[Mobile preview](workbench/docs/screenshots/settings-mobile.png)
+
+### Overview
+
+![Overview — sanitized demo](workbench/docs/screenshots/overview-desktop.png)
+
+[Mobile preview](workbench/docs/screenshots/overview-mobile.png)
+
+## Project structure
+
+```text
+workbench/
+  portal/       Current workspace UI and assets
+  server.mjs    Node.js/SQLite workspace API
+  scripts/      Static preview and isolated API/UI checks
+  docs/         Redesign notes and sanitized screenshots
 ```
 
-Follow [`integrations/openclaw-memory/README.md`](integrations/openclaw-memory/README.md) to add the client key through OpenClaw’s private configuration. For one-time history backfill followed by daily scheduled chat archiving, see the [OpenClaw daily sync guide](integrations/openclaw-memory/daily-sync.md). The Skill instructions are in [`integrations/skills/personal-ai-memory-hub/SKILL.md`](integrations/skills/personal-ai-memory-hub/SKILL.md). Give the AI this repository URL as its implementation and usage reference, then enter its own API key in the private connection settings.
+The other `src/`, `server/`, `public/` and integration directories retain the earlier Memory Hub implementation. Its [historical guide](docs/legacy-memory-hub-readme.md) documents that separate implementation; it is not the entry point for the redesigned workspace.
 
-## What the service can collect
+## Documentation
 
-An AI client can submit the visible conversation messages it is authorized to access, and a user can import exported files through the dashboard or API. Connecting MCP does not grant access to private chat histories held by other AI platforms. Those histories require a supported client submission or a user-provided export. The dashboard shows source and provenance so imported content can be traced.
+- [Workbench usage and configuration](workbench/README.md)
+- [Deployment and operations](workbench/DEPLOY.md)
+- [UI redesign and screenshot gallery](workbench/docs/ui-redesign-2026-10.md)
+- [Public-release verification](workbench/docs/public-release-verification.json)
+- [Historical Memory Hub documentation](docs/legacy-memory-hub-readme.md)
 
-## Self-host on a server
+Keep authentication at the reverse proxy and the API on loopback. This source distribution contains no production database, private archive, credentials or backups.
 
-Use [the server deployment guide](docs/server-deployment.md) for the current Node.js/SQLite/Qdrant runtime, migration checks, private configuration, backups and updates.
+## License
 
-## Legacy Cloudflare / local development
-
-Requirements: Node.js 22.18 or later, a Cloudflare account, a D1 database, and (if semantic search is enabled) a Vectorize index. Replace the D1 placeholder and Vectorize index name in `wrangler.jsonc` with resources in your own account, and configure secrets through Wrangler or Cloudflare settings. Never commit `.dev.vars` or real secrets.
-
-```bash
-npm ci
-cp .dev.vars.example .dev.vars
-npm run dev
-```
-
-For deployment, create your own D1 and Vectorize resources, set the database and index bindings, set the encryption secret, apply migrations, then deploy with Wrangler. RAG and external model calls are optional; configure provider keys in the authenticated dashboard or as server secrets. Provider pricing and rate limits apply. This repository does not include or reuse the hosted owner’s Cloudflare resources.
-
-## Main interfaces
-
-- Web dashboard: conversation archive, memories, profile, projects and plans, social accounts, knowledge files, search, conflicts, client keys, and model settings.
-- REST API: documented in [`docs/api.md`](docs/api.md).
-- Remote MCP: Streamable HTTP; client tools are constrained by the API key’s scopes, levels, and collections.
-- OpenClaw plugin and portable Skill: under [`integrations/`](integrations/).
-
-## Privacy and security
-
-Records are encrypted at rest by the application. API keys are shown once when created and stored as hashes. Use a distinct revocable key for each client. Keep client keys in private configuration and rotate them if exposed. The public repository is a source distribution, not a backup of the owner’s personal data.
-
-Dashboard login requires the account password and a second factor. A successful login keeps the same browser signed in for up to 7 days using a Secure, HttpOnly, same-site cookie; refreshing the page does not end the session. Manual logout, password changes, account revocation, or the 7-day expiry end it sooner. Passwords and authenticator codes are not stored in browser storage.
+[ISC](LICENSE)
