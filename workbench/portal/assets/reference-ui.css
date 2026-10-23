@@ -68,3 +68,17 @@ body.collapsed:has(#workspacePage[data-view=overview]) .sidebar{width:65px}body.
 body:has(#workspacePage[data-view=overview]) .topbar{flex-basis:69px;flex-shrink:0}body:has(#workspacePage[data-view=overview]) .topbar-right{gap:24px}body:has(#workspacePage[data-view=overview]) .overview-create{width:117px;margin-right:20px}body:has(#workspacePage[data-view=overview]) .mode-chip{position:fixed;top:auto;bottom:12px;right:240px}
 @media(max-width:760px){body:has(#workspacePage[data-view=overview]) .topbar{flex-basis:58px}body:has(#workspacePage[data-view=overview]) .topbar-right{gap:10px}body:has(#workspacePage[data-view=overview]) .mode-chip{display:none}}
 @media(min-width:1151px){body:has(#workspacePage[data-view=overview]) .nav{padding-top:3px}body:has(#workspacePage[data-view=overview]) .nav-item{height:43px;margin:5px 0}body:has(#workspacePage[data-view=overview]) .nav-group{margin-bottom:18px}body:has(#workspacePage[data-view=overview]) .sidebar-foot{padding-left:14px;padding-right:14px}body:has(#workspacePage[data-view=overview]) .node-card{height:67px}body:has(#workspacePage[data-view=overview]) .sidebar-actions{padding-bottom:22px}}
+
+/* Real RSS collection retains the reference panel grid; long records scroll inside. */
+#workspacePage[data-view=intel] .panel:first-child #sourceTable{max-height:275px;overflow:auto}
+.intel-latest{height:160px;overflow:auto;font-size:11px}
+.intel-latest>div{padding:6px 0;border-bottom:1px solid var(--line)}
+.intel-latest a{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.intel-latest small{display:block;color:var(--muted);margin-top:3px}
+.intel-articles article{padding:12px 0;border-bottom:1px solid var(--line)}
+.intel-articles h3{font-size:14px;line-height:1.5}
+.intel-articles p{font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.intel-articles small{color:var(--muted);font-size:10px}
+#intelFormError{color:#df583f;font-size:12px}
+.is-live #workspacePage[data-view=intel] .pipeline-step{padding:4px 9px;margin-top:3px;min-height:54px}
+.is-live #workspacePage[data-view=intel] .pipeline-step small{white-space:nowrap}

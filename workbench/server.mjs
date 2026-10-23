@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { DatabaseSync } from 'node:sqlite';
 import crypto from 'node:crypto';
 import {telemetry} from './telemetry.mjs';
+import {intelBridge} from './intel.mjs';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 
 const PORT = Number(process.env.PORT || 8890);
@@ -306,6 +307,8 @@ function buildContext(itemId) {
 
 const live = telemetry(db,{origin:ALLOWED_ORIGIN,certPath:process.env.WB_TLS_CERT_PATH});
 
+const intel = intelBridge();
+
 /* ---------- 路由 ---------- */
 const server = createServer(async (req, res) => {
   const origin = req.headers.origin;
@@ -327,6 +330,7 @@ const server = createServer(async (req, res) => {
   res.once('finish',()=>live.record(req.method,path,res.statusCode));
 
   try {
+    if(await intel(req,res,url,{json,readBody,origin:ALLOWED_ORIGIN}))return;
     if(req.method==='GET'&&path==='/api/tls')return json(res,200,live.tls());
     if(req.method==='GET'&&path==='/api/system')return json(res,200,live.system());
     if(req.method==='GET'&&path==='/api/activity')return json(res,200,live.activity());

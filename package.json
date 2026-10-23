@@ -21,7 +21,7 @@
     "test:rag": "node --test tests/rag.test.mjs",
     "preview:workbench": "node workbench/scripts/preview.mjs",
     "test:workbench:ui": "node workbench/scripts/verify-ui.cjs",
-    "test:workbench:api": "node --test workbench/scripts/api.test.mjs",
+    "test:workbench:api": "node --test workbench/scripts/api.test.mjs workbench/scripts/intel.test.mjs",
     "test:workbench:live": "node workbench/scripts/verify-live.cjs"
   },
   "keywords": [],

@@ -1,0 +1,20 @@
+// Prepare an isolated derivative checkout; never edit the caller's existing engine checkout.
+import {execFileSync} from 'node:child_process';
+import {readFileSync,writeFileSync,cpSync,mkdirSync,existsSync} from 'node:fs';
+import path from 'node:path';
+const here=import.meta.dirname;
+const pin=JSON.parse(readFileSync(path.join(here,'upstream.json'),'utf8'));
+const dest=path.resolve(process.argv[2]||'');
+if(!process.argv[2]||existsSync(dest))throw Error('Pass a new destination directory');
+execFileSync('git',['clone','--no-checkout',pin.repository,dest],{stdio:'inherit'});
+execFileSync('git',['checkout','--detach',pin.commit],{cwd:dest,stdio:'inherit'});
+cpSync(path.join(here,'module'),path.join(dest,'modules/workbench'),{recursive:true});
+cpSync(path.join(here,'Dockerfile'),path.join(dest,'Dockerfile'));
+writeFileSync(path.join(dest,'site/modules/server.ts'),'import type {ServerModule} from "@aihot/backend/modules";\nimport {workbench} from "@aihot/workbench/server";\nexport const SERVER_MODULES: readonly ServerModule[] = [workbench];\n');
+const pkg=JSON.parse(readFileSync(path.join(dest,'site/package.json'),'utf8'));
+pkg.dependencies={...pkg.dependencies,'@aihot/workbench':'*'};
+writeFileSync(path.join(dest,'site/package.json'),JSON.stringify(pkg,null,2)+'\n');
+execFileSync('npm',['install','--package-lock-only','--ignore-scripts','--no-audit','--no-fund'],{cwd:dest,stdio:'inherit'});
+writeFileSync(path.join(dest,'.env.example'),readFileSync(path.join(dest,'.env.example'),'utf8')+'\n# Private workspace bridge credential file; never put its contents here.\nWB_INTEL_TOKEN_FILE=/run/secrets/workspace\n');
+execFileSync('git',['add','.env.example','Dockerfile','site/package.json','site/modules/server.ts','modules/workbench','package-lock.json'],{cwd:dest,stdio:'inherit'});
+console.log('Prepared pinned collection engine '+pin.commit);

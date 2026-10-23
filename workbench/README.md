@@ -32,6 +32,12 @@ Eight reference page types, including the AI productivity overview: project card
 
 ![Information collection — sanitized demo](docs/screenshots/intel-desktop.png)
 
+Free RSS collection is now connected to a pinned upstream engine. AI processing remains unconfigured. [Integration guide](aihot/README.md).
+
+![Free RSS collection — synthetic API fixture](docs/screenshots/intel-live-desktop.png)
+
+[Mobile collection preview](docs/screenshots/intel-live-mobile.png)
+
 [Mobile preview](docs/screenshots/intel-mobile.png)
 
 ### Infrastructure
@@ -75,7 +81,7 @@ Production defaults to **actual data**, using same-origin `/api/wb` and `/v1` en
 - Demo project/idea edits live in page memory and disappear on refresh; demo credentials are not persisted.
 - Actual project, idea and credential forms use existing CRUD endpoints and write only after an explicit save.
 - Credential lists read metadata, not plaintext keys. Password and token inputs remain masked.
-- Memory editing, creation and deletion remain pending integrations, as do some monitoring, permission and collection controls.
+- Memory editing, creation and deletion remain pending integrations, as do some monitoring, permission and memory-distribution controls.
 
 ## Configuration and deployment
 
@@ -123,6 +129,7 @@ Alternatively set `PLAYWRIGHT_MODULE` to an installed module and `CHROME_PATH` t
 - `portal/assets/reference-ui.css`: redesigned layouts, themes and mobile styles.
 - `portal/assets/reference-base.css`: base styles. Older modules remain for historical reference and are not loaded by the new page.
 - `portal/assets/reference/`: public-safe decorative assets and synthetic SVG thumbnails.
+- `intel.mjs`, `aihot/`: private bridge, pinned upstream free-RSS engine module and deployment files.
 - `server.mjs`: workspace API with additive schema declarations for fresh SQLite installs.
 - `scripts/preview.mjs`, `scripts/verify-ui.cjs`, `scripts/api.test.mjs`: preview and isolated checks.
 

@@ -761,7 +761,7 @@
           263,
           714,
           569,
-          288
+          241
         ],
         [
           842,
@@ -773,7 +773,7 @@
           842,
           762,
           455,
-          235
+          229
         ],
         [
           1307,
@@ -785,7 +785,7 @@
           1307,
           651,
           319,
-          302
+          306
         ]
       ]
     },
@@ -959,7 +959,9 @@
     "reload defaults to live",
     "reference geometry within 3px",
     "overview 7/30/90 day tabs",
-    "overview project status tabs"
+    "overview project status tabs",
+    "RSS source edit reaches backend",
+    "raw collected article browser"
   ],
   "scriptErrors": []
 }

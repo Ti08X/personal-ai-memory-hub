@@ -14,7 +14,8 @@ Production starts in actual-data mode. Local `preview:workbench` explicitly enab
 | Containers / 容器 | Local Docker CLI | All container states and available running-container metrics; no environment values / 容器状态与可用运行指标，不读取环境密钥 |
 | TLS certificate / 证书 | Configured public origin certificate | One configured origin certificate, not a DNS/domain inventory / 配置的源站证书，不代表完整域名清单 |
 | Security and activity / 安全与审计 | Configuration checks and local mutation log | Cipher/key permissions; workbench mutations since instrumentation, no historic login audit / 加密和权限检查、接入后的工作台操作，不追溯登录历史 |
-| External collection, alerts, members/devices / 外部采集、告警、成员设备 | No backend configured | Explicitly pending; no fabricated counters or security score / 明确待接入，不编造数量或安全评分 |
+| Public RSS collection / 公开 RSS 采集 | Independent upstream collection engine via private bridge | Real raw articles, source health and fetch history; models and memory distribution remain pending / 真实原始资讯、信源状态与采集记录，模型及记忆分发待配置 |
+| Alerts, members/devices / 告警、成员设备 | No backend configured | Explicitly pending; no fabricated counters or security score / 明确待接入，不编造数量或安全评分 |
 
 Pages refresh every 30 seconds while visible, refresh upon returning to the tab, and support manual refresh. Each source has its own status and completion time. Failed sources clear their displayed data instead of substituting demo values. The interface is periodically refreshed, not a WebSocket stream. Dialogs defer redraw until closed.
 
@@ -41,3 +42,7 @@ Before deployment, back up code and obtain a consistent SQLite backup with integ
 - Reference demo UI: 16 viewports and 12 interaction checks passed.
 - Legacy server regression: 97 passed, 2 environment-dependent skips, 0 failures.
 - Production acceptance is read-only: compare API/UI values, check every configured source, verify unauthenticated requests remain blocked. Private captures, exact personal records and backups are excluded from this repository.
+
+Free collection integration and deployment: [collector documentation](../aihot/README.md).
+
+2026-10-23: [Free RSS release acceptance](free-rss-2026-10.md) records the live source/readback checks, test scope and remaining model/distribution boundaries.

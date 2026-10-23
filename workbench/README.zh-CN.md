@@ -131,3 +131,11 @@ npm run test:workbench:ui
 - `scripts/preview.mjs`、`scripts/verify-ui.cjs`、`scripts/api.test.mjs`：本地预览和隔离检查。
 
 公开仓库不包含私有归档、原始设计压缩包、生产截图、数据库、备份、SSH 私钥或访问凭据。公开版只对演示内容和素材、环境配置入口做了去标识化，不将其反向部署到已有实例覆盖私人配置。
+
+## 免费资讯采集
+
+已接入上游公开 RSS/Atom 采集引擎；模型处理、记忆分发待配置。[接入说明](aihot/README.md)。下图为合成接口测试数据，非生产截图。
+
+![免费资讯采集 · 合成测试数据](docs/screenshots/intel-live-desktop.png)
+
+[手机预览](docs/screenshots/intel-live-mobile.png)

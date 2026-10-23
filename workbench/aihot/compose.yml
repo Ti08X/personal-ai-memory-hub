@@ -1,0 +1,95 @@
+name: pw-intel
+x-app: &app
+  build:
+    context: ./engine
+    target: runtime
+  image: pw-intel-engine:free-rss
+  restart: unless-stopped
+  env_file: .env
+  environment: &env
+    NODE_ENV: production
+    DATABASE_URL: postgres://collector:${POSTGRES_PASSWORD:?required}@db:5432/collector
+    AIHOT_DATA_DIR: /data
+    API_BASE_URL: http://api:3001
+    MODEL_CALLS_ENABLED: 'false'
+    FEISHU_CONTENT_PUSH_ENABLED: 'false'
+    FEISHU_INTERNAL_ENABLED: 'false'
+    INDEXNOW_SUBMIT_ENABLED: 'false'
+    WB_INTEL_TOKEN_FILE: /run/secrets/workspace
+  volumes:
+    - data:/data
+  secrets:
+    - workspace
+  depends_on:
+    db:
+      condition: service_healthy
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: collector
+      POSTGRES_DB: collector
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U collector -d collector']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  checks:
+    <<: *app
+    profiles: [checks]
+    build:
+      context: ./engine
+      target: checks
+    image: pw-intel-checks:free-rss
+    restart: 'no'
+    cpus: 1.0
+    mem_limit: 768m
+    env_file: []
+    environment:
+      NODE_ENV: test
+      AIHOT_DATA_DIR: /tmp/workbench-checks
+      DATABASE_URL: postgres://collector:${POSTGRES_PASSWORD:?required}@db:5432/collector_test
+      DATABASE_POOL_MAX: '10'
+      MODEL_CALLS_ENABLED: 'true'
+      COLLECT_ENABLED: 'true'
+      FEISHU_INTERNAL_ENABLED: 'false'
+      ADMIN_PASSWORD: synthetic-test-password-only
+      SESSION_SECRET: synthetic-test-session-secret-only
+      IMG_PROXY_SIGN_SECRET: synthetic-test-image-secret-only
+    volumes:
+      - ./engine/.git:/app/.git:ro
+    secrets: []
+    command: [node, --test-global-setup=tests/databases.ts, --import, ./tests/databases.ts, --test, --test-concurrency=1, --test-timeout=120000, 'tests/*.test.ts', 'modules/*/tests/*.test.ts']
+  setup:
+    <<: *app
+    restart: 'no'
+    command: [sh, -c, 'node scripts/migrate.ts && node scripts/seed.ts']
+  api:
+    <<: *app
+    command: [node, apps/api/src/main.ts]
+    environment:
+      <<: *env
+      API_HOST: 0.0.0.0
+      API_PORT: '3001'
+    ports:
+      - '127.0.0.1:8901:3001'
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+  worker:
+    <<: *app
+    command: [node, modules/workbench/worker.ts]
+    stop_grace_period: 90s
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+volumes:
+  db: {}
+  data: {}
+secrets:
+  workspace:
+    file: ./workspace-token

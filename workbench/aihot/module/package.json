@@ -1,0 +1,14 @@
+{
+  "name": "@aihot/workbench",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./server": "./server.ts"
+  },
+  "dependencies": {
+    "@aihot/backend": "*",
+    "fastify": "5.12.7",
+    "zod": "4.6.5",
+    "@aihot/contracts": "*"
+  }
+}
