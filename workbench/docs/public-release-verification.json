@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "scope": "Sanitized frontend reference-layout correction; original private artwork and production captures excluded",
+  "scope": "Sanitized AI productivity overview and reference layout release; private production configuration and full reference images excluded",
   "screenshots": {
     "count": 16,
     "desktop": 8,
@@ -14,8 +14,8 @@
       "workbench/docs/screenshots/intel-mobile.png": "763dacd06d8a4ec0b229bca249763337f0023428bf8332a2561396d411189fd3",
       "workbench/docs/screenshots/memory-desktop.png": "5df5063bd0b9b0fe192938df98e841b094e8ba5fc75ab3ee1d2344d7be40f7ff",
       "workbench/docs/screenshots/memory-mobile.png": "ed2000f9541188ec0d5470ac57eaaf60535d20ecf0acef38b7658877c3063751",
-      "workbench/docs/screenshots/overview-desktop.png": "e34b74e21aeef7e016613e12174059980dcd4338944cf7a79828e39204f2704d",
-      "workbench/docs/screenshots/overview-mobile.png": "4082454414f51a53b4a74ec0d6fbce7de4df200b419d378e5e436ae115aa7db2",
+      "workbench/docs/screenshots/overview-desktop.png": "d6f76e9e92fa3591c780af73ebe9cd7699aaa8662b8d3f37cc4fc9c0c846a95b",
+      "workbench/docs/screenshots/overview-mobile.png": "659b4ba75f14620bcbd5d3e7d601bbe2ac468572083a4375c01510f0c46231e9",
       "workbench/docs/screenshots/projects-desktop.png": "9628fe4d94f8df7b05998827b7630200d13c716cc340f08ee471b867ecc184e6",
       "workbench/docs/screenshots/projects-mobile.png": "21bda9b9df0e627fc7110ee8c5367612a13daa0668b1510110fb17030e6b8816",
       "workbench/docs/screenshots/settings-desktop.png": "769b68308cedc9dea9a8f973b1e67be1ac9a7815c09f73f7de73a0e2a975dd15",
@@ -480,6 +480,44 @@
         }
       ],
       "fixtureOnly": true,
+      "overviewGeometry": {
+        ".overview-hero": [
+          283,
+          69,
+          1233,
+          174
+        ],
+        ".overview-shortcuts": [
+          283,
+          256,
+          1233,
+          150
+        ],
+        ".overview-data": [
+          283,
+          418,
+          781,
+          396
+        ],
+        ".overview-services": [
+          1078,
+          418,
+          439,
+          396
+        ],
+        ".overview-activity": [
+          283,
+          826,
+          300,
+          190
+        ],
+        ".overview-projects": [
+          595,
+          826,
+          921,
+          190
+        ]
+      },
       "geometry": {
         "projects": {
           ".heading": [
@@ -878,34 +916,12 @@
           ]
         },
         "overview": {
-          ".heading": [
-            [
-              269,
-              79,
-              1349,
-              66
-            ]
-          ],
           ".kpis": [
             [
-              269,
-              159,
-              1349,
-              100
-            ]
-          ],
-          ".project-card": [
-            [
-              284,
-              608,
-              430,
-              246
-            ],
-            [
-              728,
-              608,
-              430,
-              246
+              301,
+              479,
+              820,
+              102
             ]
           ]
         }
@@ -1001,7 +1017,9 @@
         "no fake KPI sparkline",
         "failure clears stale data",
         "reload defaults to live",
-        "reference geometry within 3px"
+        "reference geometry within 3px",
+        "overview 7/30/90 day tabs",
+        "overview project status tabs"
       ],
       "scriptErrors": []
     }
@@ -1056,10 +1074,11 @@
     "workbench/portal/assets/reference/xui-logo.png": "975ecc60fec98c131d8f147b0afcc6153983032b86c535dbdeb24ff33f2b4a69",
     "workbench/portal/assets/reference/xui.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
     "workbench/portal/assets/reference-base.css": "88d3870716b72226329327d21f5f2e8d7a354c9c154defb40097bae86302aa22",
-    "workbench/portal/assets/reference-ui.css": "ef8559c69f78cee010730a00cd1d0aa98ab5c80785d4f6747fb770e4c0d557a4",
-    "workbench/portal/assets/reference-ui.js": "c06361aa88044a9931b501c90c389ad95f34f23daf71db7d4a109750c6a8a36e",
+    "workbench/portal/assets/reference-ui.css": "cfbbd2be60eb28d390c6d8d0eb876d0902ea49895e14257f389d2ba426c16b02",
+    "workbench/portal/assets/reference-ui.js": "98d53ea7660633f5d2a5af0a8415a5e827d2348f0c96145d9e11220d4feecf82",
     "workbench/portal/assets/workbench.css": "b39664f7a7fff2686bc92bf7033ae3f71e622dc9c70f82926747778564fac06a",
     "workbench/portal/assets/workbench.js": "8ee7816d1287e20f843fe08fd288502a3f249ed1517b6e464a045f5059438917",
-    "workbench/portal/index.html": "5b2a72d6bb920e986955c659d80ace3f670c748ec1649acdf638b01ab8544938"
+    "workbench/portal/index.html": "c9f1a0e133e9246878216af67c2c93b45a7058249c5315c78f4a1c73635cadc4",
+    "workbench/portal/assets/reference/overview-mountains.png": "e10970d693f17a7d010640a0910f5c4e18e8c88b8aef5aa3419c687eea8b7f25"
   }
 }

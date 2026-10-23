@@ -6,7 +6,7 @@ A self-hosted, single-user workspace for memory, ideas, projects, tools and infr
 
 ## Redesigned UI
 
-Seven reference page types plus a matching overview: project cards, a memory timeline and detail panel, idea cards, collection tasks and pipeline, infrastructure, tools, and security settings.
+Eight reference page types, including the AI productivity overview: project cards, a memory timeline and detail panel, idea cards, collection tasks and pipeline, infrastructure, tools, and security settings.
 
 [Reference fidelity checks](docs/reference-fidelity-2026-10.md) · [All desktop/mobile screenshots](docs/ui-redesign-2026-10.md) · [Deployment guide](DEPLOY.md)
 

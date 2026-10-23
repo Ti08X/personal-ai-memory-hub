@@ -1,8 +1,8 @@
 # Reference layout correction / 参考图布局复核
 
-The eight supplied reference PNGs contain seven unique page designs: references 01 and 05 are identical. The extra overview has no supplied reference. The target viewport is 1654 × 951; reference 08 is 1655 × 950 and is checked at the common viewport.
+The eight supplied reference PNGs contain seven unique page designs: references 01 and 05 are identical. An additional AI productivity overview reference was supplied later on October 23 and is implemented at its native 1536 × 1024 viewport. The target viewport is 1654 × 951; reference 08 is 1655 × 950 and is checked at the common viewport.
 
-用户提供的八图包含七种独立页面，01/05 为同图；总览没有独立参考。以原图 1654 × 951 为桌面基准，08 的尺寸为 1655 × 950，统一基准校验。
+用户提供的八图包含七种独立页面，01/05 为同图；10 月 23 日后补了 AI 生产力总览图，现按其 1536 × 1024 原始尺寸实现。以原图 1654 × 951 为桌面基准，08 的尺寸为 1655 × 950，统一基准校验。
 
 The live-data release had simplified several page structures. This correction restores the reference components while preserving the live adapters:
 
@@ -31,3 +31,9 @@ The public preview uses sanitized artwork and synthetic content. An existing pri
 公开仓库仍使用脱敏素材和合成截图。既有私有实例可配置 `referenceArtwork: 'original'` 继续使用原图 PNG 裁切素材；不将这些私人素材或生产截图提交 GitHub。项目缩略图/灵感封面是装饰示意，并非实时服务截图；项目/工具状态来自登记记录，服务器监控来自真实采样。
 
 Deployment updates only the frontend JS/CSS and the versioned index after a static backup. No API code, database, authentication, key or personal memory content changes are required.
+
+## AI productivity overview / AI 生产力总览
+
+The later overview reference is now implemented: mountain welcome banner, date and actual summary counts, five navigation shortcuts, statistics with 7/30/90-day backend queries, running host/container rows, recorded activity and four-column project cards with real status tabs. Six primary rectangles are checked within 2 CSS pixels at 1536 × 1024. The original 22 region checks remain in place.
+
+总览恢复雪山欢迎横幅、五个快捷入口、数据概览/趋势、运行服务、最近活动、四列项目与两组 Tab。7/30/90 天通过实际 Hindsight timeseries 接口切换，项目状态按保存记录筛选。问候和日期按北京时间；今日操作只统计已记录的工作台审计，不代表完整历史。没有增长率数据时不显示原图的虚构涨幅。公开雪山背景只裁取无人名、无文字的装饰区域，不含完整私人原图。
