@@ -1,27 +1,27 @@
 {
   "date": "2026-10-23",
-  "scope": "Sanitized source and synthetic screenshots; live adapter release verified separately without publishing private production records",
+  "scope": "Sanitized frontend reference-layout correction; original private artwork and production captures excluded",
   "screenshots": {
     "count": 16,
     "desktop": 8,
     "mobile": 8,
     "sha256": {
-      "workbench/docs/screenshots/ideas-desktop.png": "bb9dac56bea826ae89f2f5ad2f9877cf69916c75e380a2923519a356db5b35a1",
-      "workbench/docs/screenshots/ideas-mobile.png": "534bcccd359c0bbda7a90a4daa3aa123c8816e8773ab31a0331496d85879baae",
-      "workbench/docs/screenshots/infra-desktop.png": "a839a39a02e8b7b5b3ad710cc7ea0ebf3c934ed6502695f94f00fd8719dc427e",
-      "workbench/docs/screenshots/infra-mobile.png": "7e0a75b8232286866e997d6e19134378f76c69ac61a41be31275ea6391169c9c",
-      "workbench/docs/screenshots/intel-desktop.png": "0da9e0e3a88ea4f6f6aab6df620a223b9a6783ca20d53332044871b1790102dd",
-      "workbench/docs/screenshots/intel-mobile.png": "6ca46b66d55f406eedd499908664eef628a20c78ad0171bd5ecb71757d1b02ef",
-      "workbench/docs/screenshots/memory-desktop.png": "e02d0d88c76fc20207b5095f4aff63b12c7c6f7a273b54a69e084b265d98823b",
-      "workbench/docs/screenshots/memory-mobile.png": "4ce820878b6d7d6d981516ac24df1b42cdccafb0665d228fdad4ef7b1608bfb9",
-      "workbench/docs/screenshots/overview-desktop.png": "f56855f091ca57bfbcab3156af7d54b1f32fba5425e54943e63d4f56cb63ca9a",
-      "workbench/docs/screenshots/overview-mobile.png": "b57931e899fe6846cf990da874c6942fbe90b59b557b95b62e8c642520940fc2",
-      "workbench/docs/screenshots/projects-desktop.png": "152afec6e241bd4956f9e3cb04928d30da0fcfbff61957b3a1d2baa84483d2fe",
-      "workbench/docs/screenshots/projects-mobile.png": "3e50984cd8a613f82ba25e1ac0128bbb8143ff9da36ba8245b0ee1c483e8ba67",
-      "workbench/docs/screenshots/settings-desktop.png": "e8516d4a9a864273806d4e89480a970b8fdd09efaa17801e0a94f9689249532d",
-      "workbench/docs/screenshots/settings-mobile.png": "a3e4929bee129ce9b1e9d3a219f0a0f3c1c0526d4a907a80dbb117b49c58b3cb",
-      "workbench/docs/screenshots/tools-desktop.png": "74dbca73c2e45dddbc139bafed0e0de405e457d5a47f0c07c2436d1b5212310e",
-      "workbench/docs/screenshots/tools-mobile.png": "fa55d7456be99ede4859861de410234479c7bf68e812136af86ab47f9bcc624d"
+      "workbench/docs/screenshots/ideas-desktop.png": "438a1729e82b155e34b19d24f8a2577d1b1d3b8d374cd723dc2ddc3b6b640a50",
+      "workbench/docs/screenshots/ideas-mobile.png": "9bad85c336df3d3068c0f23922180129db54bc3dadc59c8a151d97009e75cac9",
+      "workbench/docs/screenshots/infra-desktop.png": "4688e2ee481ebd4475e83d685828d70f62451309b48280cbabe5fd9997138426",
+      "workbench/docs/screenshots/infra-mobile.png": "605c317acd8082f45567ab1d352d84c0d65b78bc7102f32ba2731c09bef4b35d",
+      "workbench/docs/screenshots/intel-desktop.png": "1a289d3998647841fd15479d6e833eb270a17fe3eaa78917c2a22e2001978d0b",
+      "workbench/docs/screenshots/intel-mobile.png": "763dacd06d8a4ec0b229bca249763337f0023428bf8332a2561396d411189fd3",
+      "workbench/docs/screenshots/memory-desktop.png": "5df5063bd0b9b0fe192938df98e841b094e8ba5fc75ab3ee1d2344d7be40f7ff",
+      "workbench/docs/screenshots/memory-mobile.png": "ed2000f9541188ec0d5470ac57eaaf60535d20ecf0acef38b7658877c3063751",
+      "workbench/docs/screenshots/overview-desktop.png": "e34b74e21aeef7e016613e12174059980dcd4338944cf7a79828e39204f2704d",
+      "workbench/docs/screenshots/overview-mobile.png": "4082454414f51a53b4a74ec0d6fbce7de4df200b419d378e5e436ae115aa7db2",
+      "workbench/docs/screenshots/projects-desktop.png": "9628fe4d94f8df7b05998827b7630200d13c716cc340f08ee471b867ecc184e6",
+      "workbench/docs/screenshots/projects-mobile.png": "21bda9b9df0e627fc7110ee8c5367612a13daa0668b1510110fb17030e6b8816",
+      "workbench/docs/screenshots/settings-desktop.png": "769b68308cedc9dea9a8f973b1e67be1ac9a7815c09f73f7de73a0e2a975dd15",
+      "workbench/docs/screenshots/settings-mobile.png": "272040f5ef295b15444a671b6d8ba97f298bfba458758931a1e1a55784e49a05",
+      "workbench/docs/screenshots/tools-desktop.png": "a2d093f44829697df8f6bdee1670529d054b00fc09e3d6f5e389a5e06a7a2010",
+      "workbench/docs/screenshots/tools-mobile.png": "741e113b6b4fcef458a942c82a65a2bcde1d2ad2111ce62938537f70413e8862"
     }
   },
   "privacy": {
@@ -59,7 +59,857 @@
     },
     "legacy_regression_execution": "Isolated ASCII-path copy to avoid pre-existing URL pathname decoding issue in runner",
     "workbench_live_ui": {
+      "referenceChecks": [
+        {
+          "page": "projects",
+          "selector": ".project-card",
+          "index": 0,
+          "reference": 1,
+          "rect": [
+            269,
+            217,
+            438,
+            246
+          ],
+          "actual": [
+            269,
+            216,
+            440,
+            246
+          ],
+          "maxDelta": 2
+        },
+        {
+          "page": "projects",
+          "selector": ".project-card",
+          "index": 0,
+          "reference": 5,
+          "rect": [
+            269,
+            217,
+            438,
+            246
+          ],
+          "actual": [
+            269,
+            216,
+            440,
+            246
+          ],
+          "maxDelta": 2
+        },
+        {
+          "page": "memory",
+          "selector": ".kpis",
+          "index": 0,
+          "reference": 2,
+          "rect": [
+            268,
+            154,
+            1066,
+            100
+          ],
+          "actual": [
+            268,
+            153,
+            1066,
+            100
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "memory",
+          "selector": ".memory-layout>.stack>.panel",
+          "index": 0,
+          "reference": 2,
+          "rect": [
+            268,
+            270,
+            375,
+            231
+          ],
+          "actual": [
+            268,
+            269,
+            375,
+            231
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "memory",
+          "selector": ".memory-layout>.stack>.panel",
+          "index": 1,
+          "reference": 2,
+          "rect": [
+            268,
+            514,
+            375,
+            207
+          ],
+          "actual": [
+            268,
+            513,
+            375,
+            207
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "memory",
+          "selector": ".memory-stream",
+          "index": 0,
+          "reference": 2,
+          "rect": [
+            658,
+            270,
+            641,
+            679
+          ],
+          "actual": [
+            657,
+            269,
+            640,
+            679
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "ideas",
+          "selector": ".idea-card",
+          "index": 0,
+          "reference": 3,
+          "rect": [
+            266,
+            261,
+            247,
+            242
+          ],
+          "actual": [
+            266,
+            259,
+            247,
+            242
+          ],
+          "maxDelta": 2
+        },
+        {
+          "page": "ideas",
+          "selector": ".split>.stack>.panel",
+          "index": 0,
+          "reference": 3,
+          "rect": [
+            1310,
+            160,
+            332,
+            252
+          ],
+          "actual": [
+            1310,
+            159,
+            332,
+            252
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "ideas",
+          "selector": ".split>.stack>.panel",
+          "index": 1,
+          "reference": 3,
+          "rect": [
+            1310,
+            420,
+            332,
+            207
+          ],
+          "actual": [
+            1310,
+            419,
+            332,
+            207
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "intel",
+          "selector": ".intel-grid>.stack>.panel",
+          "index": 0,
+          "reference": 4,
+          "rect": [
+            263,
+            295,
+            569,
+            407
+          ],
+          "actual": [
+            263,
+            294,
+            569,
+            407
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "intel",
+          "selector": ".intel-grid>.stack>.panel",
+          "index": 2,
+          "reference": 4,
+          "rect": [
+            843,
+            295,
+            455,
+            455
+          ],
+          "actual": [
+            842,
+            294,
+            455,
+            455
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "intel",
+          "selector": ".intel-grid>.stack>.panel",
+          "index": 4,
+          "reference": 4,
+          "rect": [
+            1306,
+            295,
+            320,
+            344
+          ],
+          "actual": [
+            1307,
+            294,
+            319,
+            344
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "infra",
+          "selector": ".infra-grid>.stack>.panel",
+          "index": 0,
+          "reference": 6,
+          "rect": [
+            266,
+            328,
+            457,
+            382
+          ],
+          "actual": [
+            266,
+            327,
+            457,
+            382
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "infra",
+          "selector": ".infra-grid>.stack>.panel",
+          "index": 2,
+          "reference": 6,
+          "rect": [
+            732,
+            328,
+            457,
+            382
+          ],
+          "actual": [
+            732,
+            327,
+            459,
+            382
+          ],
+          "maxDelta": 2
+        },
+        {
+          "page": "infra",
+          "selector": ".infra-grid>.stack>.panel",
+          "index": 4,
+          "reference": 6,
+          "rect": [
+            1201,
+            328,
+            425,
+            382
+          ],
+          "actual": [
+            1200,
+            327,
+            425,
+            382
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "tools",
+          "selector": ".quick-tile",
+          "index": 0,
+          "reference": 7,
+          "rect": [
+            270,
+            258,
+            111,
+            131
+          ],
+          "actual": [
+            270,
+            257,
+            114,
+            131
+          ],
+          "maxDelta": 3
+        },
+        {
+          "page": "tools",
+          "selector": ".tool-category",
+          "index": 0,
+          "reference": 7,
+          "rect": [
+            268,
+            441,
+            240,
+            235
+          ],
+          "actual": [
+            268,
+            439,
+            239,
+            235
+          ],
+          "maxDelta": 2
+        },
+        {
+          "page": "tools",
+          "selector": ".tool-top>.stack>.panel",
+          "index": 0,
+          "reference": 7,
+          "rect": [
+            1290,
+            216,
+            332,
+            210
+          ],
+          "actual": [
+            1289,
+            215,
+            333,
+            210
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "settings",
+          "selector": ".settings-main>.panel",
+          "index": 0,
+          "reference": 8,
+          "rect": [
+            260,
+            319,
+            601,
+            408
+          ],
+          "actual": [
+            260,
+            318,
+            602,
+            408
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "settings",
+          "selector": ".settings-main>.panel",
+          "index": 1,
+          "reference": 8,
+          "rect": [
+            872,
+            319,
+            391,
+            408
+          ],
+          "actual": [
+            873,
+            318,
+            390,
+            408
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "settings",
+          "selector": ".settings-top>.stack>.panel",
+          "index": 0,
+          "reference": 8,
+          "rect": [
+            1270,
+            209,
+            358,
+            185
+          ],
+          "actual": [
+            1270,
+            208,
+            358,
+            185
+          ],
+          "maxDelta": 1
+        },
+        {
+          "page": "settings",
+          "selector": ".settings-lower>.panel",
+          "index": 0,
+          "reference": 8,
+          "rect": [
+            260,
+            739,
+            414,
+            194
+          ],
+          "actual": [
+            260,
+            738,
+            414,
+            194
+          ],
+          "maxDelta": 1
+        }
+      ],
       "fixtureOnly": true,
+      "geometry": {
+        "projects": {
+          ".heading": [
+            [
+              269,
+              79,
+              1349,
+              66
+            ]
+          ],
+          ".project-card": [
+            [
+              269,
+              216,
+              440,
+              246
+            ],
+            [
+              723,
+              216,
+              440,
+              246
+            ]
+          ]
+        },
+        "ideas": {
+          ".heading": [
+            [
+              266,
+              74,
+              1355,
+              66
+            ]
+          ],
+          ".idea-card": [
+            [
+              266,
+              259,
+              247,
+              242
+            ]
+          ],
+          ".ideas-grid": [
+            [
+              266,
+              259,
+              1030,
+              242
+            ]
+          ],
+          ".split>.stack>.panel": [
+            [
+              1310,
+              159,
+              332,
+              252
+            ],
+            [
+              1310,
+              419,
+              332,
+              207
+            ],
+            [
+              1310,
+              634,
+              332,
+              179
+            ],
+            [
+              1310,
+              821,
+              332,
+              161
+            ]
+          ]
+        },
+        "tools": {
+          ".heading": [
+            [
+              263,
+              74,
+              1351,
+              65
+            ]
+          ],
+          ".quick-tile": [
+            [
+              270,
+              257,
+              114,
+              131
+            ]
+          ],
+          ".tool-category": [
+            [
+              268,
+              439,
+              239,
+              235
+            ],
+            [
+              524,
+              439,
+              239,
+              235
+            ],
+            [
+              781,
+              439,
+              239,
+              235
+            ],
+            [
+              1037,
+              439,
+              239,
+              235
+            ],
+            [
+              268,
+              691,
+              239,
+              235
+            ],
+            [
+              524,
+              691,
+              239,
+              235
+            ],
+            [
+              781,
+              691,
+              239,
+              235
+            ],
+            [
+              1037,
+              691,
+              239,
+              235
+            ]
+          ],
+          ".tool-top>.stack>.panel": [
+            [
+              1289,
+              215,
+              333,
+              210
+            ],
+            [
+              1289,
+              441,
+              333,
+              254
+            ],
+            [
+              1289,
+              711,
+              333,
+              217
+            ]
+          ]
+        },
+        "memory": {
+          ".heading": [
+            [
+              268,
+              74,
+              1355,
+              66
+            ]
+          ],
+          ".kpis": [
+            [
+              268,
+              153,
+              1066,
+              100
+            ]
+          ],
+          ".memory-layout>.stack>.panel": [
+            [
+              268,
+              269,
+              375,
+              231
+            ],
+            [
+              268,
+              513,
+              375,
+              207
+            ],
+            [
+              268,
+              733,
+              375,
+              272
+            ]
+          ],
+          ".memory-stream": [
+            [
+              657,
+              269,
+              640,
+              679
+            ]
+          ],
+          ".memory-detail": [
+            [
+              1311,
+              153,
+              327,
+              777
+            ]
+          ]
+        },
+        "infra": {
+          ".heading": [
+            [
+              266,
+              76,
+              1359,
+              66
+            ]
+          ],
+          ".kpis": [
+            [
+              266,
+              211,
+              1359,
+              100
+            ]
+          ],
+          ".infra-grid>.stack>.panel": [
+            [
+              266,
+              327,
+              457,
+              382
+            ],
+            [
+              266,
+              722,
+              457,
+              220
+            ],
+            [
+              732,
+              327,
+              459,
+              382
+            ],
+            [
+              732,
+              722,
+              459,
+              278
+            ],
+            [
+              1200,
+              327,
+              425,
+              382
+            ],
+            [
+              1200,
+              722,
+              425,
+              297
+            ]
+          ]
+        },
+        "intel": {
+          ".heading": [
+            [
+              263,
+              74,
+              1363,
+              66
+            ]
+          ],
+          ".kpis": [
+            [
+              263,
+              191,
+              1363,
+              89
+            ]
+          ],
+          ".intel-grid>.stack>.panel": [
+            [
+              263,
+              294,
+              569,
+              407
+            ],
+            [
+              263,
+              714,
+              569,
+              288
+            ],
+            [
+              842,
+              294,
+              455,
+              455
+            ],
+            [
+              842,
+              762,
+              455,
+              235
+            ],
+            [
+              1307,
+              294,
+              319,
+              344
+            ],
+            [
+              1307,
+              651,
+              319,
+              302
+            ]
+          ]
+        },
+        "settings": {
+          ".heading": [
+            [
+              260,
+              74,
+              1368,
+              66
+            ]
+          ],
+          ".kpis": [
+            [
+              260,
+              214,
+              1003,
+              94
+            ]
+          ],
+          ".settings-main>.panel": [
+            [
+              260,
+              318,
+              602,
+              408
+            ],
+            [
+              873,
+              318,
+              390,
+              408
+            ]
+          ],
+          ".settings-top>.stack>.panel": [
+            [
+              1270,
+              208,
+              358,
+              185
+            ],
+            [
+              1270,
+              405,
+              358,
+              320
+            ]
+          ],
+          ".settings-lower>.panel": [
+            [
+              260,
+              738,
+              414,
+              194
+            ],
+            [
+              686,
+              738,
+              438,
+              194
+            ],
+            [
+              1136,
+              738,
+              492,
+              194
+            ]
+          ]
+        },
+        "overview": {
+          ".heading": [
+            [
+              269,
+              79,
+              1349,
+              66
+            ]
+          ],
+          ".kpis": [
+            [
+              269,
+              159,
+              1349,
+              100
+            ]
+          ],
+          ".project-card": [
+            [
+              284,
+              608,
+              430,
+              246
+            ],
+            [
+              728,
+              608,
+              430,
+              246
+            ]
+          ]
+        }
+      },
       "viewports": [
         {
           "page": "projects",
@@ -150,7 +1000,8 @@
         "source dates",
         "no fake KPI sparkline",
         "failure clears stale data",
-        "reload defaults to live"
+        "reload defaults to live",
+        "reference geometry within 3px"
       ],
       "scriptErrors": []
     }
@@ -205,10 +1056,10 @@
     "workbench/portal/assets/reference/xui-logo.png": "975ecc60fec98c131d8f147b0afcc6153983032b86c535dbdeb24ff33f2b4a69",
     "workbench/portal/assets/reference/xui.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
     "workbench/portal/assets/reference-base.css": "88d3870716b72226329327d21f5f2e8d7a354c9c154defb40097bae86302aa22",
-    "workbench/portal/assets/reference-ui.css": "9c9916717ef5fea29033bbd2a782a6d2c1a585fc14acaf729e8eb6659b130254",
-    "workbench/portal/assets/reference-ui.js": "e340dc9577f4fb0c36a76ccf86e212dff647a3730c4ac0fb827eab949777a734",
+    "workbench/portal/assets/reference-ui.css": "ef8559c69f78cee010730a00cd1d0aa98ab5c80785d4f6747fb770e4c0d557a4",
+    "workbench/portal/assets/reference-ui.js": "c06361aa88044a9931b501c90c389ad95f34f23daf71db7d4a109750c6a8a36e",
     "workbench/portal/assets/workbench.css": "b39664f7a7fff2686bc92bf7033ae3f71e622dc9c70f82926747778564fac06a",
     "workbench/portal/assets/workbench.js": "8ee7816d1287e20f843fe08fd288502a3f249ed1517b6e464a045f5059438917",
-    "workbench/portal/index.html": "40d8cde330b45112835ec62f329f9fa6fa8c6c7b09dbbf01f0a6edf6bc6cd0d9"
+    "workbench/portal/index.html": "5b2a72d6bb920e986955c659d80ace3f670c748ec1649acdf638b01ab8544938"
   }
 }

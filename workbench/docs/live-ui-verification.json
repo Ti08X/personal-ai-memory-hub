@@ -1,5 +1,855 @@
 {
+  "referenceChecks": [
+    {
+      "page": "projects",
+      "selector": ".project-card",
+      "index": 0,
+      "reference": 1,
+      "rect": [
+        269,
+        217,
+        438,
+        246
+      ],
+      "actual": [
+        269,
+        216,
+        440,
+        246
+      ],
+      "maxDelta": 2
+    },
+    {
+      "page": "projects",
+      "selector": ".project-card",
+      "index": 0,
+      "reference": 5,
+      "rect": [
+        269,
+        217,
+        438,
+        246
+      ],
+      "actual": [
+        269,
+        216,
+        440,
+        246
+      ],
+      "maxDelta": 2
+    },
+    {
+      "page": "memory",
+      "selector": ".kpis",
+      "index": 0,
+      "reference": 2,
+      "rect": [
+        268,
+        154,
+        1066,
+        100
+      ],
+      "actual": [
+        268,
+        153,
+        1066,
+        100
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "memory",
+      "selector": ".memory-layout>.stack>.panel",
+      "index": 0,
+      "reference": 2,
+      "rect": [
+        268,
+        270,
+        375,
+        231
+      ],
+      "actual": [
+        268,
+        269,
+        375,
+        231
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "memory",
+      "selector": ".memory-layout>.stack>.panel",
+      "index": 1,
+      "reference": 2,
+      "rect": [
+        268,
+        514,
+        375,
+        207
+      ],
+      "actual": [
+        268,
+        513,
+        375,
+        207
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "memory",
+      "selector": ".memory-stream",
+      "index": 0,
+      "reference": 2,
+      "rect": [
+        658,
+        270,
+        641,
+        679
+      ],
+      "actual": [
+        657,
+        269,
+        640,
+        679
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "ideas",
+      "selector": ".idea-card",
+      "index": 0,
+      "reference": 3,
+      "rect": [
+        266,
+        261,
+        247,
+        242
+      ],
+      "actual": [
+        266,
+        259,
+        247,
+        242
+      ],
+      "maxDelta": 2
+    },
+    {
+      "page": "ideas",
+      "selector": ".split>.stack>.panel",
+      "index": 0,
+      "reference": 3,
+      "rect": [
+        1310,
+        160,
+        332,
+        252
+      ],
+      "actual": [
+        1310,
+        159,
+        332,
+        252
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "ideas",
+      "selector": ".split>.stack>.panel",
+      "index": 1,
+      "reference": 3,
+      "rect": [
+        1310,
+        420,
+        332,
+        207
+      ],
+      "actual": [
+        1310,
+        419,
+        332,
+        207
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "intel",
+      "selector": ".intel-grid>.stack>.panel",
+      "index": 0,
+      "reference": 4,
+      "rect": [
+        263,
+        295,
+        569,
+        407
+      ],
+      "actual": [
+        263,
+        294,
+        569,
+        407
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "intel",
+      "selector": ".intel-grid>.stack>.panel",
+      "index": 2,
+      "reference": 4,
+      "rect": [
+        843,
+        295,
+        455,
+        455
+      ],
+      "actual": [
+        842,
+        294,
+        455,
+        455
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "intel",
+      "selector": ".intel-grid>.stack>.panel",
+      "index": 4,
+      "reference": 4,
+      "rect": [
+        1306,
+        295,
+        320,
+        344
+      ],
+      "actual": [
+        1307,
+        294,
+        319,
+        344
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "infra",
+      "selector": ".infra-grid>.stack>.panel",
+      "index": 0,
+      "reference": 6,
+      "rect": [
+        266,
+        328,
+        457,
+        382
+      ],
+      "actual": [
+        266,
+        327,
+        457,
+        382
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "infra",
+      "selector": ".infra-grid>.stack>.panel",
+      "index": 2,
+      "reference": 6,
+      "rect": [
+        732,
+        328,
+        457,
+        382
+      ],
+      "actual": [
+        732,
+        327,
+        459,
+        382
+      ],
+      "maxDelta": 2
+    },
+    {
+      "page": "infra",
+      "selector": ".infra-grid>.stack>.panel",
+      "index": 4,
+      "reference": 6,
+      "rect": [
+        1201,
+        328,
+        425,
+        382
+      ],
+      "actual": [
+        1200,
+        327,
+        425,
+        382
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "tools",
+      "selector": ".quick-tile",
+      "index": 0,
+      "reference": 7,
+      "rect": [
+        270,
+        258,
+        111,
+        131
+      ],
+      "actual": [
+        270,
+        257,
+        114,
+        131
+      ],
+      "maxDelta": 3
+    },
+    {
+      "page": "tools",
+      "selector": ".tool-category",
+      "index": 0,
+      "reference": 7,
+      "rect": [
+        268,
+        441,
+        240,
+        235
+      ],
+      "actual": [
+        268,
+        439,
+        239,
+        235
+      ],
+      "maxDelta": 2
+    },
+    {
+      "page": "tools",
+      "selector": ".tool-top>.stack>.panel",
+      "index": 0,
+      "reference": 7,
+      "rect": [
+        1290,
+        216,
+        332,
+        210
+      ],
+      "actual": [
+        1289,
+        215,
+        333,
+        210
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "settings",
+      "selector": ".settings-main>.panel",
+      "index": 0,
+      "reference": 8,
+      "rect": [
+        260,
+        319,
+        601,
+        408
+      ],
+      "actual": [
+        260,
+        318,
+        602,
+        408
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "settings",
+      "selector": ".settings-main>.panel",
+      "index": 1,
+      "reference": 8,
+      "rect": [
+        872,
+        319,
+        391,
+        408
+      ],
+      "actual": [
+        873,
+        318,
+        390,
+        408
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "settings",
+      "selector": ".settings-top>.stack>.panel",
+      "index": 0,
+      "reference": 8,
+      "rect": [
+        1270,
+        209,
+        358,
+        185
+      ],
+      "actual": [
+        1270,
+        208,
+        358,
+        185
+      ],
+      "maxDelta": 1
+    },
+    {
+      "page": "settings",
+      "selector": ".settings-lower>.panel",
+      "index": 0,
+      "reference": 8,
+      "rect": [
+        260,
+        739,
+        414,
+        194
+      ],
+      "actual": [
+        260,
+        738,
+        414,
+        194
+      ],
+      "maxDelta": 1
+    }
+  ],
   "fixtureOnly": true,
+  "geometry": {
+    "projects": {
+      ".heading": [
+        [
+          269,
+          79,
+          1349,
+          66
+        ]
+      ],
+      ".project-card": [
+        [
+          269,
+          216,
+          440,
+          246
+        ],
+        [
+          723,
+          216,
+          440,
+          246
+        ]
+      ]
+    },
+    "ideas": {
+      ".heading": [
+        [
+          266,
+          74,
+          1355,
+          66
+        ]
+      ],
+      ".idea-card": [
+        [
+          266,
+          259,
+          247,
+          242
+        ]
+      ],
+      ".ideas-grid": [
+        [
+          266,
+          259,
+          1030,
+          242
+        ]
+      ],
+      ".split>.stack>.panel": [
+        [
+          1310,
+          159,
+          332,
+          252
+        ],
+        [
+          1310,
+          419,
+          332,
+          207
+        ],
+        [
+          1310,
+          634,
+          332,
+          179
+        ],
+        [
+          1310,
+          821,
+          332,
+          161
+        ]
+      ]
+    },
+    "tools": {
+      ".heading": [
+        [
+          263,
+          74,
+          1351,
+          65
+        ]
+      ],
+      ".quick-tile": [
+        [
+          270,
+          257,
+          114,
+          131
+        ]
+      ],
+      ".tool-category": [
+        [
+          268,
+          439,
+          239,
+          235
+        ],
+        [
+          524,
+          439,
+          239,
+          235
+        ],
+        [
+          781,
+          439,
+          239,
+          235
+        ],
+        [
+          1037,
+          439,
+          239,
+          235
+        ],
+        [
+          268,
+          691,
+          239,
+          235
+        ],
+        [
+          524,
+          691,
+          239,
+          235
+        ],
+        [
+          781,
+          691,
+          239,
+          235
+        ],
+        [
+          1037,
+          691,
+          239,
+          235
+        ]
+      ],
+      ".tool-top>.stack>.panel": [
+        [
+          1289,
+          215,
+          333,
+          210
+        ],
+        [
+          1289,
+          441,
+          333,
+          254
+        ],
+        [
+          1289,
+          711,
+          333,
+          217
+        ]
+      ]
+    },
+    "memory": {
+      ".heading": [
+        [
+          268,
+          74,
+          1355,
+          66
+        ]
+      ],
+      ".kpis": [
+        [
+          268,
+          153,
+          1066,
+          100
+        ]
+      ],
+      ".memory-layout>.stack>.panel": [
+        [
+          268,
+          269,
+          375,
+          231
+        ],
+        [
+          268,
+          513,
+          375,
+          207
+        ],
+        [
+          268,
+          733,
+          375,
+          272
+        ]
+      ],
+      ".memory-stream": [
+        [
+          657,
+          269,
+          640,
+          679
+        ]
+      ],
+      ".memory-detail": [
+        [
+          1311,
+          153,
+          327,
+          777
+        ]
+      ]
+    },
+    "infra": {
+      ".heading": [
+        [
+          266,
+          76,
+          1359,
+          66
+        ]
+      ],
+      ".kpis": [
+        [
+          266,
+          211,
+          1359,
+          100
+        ]
+      ],
+      ".infra-grid>.stack>.panel": [
+        [
+          266,
+          327,
+          457,
+          382
+        ],
+        [
+          266,
+          722,
+          457,
+          220
+        ],
+        [
+          732,
+          327,
+          459,
+          382
+        ],
+        [
+          732,
+          722,
+          459,
+          278
+        ],
+        [
+          1200,
+          327,
+          425,
+          382
+        ],
+        [
+          1200,
+          722,
+          425,
+          297
+        ]
+      ]
+    },
+    "intel": {
+      ".heading": [
+        [
+          263,
+          74,
+          1363,
+          66
+        ]
+      ],
+      ".kpis": [
+        [
+          263,
+          191,
+          1363,
+          89
+        ]
+      ],
+      ".intel-grid>.stack>.panel": [
+        [
+          263,
+          294,
+          569,
+          407
+        ],
+        [
+          263,
+          714,
+          569,
+          288
+        ],
+        [
+          842,
+          294,
+          455,
+          455
+        ],
+        [
+          842,
+          762,
+          455,
+          235
+        ],
+        [
+          1307,
+          294,
+          319,
+          344
+        ],
+        [
+          1307,
+          651,
+          319,
+          302
+        ]
+      ]
+    },
+    "settings": {
+      ".heading": [
+        [
+          260,
+          74,
+          1368,
+          66
+        ]
+      ],
+      ".kpis": [
+        [
+          260,
+          214,
+          1003,
+          94
+        ]
+      ],
+      ".settings-main>.panel": [
+        [
+          260,
+          318,
+          602,
+          408
+        ],
+        [
+          873,
+          318,
+          390,
+          408
+        ]
+      ],
+      ".settings-top>.stack>.panel": [
+        [
+          1270,
+          208,
+          358,
+          185
+        ],
+        [
+          1270,
+          405,
+          358,
+          320
+        ]
+      ],
+      ".settings-lower>.panel": [
+        [
+          260,
+          738,
+          414,
+          194
+        ],
+        [
+          686,
+          738,
+          438,
+          194
+        ],
+        [
+          1136,
+          738,
+          492,
+          194
+        ]
+      ]
+    },
+    "overview": {
+      ".heading": [
+        [
+          269,
+          79,
+          1349,
+          66
+        ]
+      ],
+      ".kpis": [
+        [
+          269,
+          159,
+          1349,
+          100
+        ]
+      ],
+      ".project-card": [
+        [
+          284,
+          608,
+          430,
+          246
+        ],
+        [
+          728,
+          608,
+          430,
+          246
+        ]
+      ]
+    }
+  },
   "viewports": [
     {
       "page": "projects",
@@ -90,7 +940,8 @@
     "source dates",
     "no fake KPI sparkline",
     "failure clears stale data",
-    "reload defaults to live"
+    "reload defaults to live",
+    "reference geometry within 3px"
   ],
   "scriptErrors": []
 }

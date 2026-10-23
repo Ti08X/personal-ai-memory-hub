@@ -1,0 +1,29 @@
+{
+  "viewport": {"width":1654,"height":951},
+  "tolerancePixels":3,
+  "scope":"Measured primary rectangles from the eight supplied reference PNGs; content and live charts are data-dependent. References 01 and 05 are identical.",
+  "rectangles":[
+    {"page":"projects","selector":".project-card","index":0,"reference":1,"rect":[269,217,438,246]},
+    {"page":"projects","selector":".project-card","index":0,"reference":5,"rect":[269,217,438,246]},
+    {"page":"memory","selector":".kpis","index":0,"reference":2,"rect":[268,154,1066,100]},
+    {"page":"memory","selector":".memory-layout>.stack>.panel","index":0,"reference":2,"rect":[268,270,375,231]},
+    {"page":"memory","selector":".memory-layout>.stack>.panel","index":1,"reference":2,"rect":[268,514,375,207]},
+    {"page":"memory","selector":".memory-stream","index":0,"reference":2,"rect":[658,270,641,679]},
+    {"page":"ideas","selector":".idea-card","index":0,"reference":3,"rect":[266,261,247,242]},
+    {"page":"ideas","selector":".split>.stack>.panel","index":0,"reference":3,"rect":[1310,160,332,252]},
+    {"page":"ideas","selector":".split>.stack>.panel","index":1,"reference":3,"rect":[1310,420,332,207]},
+    {"page":"intel","selector":".intel-grid>.stack>.panel","index":0,"reference":4,"rect":[263,295,569,407]},
+    {"page":"intel","selector":".intel-grid>.stack>.panel","index":2,"reference":4,"rect":[843,295,455,455]},
+    {"page":"intel","selector":".intel-grid>.stack>.panel","index":4,"reference":4,"rect":[1306,295,320,344]},
+    {"page":"infra","selector":".infra-grid>.stack>.panel","index":0,"reference":6,"rect":[266,328,457,382]},
+    {"page":"infra","selector":".infra-grid>.stack>.panel","index":2,"reference":6,"rect":[732,328,457,382]},
+    {"page":"infra","selector":".infra-grid>.stack>.panel","index":4,"reference":6,"rect":[1201,328,425,382]},
+    {"page":"tools","selector":".quick-tile","index":0,"reference":7,"rect":[270,258,111,131]},
+    {"page":"tools","selector":".tool-category","index":0,"reference":7,"rect":[268,441,240,235]},
+    {"page":"tools","selector":".tool-top>.stack>.panel","index":0,"reference":7,"rect":[1290,216,332,210]},
+    {"page":"settings","selector":".settings-main>.panel","index":0,"reference":8,"rect":[260,319,601,408]},
+    {"page":"settings","selector":".settings-main>.panel","index":1,"reference":8,"rect":[872,319,391,408]},
+    {"page":"settings","selector":".settings-top>.stack>.panel","index":0,"reference":8,"rect":[1270,209,358,185]},
+    {"page":"settings","selector":".settings-lower>.panel","index":0,"reference":8,"rect":[260,739,414,194]}
+  ]
+}
