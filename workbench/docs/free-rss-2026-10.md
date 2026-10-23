@@ -16,7 +16,7 @@ Checked on 2026-10-23 at 14:40 UTC:
 - Existing business data, credentials and authentication preserved. Both public unauthenticated access and upstream private routes without the service token return **401**. New API port is loopback-only; collector PostgreSQL publishes no host port.
 - Deployed UI assets match the tested source hashes. Private runtime configuration and original reference artwork remain in the existing deployment.
 
-Raw collection is stored separately from personal memory. In the UI, AI processing is explicitly “待配置”; raw database storage is not described as completed summarization, vector indexing or memory distribution. Fetch records show source-provided failures and actual new-item counts. The overview displays 6 source rows, with a dialog for the full current source list; fetch history shows the latest 30 attempts.
+Raw collection is stored separately from personal memory. In the UI, AI processing is explicitly “待配置”; raw database storage is not described as completed summarization, vector indexing or memory distribution. Fetch records show source-provided failures and actual new-item counts. The initial overview displayed 6 source rows; the subsequent [readability update](readability-2026-10.md) uses 4 source cards and a full-list management dialog; fetch history shows the latest 30 attempts.
 
 ## Verification
 

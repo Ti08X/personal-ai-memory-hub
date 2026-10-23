@@ -8,7 +8,7 @@ A self-hosted, single-user workspace for memory, ideas, projects, tools and infr
 
 Eight reference page types, including the AI productivity overview: project cards, a memory timeline and detail panel, idea cards, collection tasks and pipeline, infrastructure, tools, and security settings.
 
-[Reference fidelity checks](docs/reference-fidelity-2026-10.md) · [All desktop/mobile screenshots](docs/ui-redesign-2026-10.md) · [Deployment guide](DEPLOY.md)
+[Current actual-data readability update](docs/readability-2026-10.md) · [Reference fidelity checks](docs/reference-fidelity-2026-10.md) · [All desktop/mobile screenshots](docs/ui-redesign-2026-10.md) · [Deployment guide](DEPLOY.md)
 
 ### Projects
 
@@ -36,7 +36,7 @@ Free RSS collection is now connected to a pinned upstream engine. AI processing 
 
 ![Free RSS collection — synthetic API fixture](docs/screenshots/intel-live-desktop.png)
 
-[Mobile collection preview](docs/screenshots/intel-live-mobile.png)
+[Mobile collection preview](docs/screenshots/intel-live-mobile.png) · [Dark theme](docs/screenshots/intel-live-dark.png)
 
 [Mobile preview](docs/screenshots/intel-mobile.png)
 
@@ -126,7 +126,8 @@ Alternatively set `PLAYWRIGHT_MODULE` to an installed module and `CHROME_PATH` t
 
 - `portal/index.html`: navigation, icon symbols and shell.
 - `portal/assets/reference-ui.js`: pages, data modes and interactions.
-- `portal/assets/reference-ui.css`: redesigned layouts, themes and mobile styles.
+- `portal/assets/reference-ui.css`: reference layouts, themes and mobile styles.
+- `portal/assets/reference-readable.css`: actual-mode typography, contrast, natural panel heights and responsive reading layouts.
 - `portal/assets/reference-base.css`: base styles. Older modules remain for historical reference and are not loaded by the new page.
 - `portal/assets/reference/`: public-safe decorative assets and synthetic SVG thumbnails.
 - `intel.mjs`, `aihot/`: private bridge, pinned upstream free-RSS engine module and deployment files.

@@ -1,484 +1,470 @@
 {
-  "referenceChecks": [
+  "readability": [
     {
       "page": "projects",
-      "selector": ".project-card",
-      "index": 0,
-      "reference": 1,
-      "rect": [
-        269,
-        217,
-        438,
-        246
-      ],
-      "actual": [
-        269,
-        216,
-        440,
-        246
-      ],
-      "maxDelta": 2
-    },
-    {
-      "page": "projects",
-      "selector": ".project-card",
-      "index": 0,
-      "reference": 5,
-      "rect": [
-        269,
-        217,
-        438,
-        246
-      ],
-      "actual": [
-        269,
-        216,
-        440,
-        246
-      ],
-      "maxDelta": 2
-    },
-    {
-      "page": "memory",
-      "selector": ".kpis",
-      "index": 0,
-      "reference": 2,
-      "rect": [
-        268,
-        154,
-        1066,
-        100
-      ],
-      "actual": [
-        268,
-        153,
-        1066,
-        100
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "memory",
-      "selector": ".memory-layout>.stack>.panel",
-      "index": 0,
-      "reference": 2,
-      "rect": [
-        268,
-        270,
-        375,
-        231
-      ],
-      "actual": [
-        268,
-        269,
-        375,
-        231
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "memory",
-      "selector": ".memory-layout>.stack>.panel",
-      "index": 1,
-      "reference": 2,
-      "rect": [
-        268,
-        514,
-        375,
-        207
-      ],
-      "actual": [
-        268,
-        513,
-        375,
-        207
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "memory",
-      "selector": ".memory-stream",
-      "index": 0,
-      "reference": 2,
-      "rect": [
-        658,
-        270,
-        641,
-        679
-      ],
-      "actual": [
-        657,
-        269,
-        640,
-        679
-      ],
-      "maxDelta": 1
+      "width": 1654,
+      "smallestCheckedFont": 12
     },
     {
       "page": "ideas",
-      "selector": ".idea-card",
-      "index": 0,
-      "reference": 3,
-      "rect": [
-        266,
-        261,
-        247,
-        242
-      ],
-      "actual": [
-        266,
-        259,
-        247,
-        242
-      ],
-      "maxDelta": 2
-    },
-    {
-      "page": "ideas",
-      "selector": ".split>.stack>.panel",
-      "index": 0,
-      "reference": 3,
-      "rect": [
-        1310,
-        160,
-        332,
-        252
-      ],
-      "actual": [
-        1310,
-        159,
-        332,
-        252
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "ideas",
-      "selector": ".split>.stack>.panel",
-      "index": 1,
-      "reference": 3,
-      "rect": [
-        1310,
-        420,
-        332,
-        207
-      ],
-      "actual": [
-        1310,
-        419,
-        332,
-        207
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "intel",
-      "selector": ".intel-grid>.stack>.panel",
-      "index": 0,
-      "reference": 4,
-      "rect": [
-        263,
-        295,
-        569,
-        407
-      ],
-      "actual": [
-        263,
-        294,
-        569,
-        407
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "intel",
-      "selector": ".intel-grid>.stack>.panel",
-      "index": 2,
-      "reference": 4,
-      "rect": [
-        843,
-        295,
-        455,
-        455
-      ],
-      "actual": [
-        842,
-        294,
-        455,
-        455
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "intel",
-      "selector": ".intel-grid>.stack>.panel",
-      "index": 4,
-      "reference": 4,
-      "rect": [
-        1306,
-        295,
-        320,
-        344
-      ],
-      "actual": [
-        1307,
-        294,
-        319,
-        344
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "infra",
-      "selector": ".infra-grid>.stack>.panel",
-      "index": 0,
-      "reference": 6,
-      "rect": [
-        266,
-        328,
-        457,
-        382
-      ],
-      "actual": [
-        266,
-        327,
-        457,
-        382
-      ],
-      "maxDelta": 1
-    },
-    {
-      "page": "infra",
-      "selector": ".infra-grid>.stack>.panel",
-      "index": 2,
-      "reference": 6,
-      "rect": [
-        732,
-        328,
-        457,
-        382
-      ],
-      "actual": [
-        732,
-        327,
-        459,
-        382
-      ],
-      "maxDelta": 2
-    },
-    {
-      "page": "infra",
-      "selector": ".infra-grid>.stack>.panel",
-      "index": 4,
-      "reference": 6,
-      "rect": [
-        1201,
-        328,
-        425,
-        382
-      ],
-      "actual": [
-        1200,
-        327,
-        425,
-        382
-      ],
-      "maxDelta": 1
+      "width": 1654,
+      "smallestCheckedFont": 14
     },
     {
       "page": "tools",
-      "selector": ".quick-tile",
-      "index": 0,
-      "reference": 7,
-      "rect": [
-        270,
-        258,
-        111,
-        131
-      ],
-      "actual": [
-        270,
-        257,
-        114,
-        131
-      ],
-      "maxDelta": 3
+      "width": 1654,
+      "smallestCheckedFont": 14
+    },
+    {
+      "page": "memory",
+      "width": 1654,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "infra",
+      "width": 1654,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "intel",
+      "width": 1654,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "settings",
+      "width": 1654,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "overview",
+      "width": 1654,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "projects",
+      "width": 1366,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "ideas",
+      "width": 1366,
+      "smallestCheckedFont": 14
     },
     {
       "page": "tools",
-      "selector": ".tool-category",
-      "index": 0,
-      "reference": 7,
-      "rect": [
-        268,
-        441,
-        240,
-        235
+      "width": 1366,
+      "smallestCheckedFont": 14
+    },
+    {
+      "page": "memory",
+      "width": 1366,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "infra",
+      "width": 1366,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "intel",
+      "width": 1366,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "settings",
+      "width": 1366,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "overview",
+      "width": 1366,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "projects",
+      "width": 390,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "ideas",
+      "width": 390,
+      "smallestCheckedFont": 14
+    },
+    {
+      "page": "tools",
+      "width": 390,
+      "smallestCheckedFont": 14
+    },
+    {
+      "page": "memory",
+      "width": 390,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "infra",
+      "width": 390,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "intel",
+      "width": 390,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "settings",
+      "width": 390,
+      "smallestCheckedFont": 12
+    },
+    {
+      "page": "overview",
+      "width": 390,
+      "smallestCheckedFont": 12
+    }
+  ],
+  "darkContrast": [
+    {
+      "name": "nav-item",
+      "foreground": [
+        212,
+        223,
+        239
       ],
-      "actual": [
-        268,
-        439,
+      "background": [
+        16,
+        33,
+        60
+      ],
+      "ratio": 11.96
+    },
+    {
+      "name": "nav-item is-active",
+      "foreground": [
+        198,
+        220,
+        255
+      ],
+      "background": [
+        33,
+        59,
+        97
+      ],
+      "ratio": 8.1
+    },
+    {
+      "name": "panel-desc",
+      "foreground": [
+        177,
+        193,
+        216
+      ],
+      "background": [
+        25,
+        43,
+        68
+      ],
+      "ratio": 7.81
+    },
+    {
+      "name": "intel-source-name",
+      "foreground": [
+        237,
+        243,
+        252
+      ],
+      "background": [
+        25,
+        43,
+        68
+      ],
+      "ratio": 12.8
+    },
+    {
+      "name": "badge green",
+      "foreground": [
+        166,
+        244,
+        197
+      ],
+      "background": [
+        27,
+        68,
+        56
+      ],
+      "ratio": 8.48
+    },
+    {
+      "name": "intel-source-meta",
+      "foreground": [
+        177,
+        193,
+        216
+      ],
+      "background": [
+        25,
+        43,
+        68
+      ],
+      "ratio": 7.81
+    },
+    {
+      "name": "intel-news-meta",
+      "foreground": [
+        177,
+        193,
+        216
+      ],
+      "background": [
+        25,
+        43,
+        68
+      ],
+      "ratio": 7.81
+    },
+    {
+      "name": "intel-news-title",
+      "foreground": [
+        237,
+        243,
+        252
+      ],
+      "background": [
+        25,
+        43,
+        68
+      ],
+      "ratio": 12.8
+    },
+    {
+      "name": "intel-news-excerpt",
+      "foreground": [
+        212,
+        223,
+        239
+      ],
+      "background": [
+        25,
+        43,
+        68
+      ],
+      "ratio": 10.61
+    },
+    {
+      "name": "badge gray",
+      "foreground": [
+        212,
+        223,
+        239
+      ],
+      "background": [
+        48,
+        68,
+        95
+      ],
+      "ratio": 7.37
+    }
+  ],
+  "lightContrast": [
+    {
+      "name": "nav-item",
+      "foreground": [
+        63,
+        80,
+        124
+      ],
+      "background": [
+        244,
+        247,
+        251
+      ],
+      "ratio": 7.38
+    },
+    {
+      "name": "nav-item is-active",
+      "foreground": [
+        21,
+        82,
+        255
+      ],
+      "background": [
+        231,
         239,
-        235
+        255
       ],
-      "maxDelta": 2
+      "ratio": 4.94
     },
     {
-      "page": "tools",
-      "selector": ".tool-top>.stack>.panel",
-      "index": 0,
-      "reference": 7,
-      "rect": [
-        1290,
-        216,
-        332,
-        210
+      "name": "panel-desc",
+      "foreground": [
+        82,
+        100,
+        125
       ],
-      "actual": [
-        1289,
-        215,
-        333,
-        210
+      "background": [
+        255,
+        255,
+        255
       ],
-      "maxDelta": 1
+      "ratio": 6.04
     },
     {
-      "page": "settings",
-      "selector": ".settings-main>.panel",
-      "index": 0,
-      "reference": 8,
-      "rect": [
-        260,
-        319,
-        601,
-        408
+      "name": "intel-source-name",
+      "foreground": [
+        23,
+        36,
+        58
       ],
-      "actual": [
-        260,
-        318,
-        602,
-        408
+      "background": [
+        255,
+        255,
+        255
       ],
-      "maxDelta": 1
+      "ratio": 15.56
     },
     {
-      "page": "settings",
-      "selector": ".settings-main>.panel",
-      "index": 1,
-      "reference": 8,
-      "rect": [
-        872,
-        319,
-        391,
-        408
+      "name": "badge green",
+      "foreground": [
+        8,
+        115,
+        70
       ],
-      "actual": [
-        873,
-        318,
-        390,
-        408
+      "background": [
+        232,
+        247,
+        239
       ],
-      "maxDelta": 1
+      "ratio": 5.35
     },
     {
-      "page": "settings",
-      "selector": ".settings-top>.stack>.panel",
-      "index": 0,
-      "reference": 8,
-      "rect": [
-        1270,
-        209,
-        358,
-        185
+      "name": "intel-source-meta",
+      "foreground": [
+        82,
+        100,
+        125
       ],
-      "actual": [
-        1270,
-        208,
-        358,
-        185
+      "background": [
+        255,
+        255,
+        255
       ],
-      "maxDelta": 1
+      "ratio": 6.04
     },
     {
-      "page": "settings",
-      "selector": ".settings-lower>.panel",
-      "index": 0,
-      "reference": 8,
-      "rect": [
-        260,
-        739,
-        414,
-        194
+      "name": "intel-news-meta",
+      "foreground": [
+        82,
+        100,
+        125
       ],
-      "actual": [
-        260,
-        738,
-        414,
-        194
+      "background": [
+        255,
+        255,
+        255
       ],
-      "maxDelta": 1
+      "ratio": 6.04
+    },
+    {
+      "name": "intel-news-title",
+      "foreground": [
+        23,
+        36,
+        58
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 15.56
+    },
+    {
+      "name": "intel-news-excerpt",
+      "foreground": [
+        52,
+        69,
+        95
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 9.71
+    },
+    {
+      "name": "badge gray",
+      "foreground": [
+        82,
+        100,
+        125
+      ],
+      "background": [
+        237,
+        242,
+        247
+      ],
+      "ratio": 5.36
     }
   ],
   "fixtureOnly": true,
   "overviewGeometry": {
     ".overview-hero": [
-      283,
-      69,
-      1233,
-      174
+      307,
+      159,
+      1185,
+      190
     ],
     ".overview-shortcuts": [
-      283,
-      256,
-      1233,
-      150
+      307,
+      362,
+      1185,
+      181
     ],
     ".overview-data": [
-      283,
-      418,
-      781,
-      396
+      307,
+      555,
+      746,
+      418
     ],
     ".overview-services": [
-      1078,
-      418,
-      439,
-      396
+      1073,
+      555,
+      419,
+      418
     ],
     ".overview-activity": [
-      283,
-      826,
+      307,
+      985,
       300,
-      190
+      263
     ],
     ".overview-projects": [
-      595,
-      826,
-      921,
-      190
+      627,
+      985,
+      865,
+      263
     ]
   },
   "geometry": {
     "projects": {
       ".heading": [
         [
-          269,
-          79,
-          1349,
-          66
+          273,
+          89,
+          1341,
+          65
         ]
       ],
       ".project-card": [
         [
-          269,
-          216,
-          440,
+          273,
+          300,
+          434,
           246
         ],
         [
-          723,
-          216,
-          440,
+          727,
+          300,
+          434,
           246
         ]
       ]
@@ -486,52 +472,52 @@
     "ideas": {
       ".heading": [
         [
-          266,
-          74,
-          1355,
-          66
+          273,
+          89,
+          1341,
+          65
         ]
       ],
       ".idea-card": [
         [
-          266,
-          259,
-          247,
-          242
+          273,
+          337,
+          242,
+          247
         ]
       ],
       ".ideas-grid": [
         [
-          266,
-          259,
-          1030,
-          242
+          273,
+          337,
+          1010,
+          247
         ]
       ],
       ".split>.stack>.panel": [
         [
-          1310,
-          159,
+          1303,
+          238,
           332,
-          252
+          278
         ],
         [
-          1310,
-          419,
+          1303,
+          536,
           332,
-          207
+          194
         ],
         [
-          1310,
-          634,
+          1303,
+          750,
           332,
-          179
+          214
         ],
         [
-          1310,
-          821,
+          1303,
+          984,
           332,
-          161
+          192
         ]
       ]
     },
@@ -539,7 +525,7 @@
       ".heading": [
         [
           263,
-          74,
+          89,
           1351,
           65
         ]
@@ -547,7 +533,7 @@
       ".quick-tile": [
         [
           270,
-          257,
+          342,
           114,
           131
         ]
@@ -555,313 +541,313 @@
       ".tool-category": [
         [
           268,
-          439,
-          239,
+          526,
+          238,
           235
         ],
         [
-          524,
-          439,
-          239,
+          523,
+          526,
+          238,
           235
         ],
         [
-          781,
-          439,
-          239,
+          777,
+          526,
+          238,
           235
         ],
         [
-          1037,
-          439,
-          239,
+          1032,
+          526,
+          238,
           235
         ],
         [
           268,
-          691,
-          239,
+          778,
+          238,
           235
         ],
         [
-          524,
-          691,
-          239,
+          523,
+          778,
+          238,
           235
         ],
         [
-          781,
-          691,
-          239,
+          777,
+          778,
+          238,
           235
         ],
         [
-          1037,
-          691,
-          239,
+          1032,
+          778,
+          238,
           235
         ]
       ],
       ".tool-top>.stack>.panel": [
         [
           1289,
-          215,
+          298,
           333,
-          210
+          240
         ],
         [
           1289,
-          441,
+          558,
           333,
-          254
+          252
         ],
         [
           1289,
-          711,
+          830,
           333,
-          217
+          279
         ]
       ]
     },
     "memory": {
       ".heading": [
         [
-          268,
-          74,
-          1355,
-          66
+          277,
+          89,
+          1337,
+          65
         ]
       ],
       ".kpis": [
         [
-          268,
-          153,
-          1066,
-          100
+          277,
+          238,
+          1337,
+          104
         ]
       ],
       ".memory-layout>.stack>.panel": [
         [
-          268,
-          269,
-          375,
-          231
+          277,
+          362,
+          320,
+          247
         ],
         [
-          268,
-          513,
-          375,
-          207
+          277,
+          629,
+          320,
+          127
         ],
         [
-          268,
-          733,
-          375,
-          272
+          277,
+          776,
+          320,
+          302
         ]
       ],
       ".memory-stream": [
         [
-          657,
-          269,
-          640,
-          679
+          617,
+          362,
+          602,
+          425
         ]
       ],
       ".memory-detail": [
         [
-          1311,
-          153,
-          327,
-          777
+          1238,
+          362,
+          376,
+          754
         ]
       ]
     },
     "infra": {
       ".heading": [
         [
-          266,
-          76,
-          1359,
-          66
+          273,
+          89,
+          1341,
+          65
         ]
       ],
       ".kpis": [
         [
-          266,
-          211,
-          1359,
-          100
+          273,
+          292,
+          1341,
+          104
         ]
       ],
       ".infra-grid>.stack>.panel": [
         [
-          266,
-          327,
-          457,
-          382
+          273,
+          416,
+          451,
+          281
         ],
         [
-          266,
-          722,
-          457,
-          220
+          273,
+          717,
+          451,
+          215
         ],
         [
-          732,
-          327,
-          459,
-          382
+          744,
+          416,
+          453,
+          232
         ],
         [
-          732,
-          722,
-          459,
-          278
+          744,
+          667,
+          453,
+          337
         ],
         [
-          1200,
-          327,
-          425,
-          382
+          1217,
+          416,
+          397,
+          437
         ],
         [
-          1200,
-          722,
-          425,
-          297
+          1217,
+          873,
+          397,
+          370
         ]
       ]
     },
     "intel": {
       ".heading": [
         [
-          263,
-          74,
-          1363,
-          66
+          273,
+          89,
+          1341,
+          65
         ]
       ],
       ".kpis": [
         [
-          263,
-          191,
-          1363,
-          89
+          273,
+          284,
+          1341,
+          104
         ]
       ],
       ".intel-grid>.stack>.panel": [
         [
-          263,
-          294,
-          569,
-          407
+          273,
+          408,
+          427,
+          789
         ],
         [
-          263,
-          714,
-          569,
-          241
+          273,
+          1217,
+          427,
+          192
         ],
         [
-          842,
-          294,
-          455,
-          455
+          720,
+          408,
+          524,
+          974
         ],
         [
-          842,
-          762,
-          455,
-          229
+          720,
+          1402,
+          524,
+          245
         ],
         [
-          1307,
-          294,
-          319,
-          344
+          1264,
+          408,
+          350,
+          482
         ],
         [
-          1307,
-          651,
-          319,
-          306
+          1264,
+          910,
+          350,
+          371
         ]
       ]
     },
     "settings": {
       ".heading": [
         [
-          260,
-          74,
-          1368,
-          66
+          273,
+          89,
+          1341,
+          65
         ]
       ],
       ".kpis": [
         [
-          260,
-          214,
-          1003,
-          94
+          273,
+          292,
+          963,
+          104
         ]
       ],
       ".settings-main>.panel": [
         [
-          260,
-          318,
-          602,
-          408
+          273,
+          416,
+          578,
+          413
         ],
         [
-          873,
-          318,
-          390,
-          408
+          871,
+          416,
+          365,
+          413
         ]
       ],
       ".settings-top>.stack>.panel": [
         [
-          1270,
-          208,
+          1256,
+          286,
           358,
-          185
+          202
         ],
         [
-          1270,
-          405,
+          1256,
+          508,
           358,
-          320
+          332
         ]
       ],
       ".settings-lower>.panel": [
         [
-          260,
-          738,
-          414,
-          194
+          273,
+          853,
+          400,
+          220
         ],
         [
-          686,
-          738,
-          438,
-          194
+          693,
+          853,
+          424,
+          220
         ],
         [
-          1136,
-          738,
-          492,
-          194
+          1138,
+          853,
+          476,
+          220
         ]
       ]
     },
     "overview": {
       ".kpis": [
         [
-          301,
-          479,
-          820,
-          102
+          332,
+          623,
+          783,
+          104
         ]
       ]
     }
@@ -905,6 +891,46 @@
     {
       "page": "overview",
       "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "projects",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "page": "ideas",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "page": "tools",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "page": "memory",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "page": "infra",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "page": "intel",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "page": "settings",
+      "width": 1366,
+      "overflow": false
+    },
+    {
+      "page": "overview",
+      "width": 1366,
       "overflow": false
     },
     {
@@ -957,11 +983,13 @@
     "no fake KPI sparkline",
     "failure clears stale data",
     "reload defaults to live",
-    "reference geometry within 3px",
+    "actual-mode text at least 12px",
     "overview 7/30/90 day tabs",
     "overview project status tabs",
     "RSS source edit reaches backend",
-    "raw collected article browser"
+    "raw collected article browser",
+    "light and dark sampled text contrast >= 4.5",
+    "mobile memory detail visible"
   ],
   "scriptErrors": []
 }

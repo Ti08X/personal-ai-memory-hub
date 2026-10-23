@@ -139,3 +139,5 @@ npm run test:workbench:ui
 ![免费资讯采集 · 合成测试数据](docs/screenshots/intel-live-desktop.png)
 
 [手机预览](docs/screenshots/intel-live-mobile.png)
+
+2026-10-23：[真实数据模式可读性改进](docs/readability-2026-10.md)；正文、表格与状态标签放大，资讯优先，手机可读取记忆详情。
