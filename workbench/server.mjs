@@ -4,6 +4,7 @@
 import { createServer } from 'node:http';
 import { DatabaseSync } from 'node:sqlite';
 import crypto from 'node:crypto';
+import {telemetry} from './telemetry.mjs';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 
 const PORT = Number(process.env.PORT || 8890);
@@ -303,6 +304,8 @@ function buildContext(itemId) {
   return { text: lines.join('\n'), item: it, credCount: creds.length };
 }
 
+const live = telemetry(db,{origin:ALLOWED_ORIGIN,certPath:process.env.WB_TLS_CERT_PATH});
+
 /* ---------- 路由 ---------- */
 const server = createServer(async (req, res) => {
   const origin = req.headers.origin;
@@ -320,8 +323,15 @@ const server = createServer(async (req, res) => {
 
   const url = new URL(req.url, 'http://127.0.0.1');
   const path = url.pathname;
+  if(['POST','PATCH','DELETE'].includes(req.method)&&origin&&origin!==ALLOWED_ORIGIN)return json(res,403,{error:'origin_not_allowed'});
+  res.once('finish',()=>live.record(req.method,path,res.statusCode));
 
   try {
+    if(req.method==='GET'&&path==='/api/tls')return json(res,200,live.tls());
+    if(req.method==='GET'&&path==='/api/system')return json(res,200,live.system());
+    if(req.method==='GET'&&path==='/api/activity')return json(res,200,live.activity());
+    if(req.method==='GET'&&path==='/api/security')return json(res,200,live.security(KEY_PATH));
+    if(req.method==='GET'&&path==='/api/containers')return json(res,200,await live.containers());
     /* ===== health ===== */
     if (req.method === 'GET' && path === '/api/health') {
       const i = db.prepare('SELECT COUNT(*) AS c FROM items').get().c;
@@ -330,29 +340,6 @@ const server = createServer(async (req, res) => {
     }
 
     /* ===== items ===== */
-    /* ===== 容器状态（只读，来自 docker ps）===== */
-    if (req.method === 'GET' && path === '/api/containers') {
-      try {
-        const { execFileSync } = await import('node:child_process');
-        const raw = execFileSync('docker', [
-          'ps', '-a', '--format',
-          '{{.Names}}|{{.State}}|{{.Image}}|{{.Status}}'
-        ], { timeout: 8000, encoding: 'utf8' });
-        const containers = raw.trim().split('\n').filter(Boolean).map(line => {
-          const [name, state, image, status] = line.split('|');
-          return { name, status: state, image, uptime: status };
-        });
-        return json(res, 200, {
-          ok: true,
-          total: containers.length,
-          running: containers.filter(c => c.status === 'running').length,
-          containers,
-        });
-      } catch (e) {
-        return json(res, 200, { ok: false, total: 0, running: 0, containers: [], error: 'docker unavailable' });
-      }
-    }
-
     if (req.method === 'GET' && path === '/api/items') {
       const rows = db.prepare(`SELECT ${ITEM_COLS} FROM items ORDER BY category, sort_order, created_at`).all();
       return json(res, 200, { items: rows.map(r => itemOut(r, false)) });

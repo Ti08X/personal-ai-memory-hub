@@ -19,7 +19,7 @@ A self-hosted personal workspace for memory, ideas, projects, tools, and infrast
 | Security and settings | Credential metadata, members, devices, preferences and notifications |
 | Overview | A shared entry point for memory metrics and project cards |
 
-The default **UI demo** presents the reference layout using synthetic content. Switch to **actual data** to use configured, same-origin APIs. Some collection, monitoring, permissions and memory-editing controls are UI placeholders; they do not execute production operations. Demo counters are illustrative, not live service or security metrics.
+Production defaults to **actual data**, refreshed every 30 seconds while visible. Projects, ideas, tools, memories, ingestion jobs, host resources, containers and the configured origin certificate use backend data. Local static preview explicitly uses synthetic demo content. External collection, member/device management and alerts remain marked as unconnected. See [live backend coverage](workbench/docs/live-backend-2026-10.md).
 
 ## Quick start
 

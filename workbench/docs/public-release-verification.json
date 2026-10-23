@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "scope": "Sanitized public source and regenerated synthetic screenshots; no production deployment",
+  "scope": "Sanitized source and synthetic screenshots; live adapter release verified separately without publishing private production records",
   "screenshots": {
     "count": 16,
     "desktop": 8,
@@ -32,12 +32,13 @@
       "images_checked": 48
     },
     "original_reference_archive_included": false,
-    "production_captures_or_backups_included": false
+    "production_captures_or_backups_included": false,
+    "live_release_scan": "Changed source and synthetic fixtures reviewed; private production configuration and captures excluded"
   },
   "validation": {
     "typescript": "passed",
     "workbench_api_tests": {
-      "pass": 5,
+      "pass": 7,
       "fail": 0
     },
     "workbench_ui": {
@@ -56,7 +57,103 @@
         "Optional official OpenClaw SDK reference unavailable"
       ]
     },
-    "legacy_regression_execution": "Isolated ASCII-path copy to avoid pre-existing URL pathname decoding issue in runner"
+    "legacy_regression_execution": "Isolated ASCII-path copy to avoid pre-existing URL pathname decoding issue in runner",
+    "workbench_live_ui": {
+      "fixtureOnly": true,
+      "viewports": [
+        {
+          "page": "projects",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "ideas",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "tools",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "memory",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "infra",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "intel",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "settings",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "overview",
+          "width": 1654,
+          "overflow": false
+        },
+        {
+          "page": "projects",
+          "width": 390,
+          "overflow": false
+        },
+        {
+          "page": "ideas",
+          "width": 390,
+          "overflow": false
+        },
+        {
+          "page": "tools",
+          "width": 390,
+          "overflow": false
+        },
+        {
+          "page": "memory",
+          "width": 390,
+          "overflow": false
+        },
+        {
+          "page": "infra",
+          "width": 390,
+          "overflow": false
+        },
+        {
+          "page": "intel",
+          "width": 390,
+          "overflow": false
+        },
+        {
+          "page": "settings",
+          "width": 390,
+          "overflow": false
+        },
+        {
+          "page": "overview",
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "checks": [
+        "live default",
+        "automatic refresh",
+        "backend-derived status counts",
+        "backend memory search",
+        "source dates",
+        "no fake KPI sparkline",
+        "failure clears stale data",
+        "reload defaults to live"
+      ],
+      "scriptErrors": []
+    }
   },
   "portal_sha256": {
     "workbench/portal/assets/creds.js": "8d658b51ba980bd3984b28f241c342f54d5158862bb440fa17157fc64148300b",
@@ -108,8 +205,8 @@
     "workbench/portal/assets/reference/xui-logo.png": "975ecc60fec98c131d8f147b0afcc6153983032b86c535dbdeb24ff33f2b4a69",
     "workbench/portal/assets/reference/xui.svg": "b3e756e22e4958ce0174f4babc832c4541a7ba4eb6cb589685722922b0539d23",
     "workbench/portal/assets/reference-base.css": "88d3870716b72226329327d21f5f2e8d7a354c9c154defb40097bae86302aa22",
-    "workbench/portal/assets/reference-ui.css": "ef1da18f099ed87f5a342f60fb7a0a773e97eb8f5ddc1d36cadbc359c6b0f937",
-    "workbench/portal/assets/reference-ui.js": "708c95530cdafca98ac0fc260a3b254f40259583451f6824724f2d6960fde165",
+    "workbench/portal/assets/reference-ui.css": "9c9916717ef5fea29033bbd2a782a6d2c1a585fc14acaf729e8eb6659b130254",
+    "workbench/portal/assets/reference-ui.js": "e340dc9577f4fb0c36a76ccf86e212dff647a3730c4ac0fb827eab949777a734",
     "workbench/portal/assets/workbench.css": "b39664f7a7fff2686bc92bf7033ae3f71e622dc9c70f82926747778564fac06a",
     "workbench/portal/assets/workbench.js": "8ee7816d1287e20f843fe08fd288502a3f249ed1517b6e464a045f5059438917",
     "workbench/portal/index.html": "40d8cde330b45112835ec62f329f9fa6fa8c6c7b09dbbf01f0a6edf6bc6cd0d9"

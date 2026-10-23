@@ -69,7 +69,7 @@ npm run preview:workbench
 
 This server provides static files only. It neither starts an API nor proxies a production database or memory service.
 
-The default **UI demo** uses synthetic content. **Actual data** uses same-origin `/api/wb` and `/v1` endpoints. Unconnected statistics are not replaced with demo values in actual mode.
+Production defaults to **actual data**, using same-origin `/api/wb` and `/v1` endpoints with a 30-second visible-page refresh. Local preview explicitly enables synthetic demo mode. Unconnected or failed sources never fall back to demo values. See [backend coverage and limitations](docs/live-backend-2026-10.md).
 
 - Navigation, command search, project filtering, view switching, idea search and details work locally.
 - Demo project/idea edits live in page memory and disappear on refresh; demo credentials are not persisted.
@@ -107,6 +107,7 @@ For UI-only releases, back up the existing static directory, upload `portal/asse
 npm run check
 npm run test:server
 npm run test:workbench:api
+npm run test:workbench:live
 # Optional browser tooling for screenshot generation and interaction checks:
 npm install --no-save --package-lock=false playwright
 npx playwright install chromium

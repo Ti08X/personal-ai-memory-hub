@@ -1,0 +1,96 @@
+{
+  "fixtureOnly": true,
+  "viewports": [
+    {
+      "page": "projects",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "ideas",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "tools",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "memory",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "infra",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "intel",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "settings",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "overview",
+      "width": 1654,
+      "overflow": false
+    },
+    {
+      "page": "projects",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "ideas",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "tools",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "memory",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "infra",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "intel",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "settings",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "overview",
+      "width": 390,
+      "overflow": false
+    }
+  ],
+  "checks": [
+    "live default",
+    "automatic refresh",
+    "backend-derived status counts",
+    "backend memory search",
+    "source dates",
+    "no fake KPI sparkline",
+    "failure clears stale data",
+    "reload defaults to live"
+  ],
+  "scriptErrors": []
+}

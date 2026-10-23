@@ -71,7 +71,7 @@ npm run preview:workbench
 
 预览服务器只提供静态文件，不启动 API，不代理任何线上数据库或记忆服务。
 
-默认 **UI 演示** 展示参考布局；顶部可切换 **实际数据**，通过同源 `/api/wb` 与 `/v1` 读取现有接口。实际模式中未接入的统计不使用演示值填充。
+生产页面默认 **实际数据**，通过同源 `/api/wb` 与 `/v1` 读取后端，可见时每 30 秒刷新。本地预览显式开启合成演示模式。未接入或失败的接口不会使用演示值填充。详见[接入范围与限制](docs/live-backend-2026-10.md)。
 
 - 导航、⌘K / Ctrl+K 搜索、项目筛选与视图切换、灵感搜索和详情可操作。
 - 演示项目/灵感编辑只修改当前页面内存，刷新消失；演示凭据不会持久保存密钥。
@@ -109,6 +109,7 @@ Hindsight bank 默认是虚构的 `demo-bank`。在加载 `reference-ui.js` 前�
 npm run check
 npm run test:server
 npm run test:workbench:api
+npm run test:workbench:live
 # 可选：安装 Playwright 后生成脱敏截图并检查交互。
 npm install --no-save --package-lock=false playwright
 npx playwright install chromium
