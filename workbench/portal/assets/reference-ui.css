@@ -82,3 +82,11 @@ body:has(#workspacePage[data-view=overview]) .topbar{flex-basis:69px;flex-shrink
 #intelFormError{color:#df583f;font-size:12px}
 .is-live #workspacePage[data-view=intel] .pipeline-step{padding:4px 9px;margin-top:3px;min-height:54px}
 .is-live #workspacePage[data-view=intel] .pipeline-step small{white-space:nowrap}
+
+/* Search is an overlay, never a document-flow section below the application. */
+.palette{position:fixed;inset:0;z-index:100;display:none;align-items:flex-start;justify-content:center;padding:clamp(20px,10dvh,90px) 16px 20px;overflow:hidden}
+.palette.is-open{display:flex}
+.palette-box{display:flex;flex-direction:column;width:min(640px,100%);min-height:0;max-height:100%;overflow:hidden;border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 70px #14224540}
+.palette-input{flex:none;border-bottom:1px solid var(--line)}
+#paletteList{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+#paletteList .pal-item{flex-shrink:0;overflow-wrap:anywhere}

@@ -255,6 +255,31 @@ body.is-live .overview-service .gauges { grid-column:2/-1; display:grid; grid-te
 body.is-live .overview-service .gauge { display:flex; flex-direction:column; align-items:center; gap:5px; }
 body.is-live .overview-service .gauge b { width:48px; height:48px; font-size:12px!important; }
 body.is-live :is(.detail-meta,.detail-link,.detail-footer,.timeline-time,.tiny-label) { font-size:12px!important; line-height:1.7; color:var(--ink-3); }
+
+/* The application scrolls in #scrollArea; search never scrolls the document. */
+html:has(body.is-live #workspacePage) { height:100%; overflow:hidden; }
+body.is-live { height:100dvh; }
+body.is-live .palette-input input { font-size:16px; background:transparent; color:var(--ink); }
+body.is-live .pal-item { min-height:44px; font-size:14px; }
+
+/* Shared navigation dimensions, independent of the selected page. */
+body.is-live:has(#workspacePage) { --live-rail:240px; --sidebar-w:var(--live-rail); }
+body.is-live:has(#workspacePage) .sidebar { width:var(--live-rail); }
+body.is-live:has(#workspacePage) .main { margin-left:var(--live-rail); width:calc(100% - var(--live-rail)); }
+body.is-live:has(#workspacePage) .nav { padding-top:3px; }
+body.is-live:has(#workspacePage) .nav-item { height:40px; margin:4px 0; }
+body.is-live:has(#workspacePage) .nav-group { margin-bottom:18px; }
+body.is-live:has(#workspacePage) .sidebar-foot { padding-left:10px; padding-right:10px; }
+body.is-live:has(#workspacePage) .node-card { height:65px; }
+body.is-live:has(#workspacePage) .sidebar-actions { padding-bottom:12px; }
+@media(max-width:1150px) {
+  body.is-live:has(#workspacePage) { --live-rail:205px; }
+}
+@media(max-width:760px) {
+  body.is-live:has(#workspacePage) { --live-rail:65px; }
+  body.is-live:has(#workspacePage) .sidebar-foot { padding-left:0; padding-right:0; }
+}
+body.is-live.collapsed:has(#workspacePage) { --live-rail:65px; }
 body.is-live .detail-body p { color:var(--ink-2)!important; }
 body.is-live .detail-body h4 { font-size:14px; }
 body.is-live #workspacePage svg text { font-size:12px!important; fill:var(--ink-3); }
