@@ -50,6 +50,7 @@ const shellGeometry=()=>{
     await page.locator('button[data-view="'+view+'"]').click();
     const before=await page.evaluate(shellGeometry);
     expected??=before;
+    assert.equal(before.sidebar.width,size.width<=760?65:size.width<=1150?190:220,'unexpected navigation width on '+view);
     assert.equal(before.sidebar.width,expected.sidebar.width,'navigation width changed on '+view);
     assert.equal(before.nav.height,expected.nav.height,'navigation item height changed on '+view);
     assert.equal(before.settings.y,expected.settings.y,'settings action moved on '+view);

@@ -90,3 +90,11 @@ body:has(#workspacePage[data-view=overview]) .topbar{flex-basis:69px;flex-shrink
 .palette-input{flex:none;border-bottom:1px solid var(--line)}
 #paletteList{min-height:0;overflow-y:auto;overscroll-behavior:contain}
 #paletteList .pal-item{flex-shrink:0;overflow-wrap:anywhere}
+
+/* Keep one slightly narrower navigation rail across every page and data mode. */
+body:has(#workspacePage){--workspace-rail:220px;--sidebar-w:var(--workspace-rail)}
+body:has(#workspacePage) .sidebar{width:var(--workspace-rail)}
+body:has(#workspacePage) .main{margin-left:var(--workspace-rail);width:calc(100% - var(--workspace-rail))}
+@media(max-width:1150px){body:has(#workspacePage){--workspace-rail:190px}}
+@media(max-width:760px){body:has(#workspacePage){--workspace-rail:65px}}
+body.collapsed:has(#workspacePage){--workspace-rail:65px}
