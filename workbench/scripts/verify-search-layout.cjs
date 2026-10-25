@@ -6,7 +6,7 @@ const path=require('node:path');
 const views=['overview','memory','ideas','intel','projects','infra','tools','settings'];
 const shellGeometry=()=>{
  const rect=selector=>{const e=document.querySelector(selector),r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}};
- return {sidebar:rect('.sidebar'),nav:rect('.nav-item'),footer:rect('.sidebar-foot'),main:rect('.main'),rootScroll:document.documentElement.scrollTop,bodyHeight:document.body.getBoundingClientRect().height,viewportHeight:innerHeight};
+ return {sidebar:rect('.sidebar'),nav:rect('.nav-item'),settings:rect('.sidebar-action[data-view="settings"]'),main:rect('.main'),rootScroll:document.documentElement.scrollTop,bodyHeight:document.body.getBoundingClientRect().height,viewportHeight:innerHeight};
 };
 
 (async()=>{
@@ -52,7 +52,13 @@ const shellGeometry=()=>{
     expected??=before;
     assert.equal(before.sidebar.width,expected.sidebar.width,'navigation width changed on '+view);
     assert.equal(before.nav.height,expected.nav.height,'navigation item height changed on '+view);
-    assert.equal(before.footer.y,expected.footer.y,'navigation footer moved on '+view);
+    assert.equal(before.settings.y,expected.settings.y,'settings action moved on '+view);
+    assert.deepEqual((await page.locator('.sidebar-actions .sidebar-action').allTextContents()).map(x=>x.trim()),['\u8bbe\u7f6e']);
+    assert.equal(await page.locator('.sidebar').getByText('外部服务',{exact:true}).count(),0);
+    assert.equal(await page.locator('.sidebar').getByText('Hindsight 控制台',{exact:true}).count(),0);
+    assert.equal(await page.locator('.sidebar').getByText('系统状态',{exact:true}).count(),0);
+    assert.equal(await page.locator('.sidebar').getByText('帮助与反馈',{exact:true}).count(),0);
+    assert.equal(await page.locator('.sidebar .node-card').count(),0);
     assert.equal(before.main.y,0,'main page moved out of the viewport');
     assert.equal(before.rootScroll,0);
     assert.equal(await page.locator('#palette').isVisible(),false);
